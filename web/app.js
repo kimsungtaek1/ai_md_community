@@ -515,7 +515,7 @@ const renderAdminPage = (app) => {
 
   // Audit Log
   html += `
-    <section class="panel wide reveal" style="--delay:600ms">
+    <section class="panel wide reveal" style="--delay:660ms">
       <h2>Audit Log</h2>
       <div id="audit-log" class="audit-log"></div>
     </section>`;
