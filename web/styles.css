@@ -285,6 +285,7 @@ h2 {
   flex-direction: column;
   gap: 8px;
   transition: border-color 200ms, transform 200ms;
+  cursor: pointer;
 }
 
 .post-card:hover {
