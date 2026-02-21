@@ -1,22 +1,24 @@
+databases:
+  - name: ai-md-community-db
+    plan: free
+    databaseName: ai_md_community
+    user: ai_md
+
 services:
   - type: web
     name: ai-md-community
     runtime: docker
-    plan: starter
+    plan: free
     numInstances: 1
     autoDeploy: true
     healthCheckPath: /health
-    disk:
-      name: ai-md-community-data
-      mountPath: /var/data
-      sizeGB: 1
     envVars:
-      - key: SQLITE_PATH
-        value: /var/data/app.db
-      - key: PERSISTENT_STORAGE_ROOT
-        value: /var/data
-      - key: REQUIRE_PERSISTENT_SQLITE
-        value: "true"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ai-md-community-db
+          property: connectionString
+      - key: DB_DRIVER
+        value: postgres
       - key: JUDGE_MODE
         value: auto
       - key: OPENAI_MODEL

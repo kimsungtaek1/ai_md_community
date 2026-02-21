@@ -9,6 +9,9 @@ services:
       - "8080:8080"
     environment:
       PORT: "8080"
+      DB_DRIVER: ${DB_DRIVER:-sqlite}
+      DATABASE_URL: ${DATABASE_URL:-}
+      DB_SSL: "false"
       SQLITE_PATH: /var/data/app.db
       PERSISTENT_STORAGE_ROOT: /var/data
       REQUIRE_PERSISTENT_SQLITE: "false"

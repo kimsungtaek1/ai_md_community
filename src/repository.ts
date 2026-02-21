@@ -15,6 +15,9 @@ import type {
   RevisionRequest,
   State
 } from "./types.js";
+import type { IRepository, RevisionDecision } from "./irepository.js";
+
+export type { RevisionDecision };
 
 const nowIso = (): string => new Date().toISOString();
 
@@ -90,17 +93,8 @@ interface DbAuditLogRow {
   created_at: string;
 }
 
-export interface RevisionDecision {
-  accepted: boolean;
-  reason: string;
-  supportCount: number;
-  opposeCount: number;
-  confidence: number;
-  model: string;
-  citations: DecisionCitation[];
-}
-
-export class Repository {
+export class Repository implements IRepository {
+  readonly driverName = "sqlite" as const;
   private readonly db: DatabaseSync;
 
   constructor(dbPath: string) {
@@ -108,6 +102,10 @@ export class Repository {
     this.db = new DatabaseSync(dbPath);
     this.db.exec("PRAGMA foreign_keys = ON;");
     this.migrate();
+  }
+
+  async ping(): Promise<boolean> {
+    return true;
   }
 
   private migrate(): void {
@@ -321,7 +319,7 @@ export class Repository {
     return row;
   }
 
-  listAgents(): Agent[] {
+  async listAgents(): Promise<Agent[]> {
     const rows = this.db
       .prepare(`SELECT id, name, created_at FROM agents ORDER BY created_at ASC`)
       .all() as Array<{ id: string; name: string; created_at: string }>;
@@ -333,7 +331,7 @@ export class Repository {
     }));
   }
 
-  createAgent(name: string): Agent {
+  async createAgent(name: string): Promise<Agent> {
     return this.withTransaction(() => {
       const agent: Agent = {
         id: nanoid(),
@@ -353,7 +351,7 @@ export class Repository {
     });
   }
 
-  listCategories(): Category[] {
+  async listCategories(): Promise<Category[]> {
     const rows = this.db
       .prepare(
         `SELECT id, name, description, created_by, created_at
@@ -419,15 +417,15 @@ export class Repository {
     }));
   }
 
-  listCategoryRequests(): CategoryRequest[] {
+  async listCategoryRequests(): Promise<CategoryRequest[]> {
     return this.readCategoryRequests();
   }
 
-  createCategoryRequest(input: {
+  async createCategoryRequest(input: {
     requestedBy: string;
     name: string;
     description: string;
-  }): CategoryRequest {
+  }): Promise<CategoryRequest> {
     return this.withTransaction(() => {
       this.requireAgent(input.requestedBy);
 
@@ -458,10 +456,10 @@ export class Repository {
     });
   }
 
-  reviewCategoryRequest(
+  async reviewCategoryRequest(
     requestId: string,
     input: { agentId: string; decision: "approve" | "reject"; reason: string }
-  ): CategoryRequest {
+  ): Promise<CategoryRequest> {
     return this.withTransaction(() => {
       this.requireAgent(input.agentId);
 
@@ -681,16 +679,16 @@ export class Repository {
     }));
   }
 
-  listPosts(): Post[] {
+  async listPosts(): Promise<Post[]> {
     return this.readPosts();
   }
 
-  createPost(input: {
+  async createPost(input: {
     categoryId: string;
     authorAgentId: string;
     title: string;
     body: string;
-  }): Post {
+  }): Promise<Post> {
     return this.withTransaction(() => {
       this.requireAgent(input.authorAgentId);
       this.requireCategory(input.categoryId);
@@ -724,7 +722,7 @@ export class Repository {
     });
   }
 
-  updatePost(postId: string, input: { authorAgentId: string; title?: string; body?: string }): Post {
+  async updatePost(postId: string, input: { authorAgentId: string; title?: string; body?: string }): Promise<Post> {
     return this.withTransaction(() => {
       this.requireAgent(input.authorAgentId);
       const row = this.requirePostRow(postId);
@@ -754,7 +752,7 @@ export class Repository {
     });
   }
 
-  addComment(postId: string, input: { agentId: string; body: string }): Comment {
+  async addComment(postId: string, input: { agentId: string; body: string }): Promise<Comment> {
     return this.withTransaction(() => {
       this.requireAgent(input.agentId);
       this.requirePostRow(postId);
@@ -781,10 +779,10 @@ export class Repository {
     });
   }
 
-  createRevisionRequest(
+  async createRevisionRequest(
     postId: string,
     input: { reviewerAgentId: string; summary: string; candidateBody: string }
-  ): RevisionRequest {
+  ): Promise<RevisionRequest> {
     return this.withTransaction(() => {
       this.requireAgent(input.reviewerAgentId);
       const post = this.requirePostRow(postId);
@@ -829,11 +827,11 @@ export class Repository {
     });
   }
 
-  addDebateTurn(
+  async addDebateTurn(
     postId: string,
     revisionId: string,
     input: { speakerAgentId: string; stance: "support" | "oppose" | "neutral"; message: string }
-  ): DebateTurn {
+  ): Promise<DebateTurn> {
     return this.withTransaction(() => {
       this.requireAgent(input.speakerAgentId);
       this.requirePostRow(postId);
@@ -870,7 +868,7 @@ export class Repository {
     });
   }
 
-  getRevisionContext(postId: string, revisionId: string): { post: Post; revision: RevisionRequest } {
+  async getRevisionContext(postId: string, revisionId: string): Promise<{ post: Post; revision: RevisionRequest }> {
     const post = this.readPosts().find((item) => item.id === postId);
     if (!post) {
       throw new Error(`Post not found: ${postId}`);
@@ -885,12 +883,12 @@ export class Repository {
     return { post, revision };
   }
 
-  applyRevisionDecision(postId: string, revisionId: string, decision: RevisionDecision): {
+  async applyRevisionDecision(postId: string, revisionId: string, decision: RevisionDecision): Promise<{
     post: Post;
     revision: RevisionRequest;
-  } {
+  }> {
     return this.withTransaction(() => {
-      const post = this.requirePostRow(postId);
+      this.requirePostRow(postId);
       const revision = this.requireRevisionRow(postId, revisionId);
 
       if (revision.status !== "pending") {
@@ -934,7 +932,7 @@ export class Repository {
         citations: decision.citations
       });
 
-      const postEntity = this.readPosts().find((item) => item.id === post.id);
+      const postEntity = this.readPosts().find((item) => item.id === postId);
       if (!postEntity) {
         throw new Error("Post disappeared after decision update.");
       }
@@ -950,7 +948,7 @@ export class Repository {
     });
   }
 
-  listAuditLogs(limit = 150): AuditLog[] {
+  async listAuditLogs(limit = 150): Promise<AuditLog[]> {
     const rows = this.db
       .prepare(
         `SELECT id, event_type, entity_type, entity_id, actor_agent_id, payload_json, created_at
@@ -980,13 +978,13 @@ export class Repository {
     });
   }
 
-  getState(auditLimit = 200): State {
+  async getState(auditLimit = 200): Promise<State> {
     return {
-      agents: this.listAgents(),
-      categories: this.listCategories(),
-      categoryRequests: this.listCategoryRequests(),
-      posts: this.listPosts(),
-      auditLogs: this.listAuditLogs(auditLimit)
+      agents: await this.listAgents(),
+      categories: await this.listCategories(),
+      categoryRequests: await this.listCategoryRequests(),
+      posts: await this.listPosts(),
+      auditLogs: await this.listAuditLogs(auditLimit)
     };
   }
 }
