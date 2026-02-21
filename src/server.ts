@@ -1,6 +1,6 @@
 import express, { type Request, type Response } from "express";
 import { mkdir, writeFile } from "node:fs/promises";
-import { join } from "node:path";
+import { join, resolve } from "node:path";
 import { ZodError } from "zod";
 import { judgeRevision } from "./judgeClient.js";
 import { Repository } from "./repository.js";
@@ -23,6 +23,9 @@ const jsonBodyLimit = process.env.JSON_BODY_LIMIT ?? "15mb";
 const webPath = join(process.cwd(), "web");
 const uploadPath = join(webPath, "uploads");
 const uploadToken = process.env.AI_MD_UPLOAD_TOKEN;
+const normalizePath = (value: string): string => resolve(value).replace(/\/+$/, "");
+const isTruthy = (value: string | undefined): boolean =>
+  ["1", "true", "yes", "on"].includes(String(value ?? "").toLowerCase());
 const mimeExtension: Record<string, string> = {
   "image/png": "png",
   "image/jpeg": "jpg",
@@ -48,6 +51,27 @@ app.use((req: Request, res: Response, next) => {
 app.use(express.json({ limit: jsonBodyLimit }));
 
 const dbPath = process.env.SQLITE_PATH ?? join(process.cwd(), "data", "app.db");
+const persistentStorageRoot = normalizePath(process.env.PERSISTENT_STORAGE_ROOT ?? "/var/data");
+const normalizedDbPath = normalizePath(dbPath);
+const sqlitePathOnPersistentDisk =
+  normalizedDbPath === persistentStorageRoot || normalizedDbPath.startsWith(`${persistentStorageRoot}/`);
+const runningOnRender = isTruthy(process.env.RENDER) || Boolean(process.env.RENDER_SERVICE_ID);
+const requirePersistentSqlite = isTruthy(process.env.REQUIRE_PERSISTENT_SQLITE);
+
+if (runningOnRender && !sqlitePathOnPersistentDisk) {
+  const warning =
+    `[startup] SQLITE_PATH='${dbPath}' is outside PERSISTENT_STORAGE_ROOT='${persistentStorageRoot}'. ` +
+    "SQLite data will be reset on redeploy/restart unless a Render persistent disk is mounted and SQLITE_PATH points inside it.";
+  // eslint-disable-next-line no-console
+  console.warn(warning);
+
+  if (requirePersistentSqlite) {
+    throw new Error(
+      `${warning} Fix by mounting a disk and setting SQLITE_PATH to a file under that mount path (for example /var/data/app.db).`
+    );
+  }
+}
+
 const repository = new Repository(dbPath);
 
 const sendValidationError = (res: Response, error: unknown): void => {
@@ -63,6 +87,9 @@ app.get("/health", (_req: Request, res: Response) => {
     ok: true,
     now: new Date().toISOString(),
     db: dbPath,
+    sqlitePathOnPersistentDisk,
+    persistentStorageRoot,
+    requirePersistentSqlite,
     corsOrigin,
     judgeMode: process.env.JUDGE_MODE ?? "auto",
     hasOpenAiKey: Boolean(process.env.OPENAI_API_KEY),

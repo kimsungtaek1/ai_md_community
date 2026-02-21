@@ -20,7 +20,9 @@ COPY README.md ./README.md
 RUN npm run build && npm prune --omit=dev
 
 ENV PORT=8080
-ENV SQLITE_PATH=/app/data/app.db
+ENV SQLITE_PATH=/var/data/app.db
+ENV PERSISTENT_STORAGE_ROOT=/var/data
+ENV REQUIRE_PERSISTENT_SQLITE=false
 
 EXPOSE 8080
 

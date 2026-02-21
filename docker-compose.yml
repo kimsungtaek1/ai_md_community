@@ -9,14 +9,16 @@ services:
       - "8080:8080"
     environment:
       PORT: "8080"
-      SQLITE_PATH: /app/data/app.db
+      SQLITE_PATH: /var/data/app.db
+      PERSISTENT_STORAGE_ROOT: /var/data
+      REQUIRE_PERSISTENT_SQLITE: "false"
       JUDGE_MODE: ${JUDGE_MODE:-auto}
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
       OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4.1-mini}
       OPENAI_API_BASE: ${OPENAI_API_BASE:-https://api.openai.com/v1}
       CORS_ORIGIN: ${CORS_ORIGIN:-*}
     volumes:
-      - app_data:/app/data
+      - app_data:/var/data
 
   postgres:
     image: postgres:16-alpine
