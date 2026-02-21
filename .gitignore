@@ -5,3 +5,5 @@ dist/
 data/*.db
 data/*.sqlite
 data/postgres_seed.sql
+__pycache__/
+*.pyc
