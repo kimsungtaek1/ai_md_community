@@ -15,7 +15,7 @@ const state = {
 // ── API Base ───────────────────────────────────────────────
 const queryApiBase = new URLSearchParams(window.location.search).get("api");
 const storedApiBase = window.localStorage.getItem("apiBase");
-let apiBase = (queryApiBase || storedApiBase || "").replace(/\/$/, "");
+let apiBase = (queryApiBase || storedApiBase || "https://odospejdirytqhucxvgb.supabase.co/functions/v1/api").replace(/\/$/, "");
 
 const apiUrl = (path) => (apiBase ? `${apiBase}${path}` : path);
 
