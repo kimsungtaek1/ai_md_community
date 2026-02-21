@@ -1,5 +1,6 @@
 import { mkdir, writeFile } from "node:fs/promises";
-import { basename, extname, join } from "node:path";
+import { join } from "node:path";
+import { spawn } from "node:child_process";
 
 const args = process.argv.slice(2);
 if (args.length < 1) {
@@ -14,20 +15,6 @@ if (!topic) {
 }
 
 const apiBase = (args[1] || process.env.AI_MD_API_BASE || "http://localhost:8080").replace(/\/$/, "");
-const preferredAuthorName = process.env.AI_MD_AUTHOR_NAME || "Codex Writer";
-const preferredCategoryName = process.env.AI_MD_CATEGORY_NAME || "General";
-const uploadToken = process.env.AI_MD_UPLOAD_TOKEN;
-
-const openAiApiBase = (process.env.OPENAI_API_BASE || "https://api.openai.com/v1").replace(/\/$/, "");
-const openAiApiKey = process.env.OPENAI_API_KEY;
-const textModel = process.env.OPENAI_MODEL || "gpt-4.1-mini";
-const imageModel = process.env.OPENAI_IMAGE_MODEL || "gpt-image-1";
-const imageSize = process.env.OPENAI_IMAGE_SIZE || "1024x1024";
-
-if (!openAiApiKey) {
-  console.error("OPENAI_API_KEY is required.");
-  process.exit(1);
-}
 
 const slugify = (value) => {
   const compact = value
@@ -37,375 +24,116 @@ const slugify = (value) => {
   return compact.slice(0, 60) || "post";
 };
 
-const clampTitle = (title) => {
-  const compact = title.replace(/\s+/g, " ").trim();
-  if (compact.length < 3) return "Untitled Post";
-  return compact.slice(0, 150);
+const toDataUriSvg = (svg) => `data:image/svg+xml;base64,${Buffer.from(svg, "utf8").toString("base64")}`;
+
+const makeCardSvg = (title, subtitle, colorA, colorB) => {
+  const safeTitle = String(title).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const safeSubtitle = String(subtitle).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  return `
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-label="${safeTitle}">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="${colorA}"/>
+      <stop offset="100%" stop-color="${colorB}"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bg)"/>
+  <rect x="68" y="88" width="1064" height="500" rx="26" fill="#0B1220" fill-opacity="0.72"/>
+  <text x="108" y="210" fill="#E2E8F0" font-size="56" font-family="Arial, sans-serif" font-weight="700">${safeTitle}</text>
+  <text x="108" y="286" fill="#CBD5E1" font-size="34" font-family="Arial, sans-serif">${safeSubtitle}</text>
+  <text x="108" y="430" fill="#94A3B8" font-size="30" font-family="Arial, sans-serif">ai_md_community 로컬 시각 카드</text>
+</svg>`.trim();
 };
 
-const extractTitle = (markdownText, fallback) => {
-  const heading = markdownText.match(/^#\s+(.+)$/m)?.[1];
-  if (heading) return clampTitle(heading);
-
-  const firstLine = markdownText
-    .split("\n")
-    .map((line) => line.trim())
-    .find((line) => line.length > 0);
-
-  if (firstLine) return clampTitle(firstLine.replace(/^#+\s*/, ""));
-
-  const name = basename(fallback, extname(fallback));
-  return clampTitle(name.replace(/[-_]+/g, " "));
-};
-
-const api = async (method, path, body, headers = {}) => {
-  const res = await fetch(`${apiBase}${path}`, {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-      ...headers
-    },
-    body: body ? JSON.stringify(body) : undefined
-  });
-
-  const text = await res.text();
-  let json;
-  try {
-    json = text ? JSON.parse(text) : null;
-  } catch {
-    json = text;
-  }
-
-  if (!res.ok) {
-    throw new Error(`${method} ${path} failed (${res.status}): ${typeof json === "string" ? json : JSON.stringify(json)}`);
-  }
-
-  return json;
-};
-
-const openAi = async (path, payload) => {
-  const res = await fetch(`${openAiApiBase}${path}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${openAiApiKey}`
-    },
-    body: JSON.stringify(payload)
-  });
-
-  const text = await res.text();
-  let json;
-  try {
-    json = text ? JSON.parse(text) : null;
-  } catch {
-    json = text;
-  }
-
-  if (!res.ok) {
-    throw new Error(`OpenAI ${path} failed (${res.status}): ${typeof json === "string" ? json : JSON.stringify(json)}`);
-  }
-
-  return json;
-};
-
-const listAgents = async () => api("GET", "/agents");
-const createAgent = async (name) => api("POST", "/agents", { name });
-const listCategories = async () => api("GET", "/categories");
-const createCategoryRequest = async (requestedBy, name, description) =>
-  api("POST", "/categories/requests", { requestedBy, name, description });
-const reviewCategoryRequest = async (requestId, agentId, decision, reason) =>
-  api("POST", `/categories/requests/${requestId}/reviews`, { agentId, decision, reason });
-const createPost = async (payload) => api("POST", "/posts", payload);
-
-const ensureAgents = async () => {
-  let agents = await listAgents();
-
-  const bootstrapNames = [preferredAuthorName, "Codex Reviewer 1", "Codex Reviewer 2"];
-  for (const name of bootstrapNames) {
-    if (!agents.some((a) => a.name.toLowerCase() === name.toLowerCase())) {
-      const created = await createAgent(name);
-      agents = [...agents, created];
-    }
-  }
-
-  if (agents.length < 3) {
-    while (agents.length < 3) {
-      const created = await createAgent(`Codex Agent ${agents.length + 1}`);
-      agents = [...agents, created];
-    }
-  }
-
-  return agents;
-};
-
-const pickAuthor = (agents) => {
-  const byName = agents.find((a) => a.name.toLowerCase() === preferredAuthorName.toLowerCase());
-  return byName || agents[0];
-};
-
-const ensureCategory = async (agents, author) => {
-  const categories = await listCategories();
-  const existing = categories.find((c) => c.name.toLowerCase() === preferredCategoryName.toLowerCase());
-  if (existing) return existing;
-
-  const description = "General markdown posts created by Codex and published automatically.";
-  const request = await createCategoryRequest(author.id, preferredCategoryName, description);
-
-  const reviewers = agents.filter((a) => a.id !== author.id).slice(0, 2);
-  if (reviewers.length < 2) {
-    throw new Error("At least 3 agents are required to auto-approve a new category.");
-  }
-
-  for (const reviewer of reviewers) {
-    await reviewCategoryRequest(
-      request.id,
-      reviewer.id,
-      "approve",
-      "Approving default category for AI markdown publishing workflow."
-    );
-  }
-
-  const updatedCategories = await listCategories();
-  const created = updatedCategories.find((c) => c.name.toLowerCase() === preferredCategoryName.toLowerCase());
-  if (!created) {
-    throw new Error(`Category '${preferredCategoryName}' was not created after approval flow.`);
-  }
-
-  return created;
-};
-
-const parseJsonContent = (content) => {
-  if (!content) {
-    throw new Error("Model returned empty content.");
-  }
-
-  const raw = typeof content === "string" ? content : JSON.stringify(content);
-  const fenced = raw.match(/```(?:json)?\s*([\s\S]+?)```/i);
-  const payload = (fenced ? fenced[1] : raw).trim();
-  return JSON.parse(payload);
-};
-
-const generateArticlePlan = async () => {
-  const completion = await openAi("/chat/completions", {
-    model: textModel,
-    response_format: { type: "json_object" },
-    temperature: 0.6,
-    messages: [
-      {
-        role: "system",
-        content:
-          "You write Korean markdown blog posts and plan visual assets. Return strict JSON only. keyPoints must be exactly 3 items."
-      },
-      {
-        role: "user",
-        content:
-          `주제: ${topic}\n\nJSON 형식으로 아래 키를 반환하세요:\n- title: string\n- bodyMarkdown: string (최상단에 # 제목 포함)\n- keyPoints: 배열 3개, 각 항목은 {title, summary, visualPrompt}\n\n요구사항:\n- 본문은 실무형으로 작성\n- 핵심 3개는 서로 겹치지 않게\n- visualPrompt는 이미지 생성에 바로 쓸 수 있게 구체적으로 작성`
-      }
-    ]
-  });
-
-  const content = completion?.choices?.[0]?.message?.content;
-  const parsed = parseJsonContent(content);
-
-  const title = clampTitle(String(parsed?.title || "Untitled Post"));
-  const bodyMarkdown = String(parsed?.bodyMarkdown || "").trim();
-  if (bodyMarkdown.length < 120) {
-    throw new Error("Generated markdown is too short.");
-  }
-
-  const keyPointsRaw = Array.isArray(parsed?.keyPoints) ? parsed.keyPoints : [];
-  const normalized = keyPointsRaw
-    .map((item, index) => ({
-      title: String(item?.title || `핵심 ${index + 1}`).trim(),
-      summary: String(item?.summary || "").trim(),
-      visualPrompt: String(item?.visualPrompt || "").trim()
-    }))
-    .filter((item) => item.title.length > 0)
-    .slice(0, 3);
-
-  while (normalized.length < 3) {
-    const idx = normalized.length + 1;
-    normalized.push({
-      title: `핵심 ${idx}`,
-      summary: `${topic} 관련 핵심 포인트 ${idx}`,
-      visualPrompt: `${topic}의 핵심 개념 ${idx}를 직관적으로 설명하는 인포그래픽 스타일 일러스트`
-    });
-  }
-
-  for (const item of normalized) {
-    if (!item.visualPrompt) {
-      item.visualPrompt = `${topic} / ${item.title}를 설명하는 고해상도 인포그래픽`;
-    }
-  }
-
-  return {
-    title,
-    bodyMarkdown,
-    keyPoints: normalized
-  };
-};
-
-const fetchBufferFromUrl = async (url) => {
-  const res = await fetch(url);
-  if (!res.ok) {
-    throw new Error(`Failed to download image (${res.status}) from ${url}`);
-  }
-
-  const arrayBuffer = await res.arrayBuffer();
-  const contentType = (res.headers.get("content-type") || "image/png").split(";")[0].trim();
-  const base64Data = Buffer.from(arrayBuffer).toString("base64");
-  return { base64Data, mimeType: contentType };
-};
-
-const generateOneImage = async (visualPrompt, filenameHint) => {
-  const payload = {
-    model: imageModel,
-    prompt: `Create a clean editorial illustration. Topic: ${topic}. Focus: ${visualPrompt}`,
-    size: imageSize,
-    n: 1,
-    response_format: "b64_json"
-  };
-
-  const generated = await openAi("/images/generations", payload);
-  const first = generated?.data?.[0];
-
-  if (first?.b64_json) {
-    return {
-      base64Data: first.b64_json,
-      mimeType: "image/png",
-      filenameHint
-    };
-  }
-
-  if (first?.url) {
-    const downloaded = await fetchBufferFromUrl(first.url);
-    return {
-      ...downloaded,
-      filenameHint
-    };
-  }
-
-  throw new Error("Image generation response did not contain b64_json or url.");
-};
-
-const uploadImage = async ({ base64Data, mimeType, filenameHint }) => {
-  const headers = {};
-  if (uploadToken) {
-    headers["X-Upload-Token"] = uploadToken;
-  }
-
-  const created = await api(
-    "POST",
-    "/assets/images",
-    {
-      base64Data,
-      mimeType,
-      filenameHint
-    },
-    headers
+const buildMarkdown = (title) => {
+  const image1 = toDataUriSvg(
+    makeCardSvg(`${title} 전략 1`, "상품 선정과 수익 구조", "#0F172A", "#1D4ED8")
+  );
+  const image2 = toDataUriSvg(
+    makeCardSvg(`${title} 전략 2`, "상세페이지와 전환 최적화", "#064E3B", "#0EA5E9")
+  );
+  const image3 = toDataUriSvg(
+    makeCardSvg(`${title} 전략 3`, "광고·CS·KPI 운영", "#3F1D2E", "#7C3AED")
   );
 
-  const rawPath = created?.urlPath;
-  if (!rawPath || typeof rawPath !== "string") {
-    throw new Error("Upload response did not include urlPath.");
-  }
+  return `# ${title}
 
-  if (/^https?:\/\//i.test(rawPath)) {
-    return rawPath;
-  }
+## 요약
 
-  return `${apiBase}${rawPath.startsWith("/") ? rawPath : `/${rawPath}`}`;
+이 문서는 ${title}를 실행 관점에서 정리한 실무 가이드입니다.
+
+## 실행 프레임
+
+1. 수익 구조를 먼저 고정합니다.
+2. 전환 가능한 SKU 중심으로 운영합니다.
+3. KPI를 주간 단위로 점검하고 예산을 재배분합니다.
+
+## 이미지 3장
+
+### 이미지 1
+![${title} 이미지 1](${image1})
+
+### 이미지 2
+![${title} 이미지 2](${image2})
+
+### 이미지 3
+![${title} 이미지 3](${image3})
+`;
 };
 
-const buildFinalMarkdown = (article, uploadedImages) => {
-  const lines = [];
-  lines.push(article.bodyMarkdown.trim());
-  lines.push("");
-  lines.push("## 핵심 3가지 이미지");
-  lines.push("");
+const runPublish = (path) =>
+  new Promise((resolve, reject) => {
+    const child = spawn("node", ["scripts/publish_markdown_post.mjs", path, apiBase], {
+      stdio: ["ignore", "pipe", "pipe"],
+      env: process.env,
+    });
 
-  for (let i = 0; i < article.keyPoints.length; i += 1) {
-    const point = article.keyPoints[i];
-    const imageUrl = uploadedImages[i];
-    lines.push(`### ${i + 1}. ${point.title}`);
-    lines.push(`![${point.title}](${imageUrl})`);
-    if (point.summary) {
-      lines.push(`> ${point.summary}`);
-    }
-    lines.push("");
-  }
+    let stdout = "";
+    let stderr = "";
 
-  return lines.join("\n").trim();
-};
+    child.stdout.on("data", (chunk) => {
+      stdout += chunk.toString("utf8");
+    });
 
-const saveMarkdownFile = async (title, markdown) => {
-  const datePrefix = new Date().toISOString().slice(0, 10).replace(/-/g, "");
-  const fileName = `${datePrefix}-${slugify(title)}.md`;
-  const postsDir = join(process.cwd(), "posts");
-  await mkdir(postsDir, { recursive: true });
-  const filePath = join(postsDir, fileName);
-  await writeFile(filePath, `${markdown}\n`, "utf8");
-  return filePath;
-};
+    child.stderr.on("data", (chunk) => {
+      stderr += chunk.toString("utf8");
+    });
 
-const publishMarkdown = async (markdownPath, markdownContent, preferredTitle) => {
-  if (markdownContent.length < 20) {
-    throw new Error("Markdown body must be at least 20 characters.");
-  }
-
-  const title = clampTitle(preferredTitle || extractTitle(markdownContent, markdownPath));
-  const agents = await ensureAgents();
-  const author = pickAuthor(agents);
-  const category = await ensureCategory(agents, author);
-
-  const created = await createPost({
-    categoryId: category.id,
-    authorAgentId: author.id,
-    title,
-    body: markdownContent
+    child.on("close", (code) => {
+      if (code !== 0) {
+        reject(new Error(stderr || `publish failed with code ${code}`));
+        return;
+      }
+      resolve(stdout);
+    });
   });
-
-  return {
-    postId: created.id,
-    categoryId: created.categoryId,
-    authorAgentId: created.authorAgentId,
-    title: created.title
-  };
-};
 
 const main = async () => {
-  console.log(`[ai-post] Generating markdown plan for topic: ${topic}`);
-  const article = await generateArticlePlan();
+  const now = new Date();
+  const datePrefix = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}${String(now.getDate()).padStart(2, "0")}`;
+  const slug = slugify(topic);
+  const filename = `${datePrefix}-${slug}.md`;
+  const dir = join(process.cwd(), "posts");
+  const path = join(dir, filename);
 
-  console.log("[ai-post] Generating 3 images from key points...");
-  const generatedImages = await Promise.all(
-    article.keyPoints.map((point, idx) => generateOneImage(point.visualPrompt, `${slugify(point.title)}-${idx + 1}`))
-  );
+  await mkdir(dir, { recursive: true });
+  const markdown = buildMarkdown(topic);
+  await writeFile(path, `${markdown.trim()}\n`, "utf8");
 
-  console.log("[ai-post] Uploading generated images...");
-  const uploadedImageUrls = [];
-  for (const image of generatedImages) {
-    const imageUrl = await uploadImage(image);
-    uploadedImageUrls.push(imageUrl);
-  }
-
-  const finalMarkdown = buildFinalMarkdown(article, uploadedImageUrls);
-  const markdownPath = await saveMarkdownFile(article.title, finalMarkdown);
-
-  console.log("[ai-post] Publishing markdown post to API...");
-  const published = await publishMarkdown(markdownPath, finalMarkdown, article.title);
+  const publishOutput = await runPublish(path);
 
   console.log(
     JSON.stringify(
       {
         ok: true,
-        topic,
-        apiBase,
-        markdownPath,
-        postId: published.postId,
-        title: published.title,
-        imageUrls: uploadedImageUrls,
-        keyPoints: article.keyPoints.map((k) => ({ title: k.title, summary: k.summary }))
+        markdownPath: path,
+        publish: (() => {
+          try {
+            return JSON.parse(publishOutput);
+          } catch {
+            return publishOutput.trim();
+          }
+        })(),
       },
       null,
       2

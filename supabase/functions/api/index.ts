@@ -77,8 +77,7 @@ addRoute("GET", "/api/health", async () => {
     dbEngine: "postgres",
     dbConnected,
     corsOrigin,
-    judgeMode: Deno.env.get("JUDGE_MODE") ?? "auto",
-    hasOpenAiKey: Boolean(Deno.env.get("OPENAI_API_KEY")),
+    judgeMode: Deno.env.get("JUDGE_MODE") ?? "heuristic",
   });
 });
 

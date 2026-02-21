@@ -39,13 +39,9 @@
   - `AI_MD_WEB_BASE`
   - `AI_MD_AUTHOR_NAME`
   - `AI_MD_CATEGORY_NAME`
-  - `AI_IMAGE_PROVIDER` (default: `pollinations`)
-  - `POLLINATIONS_API_BASE`, `POLLINATIONS_MODEL`
-  - `LOCAL_SD_API_BASE` (for local GPU via Stable Diffusion WebUI)
   - `AI_MD_TRY_3_IMAGES` (default: `true`)
   - `AI_MD_REQUIRE_3_IMAGES` (default: `false`)
   - `AI_MD_WRITE_BACK_IMAGES` (default: `true`)
-  - `OPENAI_API_KEY` (optional, only when `AI_IMAGE_PROVIDER=openai`)
 
 ## Verification
 - After running the publish command, report the returned `postId` to the user.

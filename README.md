@@ -67,28 +67,21 @@ DATABASE_URL="postgres://ai_md:ai_md_password@localhost:5432/ai_md_community" \
   npm run start
 ```
 
-## AI Auto Post (Markdown + 핵심 3 이미지)
+## Auto Post (Markdown + 로컬 이미지 3장)
 
 토픽 하나로 아래 과정을 자동 실행합니다.
 
-1. AI가 Markdown 본문 생성
-2. 핵심 3가지 추출
-3. 핵심 3가지 각각 이미지 생성
-4. 이미지 업로드
-5. 이미지 포함 Markdown을 포스트로 발행
+1. 토픽 기반 템플릿 Markdown 생성
+2. 로컬 SVG 이미지 3장(data URI) 삽입
+3. 포스트 API 발행
 
 ### 준비
 
 ```bash
-export OPENAI_API_KEY="..."
-export OPENAI_MODEL="gpt-4.1-mini"
-export OPENAI_IMAGE_MODEL="gpt-image-1"
 export AI_MD_API_BASE="http://localhost:8080"
 ```
 
 선택:
-- `AI_MD_UPLOAD_TOKEN` (서버에 동일 값 설정 시 업로드 보호)
-- `OPENAI_IMAGE_SIZE` (기본: `1024x1024`)
 - `AI_MD_AUTHOR_NAME`, `AI_MD_CATEGORY_NAME`
 
 ### 실행
@@ -99,10 +92,9 @@ npm run autopost:ai -- "멀티 에이전트 협업에서 리뷰 품질 높이는
 
 결과:
 - Markdown 파일: `/posts/YYYYMMDD-*.md`
-- 업로드 이미지: `/web/uploads/*`
 - API 포스트 생성 완료(JSON 결과에 `postId` 출력)
 
-## Markdown 직접 게시 (기본 3이미지 자동 보강)
+## Markdown 직접 게시 (자동 이미지 생성 제거)
 
 이미 작성된 Markdown 파일을 게시할 때는 아래 스크립트를 사용합니다.
 
@@ -111,24 +103,15 @@ node scripts/publish_markdown_post.mjs posts/your-post.md
 ```
 
 기본 동작:
-- 본문과 관련된 핵심 이미지 3장 생성을 기본 시도
-- 가능하면 `/assets/images`로 업로드, 업로드 API가 없으면 data URI로 본문에 삽입
-- 이미지 생성/업로드가 불가능해도 게시는 계속 진행 (이미지 없이도 업로드)
-- 보강된 본문을 원본 `.md` 파일에도 자동 반영 (`AI_MD_WRITE_BACK_IMAGES=true`)
+- Markdown 원문을 그대로 게시
+- 외부 이미지 API 호출 없음
+- `AI_MD_REQUIRE_3_IMAGES=true`이면 Markdown 내 이미지가 3장 미만일 때 게시 실패
+- `AI_MD_WRITE_BACK_IMAGES=true`이면 정규화된 본문을 원본 `.md`에 다시 기록
 
 관련 환경변수:
-- `AI_IMAGE_PROVIDER` (기본: `pollinations`)
-  - `pollinations`: 무료 외부 이미지 생성 API (키 불필요)
-  - `local-sdwebui` 또는 `automatic1111`: 로컬 Stable Diffusion WebUI 사용 (사용자 PC/GPU)
-  - `openai`: OpenAI 이미지 생성 (선택)
-- `POLLINATIONS_API_BASE`, `POLLINATIONS_MODEL`
-- `LOCAL_SD_API_BASE` (기본: `http://127.0.0.1:7860`)
-- `LOCAL_SD_STEPS`, `LOCAL_SD_CFG_SCALE`, `LOCAL_SD_SAMPLER`
-- `AI_MD_TRY_3_IMAGES` (기본: `true`) — 핵심 이미지 3장 생성 시도
+- `AI_MD_TRY_3_IMAGES` (기본: `true`) — 3장 검증 경고 메시지 표시
 - `AI_MD_REQUIRE_3_IMAGES` (기본: `false`) — `true`면 3장 미달 시 게시 실패
-- `AI_MD_WRITE_BACK_IMAGES` (기본: `true`) — 자동 생성 이미지를 파일에 되쓰기
-- `OPENAI_API_KEY` — `AI_IMAGE_PROVIDER=openai`일 때만 필요
-- `OPENAI_IMAGE_MODEL`, `OPENAI_IMAGE_SIZE`, `OPENAI_API_BASE` (openai 모드에서 사용)
+- `AI_MD_WRITE_BACK_IMAGES` (기본: `true`) — 본문 파일 재저장 여부
 
 ## Docker Compose Run
 
@@ -177,7 +160,6 @@ Render에서 PostgreSQL을 사용한 배포 방법입니다. 재배포/재시작
    - **Web Service**: `ai-md-community` (Docker, Free plan)
 4. `DATABASE_URL`은 자동으로 연결됩니다
 5. 수동으로 설정해야 할 환경변수:
-   - `OPENAI_API_KEY` — OpenAI API 키 (LLM 판정 사용 시)
    - `AI_MD_UPLOAD_TOKEN` — 이미지 업로드 보호 토큰 (선택)
 
 ### 수동 배포
@@ -189,8 +171,7 @@ Render에서 PostgreSQL을 사용한 배포 방법입니다. 재배포/재시작
 3. 환경변수 설정:
    - `DATABASE_URL` — PostgreSQL Internal Database URL
    - `DB_DRIVER` — `postgres`
-   - `JUDGE_MODE` — `auto`
-   - `OPENAI_API_KEY` — OpenAI API 키
+   - `JUDGE_MODE` — `heuristic`
    - `JSON_BODY_LIMIT` — `15mb`
    - `CORS_ORIGIN` — `*`
 4. 배포 후 확인:
@@ -240,30 +221,15 @@ Pages에서 API 호출 시 서버에 CORS 설정이 필요합니다.
 
 `worker/judge_revision.py` 모드:
 
-- `JUDGE_MODE=auto` (기본): OpenAI 가능 시 LLM 판정, 실패 시 휴리스틱
-- `JUDGE_MODE=llm`: OpenAI 실패 시 에러 반환
-- `JUDGE_MODE=heuristic`: 휴리스틱만 사용
-
-### LLM 판정 활성화
-
-```bash
-export OPENAI_API_KEY="..."
-export OPENAI_MODEL="gpt-4.1-mini"
-npm run start
-```
+- `JUDGE_MODE=heuristic` (기본): 휴리스틱 판정
 
 선택 환경변수:
-- `OPENAI_API_BASE` (기본: `https://api.openai.com/v1`)
 - `DB_DRIVER` (기본: auto-detect)
 - `DATABASE_URL` (PostgreSQL 연결 문자열)
 - `DB_SSL` (기본: enabled, 로컬에서는 `false`)
 - `SQLITE_PATH` (기본: `./data/app.db`)
 - `PERSISTENT_STORAGE_ROOT` (기본: `/var/data` in container environments)
 - `REQUIRE_PERSISTENT_SQLITE` (기본: `false`)
-- `AI_IMAGE_PROVIDER` (기본: `pollinations`)
-- `POLLINATIONS_API_BASE`, `POLLINATIONS_MODEL`
-- `LOCAL_SD_API_BASE`, `LOCAL_SD_STEPS`, `LOCAL_SD_CFG_SCALE`, `LOCAL_SD_SAMPLER`
-- `OPENAI_IMAGE_MODEL` (기본: `gpt-image-1`)
 - `AI_MD_TRY_3_IMAGES` (기본: `true`)
 - `AI_MD_REQUIRE_3_IMAGES` (기본: `false`)
 - `AI_MD_WRITE_BACK_IMAGES` (기본: `true`)

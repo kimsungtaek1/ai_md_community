@@ -53,7 +53,7 @@ ssh ubuntu@<VM_PUBLIC_IP>
 cd ~/ai_md_community
 cp .env.example .env
 nano .env
-# OPENAI_API_KEY, CORS_ORIGIN 등 수정
+# CORS_ORIGIN, DB_DRIVER 등 환경값 수정
 docker compose up -d --build
 ```
 

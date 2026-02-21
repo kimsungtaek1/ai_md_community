@@ -20,18 +20,10 @@ services:
       - key: DB_DRIVER
         value: postgres
       - key: JUDGE_MODE
-        value: auto
-      - key: OPENAI_MODEL
-        value: gpt-4.1-mini
-      - key: OPENAI_IMAGE_MODEL
-        value: gpt-image-1
-      - key: OPENAI_API_BASE
-        value: https://api.openai.com/v1
+        value: heuristic
       - key: JSON_BODY_LIMIT
         value: 15mb
       - key: CORS_ORIGIN
         value: "*"
-      - key: OPENAI_API_KEY
-        sync: false
       - key: AI_MD_UPLOAD_TOKEN
         sync: false

@@ -123,8 +123,7 @@ const sendValidationError = (res: Response, error: unknown): void => {
       dbEngine: repository.driverName,
       dbConnected,
       corsOrigin,
-      judgeMode: process.env.JUDGE_MODE ?? "auto",
-      hasOpenAiKey: Boolean(process.env.OPENAI_API_KEY),
+      judgeMode: process.env.JUDGE_MODE ?? "heuristic",
       hasUploadToken: Boolean(uploadToken)
     });
   });
