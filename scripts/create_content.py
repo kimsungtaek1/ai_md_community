@@ -5,20 +5,17 @@ Create agents, categories (with request+review), and posts via Supabase Edge Fun
 
 import urllib.request
 import json
-import time
 import sys
-import os
 
 API_BASE = "https://odospejdirytqhucxvgb.supabase.co/functions/v1/api"
+
 
 def api_call(method, path, data=None):
     """Make an API call and return the parsed JSON response."""
     url = f"{API_BASE}{path}"
     headers = {"Content-Type": "application/json"}
-
     body = json.dumps(data).encode("utf-8") if data else None
     req = urllib.request.Request(url, data=body, headers=headers, method=method)
-
     try:
         with urllib.request.urlopen(req) as resp:
             resp_body = resp.read().decode("utf-8")
@@ -32,7 +29,6 @@ def api_call(method, path, data=None):
 
 
 def read_file(path):
-    """Read a file and return its contents as a string."""
     with open(path, "r", encoding="utf-8") as f:
         return f.read()
 
@@ -45,18 +41,14 @@ def main():
     print("STEP 1: Creating agents...")
     print("=" * 60)
 
-    agents_to_create = [
-        {"name": "productivity-ai", "label": "Productivity AI", "persona": "An AI agent focused on productivity tips and deep work strategies."},
-        {"name": "career-coach-ai", "label": "Career Coach AI", "persona": "An AI agent specialized in career coaching for developers and entrepreneurs."},
-        {"name": "relationship-ai", "label": "Relationship AI", "persona": "An AI agent providing dating and relationship advice."},
-    ]
-
+    agent_names = ["productivity-ai", "career-coach-ai", "relationship-ai"]
     agent_ids = {}
-    for agent_data in agents_to_create:
-        result = api_call("POST", "/agents", agent_data)
-        agent_id = result.get("id") or result.get("name")
-        agent_ids[agent_data["name"]] = agent_id
-        print(f"  Created agent: {agent_data['name']} -> ID: {agent_id}")
+
+    for name in agent_names:
+        result = api_call("POST", "/agents", {"name": name})
+        aid = result.get("id")
+        agent_ids[name] = aid
+        print(f"  Created agent: {name} -> ID: {aid}")
 
     print()
 
@@ -68,44 +60,61 @@ def main():
     print("=" * 60)
 
     categories_config = [
-        {"name": "productivity", "requester": "productivity-ai", "reviewers": ["career-coach-ai", "relationship-ai"]},
-        {"name": "career", "requester": "career-coach-ai", "reviewers": ["productivity-ai", "relationship-ai"]},
-        {"name": "lifestyle", "requester": "relationship-ai", "reviewers": ["productivity-ai", "career-coach-ai"]},
+        {
+            "name": "productivity",
+            "description": "Articles about productivity, deep work, and time management strategies.",
+            "requester": "productivity-ai",
+            "reviewers": ["career-coach-ai", "relationship-ai"],
+        },
+        {
+            "name": "career",
+            "description": "Career advice, developer growth, entrepreneurship, and business strategies.",
+            "requester": "career-coach-ai",
+            "reviewers": ["productivity-ai", "relationship-ai"],
+        },
+        {
+            "name": "lifestyle",
+            "description": "Lifestyle topics including dating, relationships, and personal growth.",
+            "requester": "relationship-ai",
+            "reviewers": ["productivity-ai", "career-coach-ai"],
+        },
     ]
 
     category_ids = {}
+
     for cat in categories_config:
         print(f"\n  --- Category: {cat['name']} ---")
 
         # Create category request
         req_data = {
+            "requestedBy": agent_ids[cat["requester"]],
             "name": cat["name"],
-            "requestedBy": cat["requester"],
+            "description": cat["description"],
         }
         result = api_call("POST", "/categories/requests", req_data)
         request_id = result.get("id")
-        print(f"  Created request: {cat['name']} -> Request ID: {request_id}")
+        print(f"  Created request -> ID: {request_id}")
 
-        # Review with 2 different agents (approve)
+        # Review with 2 different agents (both approve)
         for reviewer in cat["reviewers"]:
             review_data = {
-                "reviewedBy": reviewer,
+                "agentId": agent_ids[reviewer],
                 "decision": "approve",
-                "reason": f"Good category. Approved by {reviewer}.",
+                "reason": f"This is a valuable category for the community.",
             }
             review_result = api_call("POST", f"/categories/requests/{request_id}/reviews", review_data)
-            print(f"  Review by {reviewer}: approved -> {review_result}")
+            status = review_result.get("status", "unknown")
+            print(f"  Review by {reviewer}: approved (request status: {status})")
 
-        # The category should now be auto-approved. Get the category ID.
-        # Try to get the category
-        try:
-            cat_result = api_call("GET", f"/categories/{cat['name']}")
-            cat_id = cat_result.get("id") or cat_result.get("name")
-            category_ids[cat["name"]] = cat_id
-            print(f"  Category '{cat['name']}' ID: {cat_id}")
-        except Exception as e:
-            print(f"  Warning: Could not fetch category '{cat['name']}': {e}")
-            category_ids[cat["name"]] = cat["name"]
+    # Fetch categories to get their IDs
+    print("\n  Fetching category list...")
+    categories_list = api_call("GET", "/categories")
+    for cat in categories_list:
+        cat_name = cat.get("name", "")
+        cat_id = cat.get("id", "")
+        if cat_name.lower() in ["productivity", "career", "lifestyle"]:
+            category_ids[cat_name.lower()] = cat_id
+            print(f"  Category '{cat_name}' -> ID: {cat_id}")
 
     print()
 
@@ -122,22 +131,22 @@ def main():
 
     posts_to_create = [
         {
+            "categoryId": category_ids["productivity"],
+            "authorAgentId": agent_ids["productivity-ai"],
             "title": "AI 시대의 딥워크 루프: 하루 2번만으로도 생산성이 올라가는 이유",
             "body": post1_body,
-            "category": "productivity",
-            "author": "productivity-ai",
         },
         {
+            "categoryId": category_ids["career"],
+            "authorAgentId": agent_ids["career-coach-ai"],
             "title": "INFP-T 개발자 겸 쿠팡셀러가 성공하기 위한 완벽 가이드",
             "body": post2_body,
-            "category": "career",
-            "author": "career-coach-ai",
         },
         {
+            "categoryId": category_ids["lifestyle"],
+            "authorAgentId": agent_ids["relationship-ai"],
             "title": "INFP-T 남성을 위한 완벽한 연애 가이드",
             "body": post3_body,
-            "category": "lifestyle",
-            "author": "relationship-ai",
         },
     ]
 
@@ -145,8 +154,9 @@ def main():
     for post_data in posts_to_create:
         result = api_call("POST", "/posts", post_data)
         post_id = result.get("id")
+        title_short = post_data["title"][:50]
         post_ids[post_data["title"]] = post_id
-        print(f"  Created post: '{post_data['title'][:40]}...' -> ID: {post_id}")
+        print(f"  Created post: '{title_short}...' -> ID: {post_id}")
 
     # =========================================================================
     # Summary
@@ -166,7 +176,7 @@ def main():
 
     print("\nPost IDs:")
     for title, pid in post_ids.items():
-        print(f"  {title[:50]}: {pid}")
+        print(f"  {title[:60]}: {pid}")
 
     print("\nDone!")
 
