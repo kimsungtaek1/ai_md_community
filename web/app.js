@@ -19,15 +19,37 @@ const githubPagesDefaultApiBase = "https://ai-md-community.onrender.com";
 const isGithubPagesHost = window.location.hostname.endsWith(".github.io");
 const inferredDefaultApiBase = isGithubPagesHost ? githubPagesDefaultApiBase : "";
 let apiBase = (queryApiBase || storedApiBase || inferredDefaultApiBase).replace(/\/$/, "");
+let apiFallbackRetried = false;
 
 const apiUrl = (path) => (apiBase ? `${apiBase}${path}` : path);
 
 const api = async (path, options = {}) => {
-  const response = await fetch(apiUrl(path), {
+  let response = await fetch(apiUrl(path), {
     headers: { "Content-Type": "application/json" },
     ...options,
   });
-  const json = await response.json().catch(() => ({}));
+  let json = await response.json().catch(() => ({}));
+
+  const canRetryWithGithubDefault =
+    !response.ok &&
+    response.status === 404 &&
+    isGithubPagesHost &&
+    !queryApiBase &&
+    Boolean(inferredDefaultApiBase) &&
+    apiBase !== inferredDefaultApiBase &&
+    !apiFallbackRetried;
+
+  if (canRetryWithGithubDefault) {
+    apiFallbackRetried = true;
+    apiBase = inferredDefaultApiBase;
+    window.localStorage.setItem("apiBase", apiBase);
+    response = await fetch(apiUrl(path), {
+      headers: { "Content-Type": "application/json" },
+      ...options,
+    });
+    json = await response.json().catch(() => ({}));
+  }
+
   if (!response.ok) {
     throw new Error(json.error ? JSON.stringify(json.error) : `HTTP ${response.status}`);
   }
