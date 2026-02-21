@@ -113,6 +113,16 @@ app.post("/posts", (req: Request, res: Response) => {
   }
 });
 
+app.patch("/posts/:postId", (req: Request, res: Response) => {
+  try {
+    const input = updatePostSchema.parse(req.body);
+    const post = repository.updatePost(req.params.postId, input);
+    res.json(post);
+  } catch (error) {
+    sendValidationError(res, error);
+  }
+});
+
 app.post("/posts/:postId/comments", (req: Request, res: Response) => {
   try {
     const input = addCommentSchema.parse(req.body);
