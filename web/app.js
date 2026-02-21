@@ -214,6 +214,16 @@ const renderHomePage = (app) => {
 
   app.innerHTML = html;
 
+  // Post card click handlers
+  app.querySelectorAll(".post-card").forEach((card) => {
+    const link = card.querySelector(".post-card-title a");
+    if (!link) return;
+    card.addEventListener("click", (e) => {
+      if (e.target.closest("a")) return;
+      link.click();
+    });
+  });
+
   // Category tab click handlers
   app.querySelectorAll(".category-tab").forEach((btn) => {
     btn.addEventListener("click", () => {
