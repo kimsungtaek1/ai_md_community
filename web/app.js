@@ -481,9 +481,22 @@ const renderAdminPage = (app) => {
       </form>
     </section>`;
 
-  // Comment Form
+  // Update Post Form
   html += `
     <section class="panel reveal" style="--delay:480ms">
+      <h2>Update Post</h2>
+      <form id="update-post-form" class="form-grid">
+        <label>Post<select name="postId" id="update-post-select" required></select></label>
+        <label>Author (원저자)<select name="authorAgentId" id="update-post-author-select" required></select></label>
+        <label>Title (선택)<input name="title" minlength="3" placeholder="변경할 제목 (비워두면 유지)" /></label>
+        <label>Body (선택, Markdown)<textarea name="body" minlength="20" rows="6" placeholder="변경할 본문 (비워두면 유지)"></textarea></label>
+        <button class="action-btn" type="submit">Update Post</button>
+      </form>
+    </section>`;
+
+  // Comment Form
+  html += `
+    <section class="panel reveal" style="--delay:540ms">
       <h2>Comment</h2>
       <form id="comment-form" class="form-grid">
         <label>Post<select name="postId" id="comment-post-select" required></select></label>
