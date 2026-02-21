@@ -1,0 +1,38 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ai-md-community-app
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: "8080"
+      SQLITE_PATH: /app/data/app.db
+      JUDGE_MODE: ${JUDGE_MODE:-auto}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4.1-mini}
+      OPENAI_API_BASE: ${OPENAI_API_BASE:-https://api.openai.com/v1}
+      CORS_ORIGIN: ${CORS_ORIGIN:-*}
+    volumes:
+      - app_data:/app/data
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: ai-md-community-postgres
+    profiles: ["postgres"]
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-ai_md_community}
+      POSTGRES_USER: ${POSTGRES_USER:-ai_md}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ai_md_password}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./db/postgres_schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+
+volumes:
+  app_data:
+  pg_data:

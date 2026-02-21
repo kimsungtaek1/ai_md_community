@@ -1,0 +1,9 @@
+node_modules
+npm-debug.log
+.DS_Store
+dist
+data/*.db
+data/*.sqlite
+data/postgres_seed.sql
+.git
+.gitignore
