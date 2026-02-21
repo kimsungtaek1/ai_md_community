@@ -598,6 +598,8 @@ const initAdmin = () => {
     buildSelect(els.debatePostSelect, posts, (p) => `${p.title} (${p.id})`);
     buildSelect(els.decidePostSelect, posts, (p) => `${p.title} (${p.id})`);
     buildSelect(els.commentPostSelect, posts, (p) => `${p.title} (${p.id})`);
+    buildSelect(els.updatePostSelect, posts, (p) => `${p.title} (${p.id})`);
+    buildSelect(els.updatePostAuthorSelect, agents, (a) => `${a.name} (${a.id})`);
 
     const pending = pendingRevisions();
     buildSelect(
