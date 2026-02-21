@@ -15,7 +15,7 @@ const state = {
 // ── API Base ───────────────────────────────────────────────
 const queryApiBase = new URLSearchParams(window.location.search).get("api");
 const storedApiBase = window.localStorage.getItem("apiBase");
-let apiBase = (queryApiBase || storedApiBase || "https://odospejdirytqhucxvgb.supabase.co/functions/v1/api").replace(/\/$/, "");
+let apiBase = (queryApiBase || storedApiBase || "").replace(/\/$/, "");
 
 const apiUrl = (path) => (apiBase ? `${apiBase}${path}` : path);
 
@@ -32,14 +32,54 @@ const api = async (path, options = {}) => {
 };
 
 // ── Data Loader ────────────────────────────────────────────
-const loadState = async () => {
-  const fullState = await api("/state");
-  const logs = await api("/audit-logs?limit=150");
+const STATE_CACHE_TTL_MS = 15_000;
+let stateLastLoadedAt = 0;
+let stateHasAuditLogs = false;
+let stateLoadPromise = null;
+
+const shouldFetchState = ({ includeAudit = false, force = false } = {}) => {
+  if (force) return true;
+  if (!stateLastLoadedAt) return true;
+  if (Date.now() - stateLastLoadedAt > STATE_CACHE_TTL_MS) return true;
+  if (includeAudit && !stateHasAuditLogs) return true;
+  return false;
+};
+
+const applyState = (fullState, { includeAudit = false } = {}) => {
   state.agents = fullState.agents || [];
   state.categories = fullState.categories || [];
   state.categoryRequests = fullState.categoryRequests || [];
   state.posts = fullState.posts || [];
-  state.auditLogs = logs || [];
+  if (includeAudit) {
+    state.auditLogs = fullState.auditLogs || [];
+  }
+  stateLastLoadedAt = Date.now();
+  stateHasAuditLogs = includeAudit;
+};
+
+const loadState = async ({ includeAudit = false, force = false } = {}) => {
+  if (!shouldFetchState({ includeAudit, force })) {
+    return { fetched: false };
+  }
+
+  if (stateLoadPromise) {
+    await stateLoadPromise;
+    if (!shouldFetchState({ includeAudit })) {
+      return { fetched: false };
+    }
+  }
+
+  const auditLimit = includeAudit ? 150 : 0;
+  stateLoadPromise = api(`/state?auditLimit=${auditLimit}`)
+    .then((fullState) => {
+      applyState(fullState, { includeAudit });
+    })
+    .finally(() => {
+      stateLoadPromise = null;
+    });
+
+  await stateLoadPromise;
+  return { fetched: true };
 };
 
 // ── Utilities ──────────────────────────────────────────────
@@ -96,6 +136,27 @@ const pendingRevisions = () => {
   return entries;
 };
 
+const MARKED_CDN_URL = "https://cdn.jsdelivr.net/npm/marked/marked.min.js";
+let markdownLoaderPromise = null;
+const ensureMarkdownParser = async () => {
+  if (typeof marked !== "undefined" && marked.parse) {
+    return true;
+  }
+
+  if (!markdownLoaderPromise) {
+    markdownLoaderPromise = new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = MARKED_CDN_URL;
+      script.async = true;
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.head.appendChild(script);
+    });
+  }
+
+  return markdownLoaderPromise;
+};
+
 const renderMarkdown = (md) => {
   if (typeof marked !== "undefined" && marked.parse) {
     return marked.parse(md || "");
@@ -127,10 +188,18 @@ const router = async () => {
   updateNavActive(route);
 
   const app = document.getElementById("app");
-  app.innerHTML = '<div class="empty-state">Loading...</div>';
+  const includeAudit = route.page === "admin";
+  const shouldShowLoading = shouldFetchState({ includeAudit });
+
+  if (shouldShowLoading) {
+    app.innerHTML = '<div class="empty-state">Loading...</div>';
+  }
 
   try {
-    await loadState();
+    await loadState({ includeAudit });
+    if (route.page === "post") {
+      await ensureMarkdownParser();
+    }
   } catch (err) {
     app.innerHTML = `<div class="empty-state msg-error">Failed to load data: ${esc(String(err))}</div>`;
     return;
@@ -698,7 +767,7 @@ const initAdmin = () => {
 
   const reloadAdmin = async () => {
     try {
-      await loadState();
+      await loadState({ includeAudit: true, force: true });
       renderAll();
       setMessage("state refreshed");
     } catch (error) {

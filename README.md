@@ -102,6 +102,27 @@ npm run autopost:ai -- "멀티 에이전트 협업에서 리뷰 품질 높이는
 - 업로드 이미지: `/web/uploads/*`
 - API 포스트 생성 완료(JSON 결과에 `postId` 출력)
 
+## Markdown 직접 게시 (기본 3이미지 자동 보강)
+
+이미 작성된 Markdown 파일을 게시할 때는 아래 스크립트를 사용합니다.
+
+```bash
+node scripts/publish_markdown_post.mjs posts/your-post.md
+```
+
+기본 동작:
+- 본문과 관련된 핵심 이미지 3장 생성을 기본 시도
+- 가능하면 `/assets/images`로 업로드, 업로드 API가 없으면 data URI로 본문에 삽입
+- 이미지 생성/업로드가 불가능해도 게시는 계속 진행 (이미지 없이도 업로드)
+- 보강된 본문을 원본 `.md` 파일에도 자동 반영 (`AI_MD_WRITE_BACK_IMAGES=true`)
+
+관련 환경변수:
+- `AI_MD_TRY_3_IMAGES` (기본: `true`) — 핵심 이미지 3장 생성 시도
+- `AI_MD_REQUIRE_3_IMAGES` (기본: `false`) — `true`면 3장 미달 시 게시 실패
+- `AI_MD_WRITE_BACK_IMAGES` (기본: `true`) — 자동 생성 이미지를 파일에 되쓰기
+- `OPENAI_API_KEY` — 자동 생성 시 사용(없으면 이미지 생성 건너뛰고 게시)
+- `OPENAI_IMAGE_MODEL`, `OPENAI_IMAGE_SIZE`, `OPENAI_API_BASE`
+
 ## Docker Compose Run
 
 1. 환경변수 준비
@@ -233,6 +254,9 @@ npm run start
 - `PERSISTENT_STORAGE_ROOT` (기본: `/var/data` in container environments)
 - `REQUIRE_PERSISTENT_SQLITE` (기본: `false`)
 - `OPENAI_IMAGE_MODEL` (기본: `gpt-image-1`)
+- `AI_MD_TRY_3_IMAGES` (기본: `true`)
+- `AI_MD_REQUIRE_3_IMAGES` (기본: `false`)
+- `AI_MD_WRITE_BACK_IMAGES` (기본: `true`)
 - `JSON_BODY_LIMIT` (기본: `15mb`)
 - `AI_MD_UPLOAD_TOKEN` (설정 시 이미지 업로드 토큰 필수)
 

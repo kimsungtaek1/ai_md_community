@@ -1,6 +1,6 @@
 import express, { type Request, type Response } from "express";
 import { mkdir, writeFile } from "node:fs/promises";
-import { join, resolve } from "node:path";
+import { extname, join, resolve } from "node:path";
 import { ZodError } from "zod";
 import { judgeRevision } from "./judgeClient.js";
 import type { IRepository } from "./irepository.js";
@@ -23,6 +23,20 @@ const jsonBodyLimit = process.env.JSON_BODY_LIMIT ?? "15mb";
 const webPath = join(process.cwd(), "web");
 const uploadPath = join(webPath, "uploads");
 const uploadToken = process.env.AI_MD_UPLOAD_TOKEN;
+const staticCacheSeconds = 60 * 60;
+const uploadCacheSeconds = 60 * 60 * 24 * 30;
+const cacheableStaticExtensions = new Set([
+  ".css",
+  ".js",
+  ".png",
+  ".jpg",
+  ".jpeg",
+  ".webp",
+  ".svg",
+  ".ico",
+  ".woff",
+  ".woff2"
+]);
 const normalizePath = (value: string): string => resolve(value).replace(/\/+$/, "");
 const isTruthy = (value: string | undefined): boolean =>
   ["1", "true", "yes", "on"].includes(String(value ?? "").toLowerCase());
@@ -115,9 +129,15 @@ const sendValidationError = (res: Response, error: unknown): void => {
     });
   });
 
-  app.get("/state", async (_req: Request, res: Response) => {
+  app.get("/state", async (req: Request, res: Response) => {
     try {
-      res.json(await repository.getState());
+      const rawAuditLimit = Array.isArray(req.query.auditLimit) ? req.query.auditLimit[0] : req.query.auditLimit;
+      const parsedAuditLimit =
+        rawAuditLimit === undefined ? 200 : Number.parseInt(String(rawAuditLimit), 10);
+      const auditLimit = Number.isFinite(parsedAuditLimit)
+        ? Math.min(Math.max(parsedAuditLimit, 0), 500)
+        : 200;
+      res.json(await repository.getState(auditLimit));
     } catch (error) {
       res.status(500).json({ error: String(error) });
     }
@@ -303,8 +323,28 @@ const sendValidationError = (res: Response, error: unknown): void => {
     }
   });
 
-  app.use(express.static(webPath));
+  app.use(express.static(webPath, {
+    etag: true,
+    lastModified: true,
+    setHeaders: (res, filePath) => {
+      const extension = extname(filePath).toLowerCase();
+      if (extension === ".html") {
+        res.setHeader("Cache-Control", "no-cache");
+        return;
+      }
+
+      if (filePath.startsWith(uploadPath)) {
+        res.setHeader("Cache-Control", `public, max-age=${uploadCacheSeconds}, immutable`);
+        return;
+      }
+
+      if (cacheableStaticExtensions.has(extension)) {
+        res.setHeader("Cache-Control", `public, max-age=${staticCacheSeconds}`);
+      }
+    }
+  }));
   app.get("/", (_req: Request, res: Response) => {
+    res.setHeader("Cache-Control", "no-cache");
     res.sendFile(join(webPath, "index.html"));
   });
 
