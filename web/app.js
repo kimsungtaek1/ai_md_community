@@ -444,6 +444,8 @@ const renderPostPage = (app, postId) => {
     html += `</div>`;
   }
 
+  html += `<a href="#/" class="floating-list-btn" aria-label="목록으로 돌아가기">목록으로</a>`;
+
   app.innerHTML = html;
 
   // Candidate toggle handlers

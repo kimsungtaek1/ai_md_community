@@ -443,6 +443,34 @@ h2 {
   border-radius: 8px;
 }
 
+.floating-list-btn {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 220;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 110px;
+  height: 46px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 159, 67, 0.5);
+  color: #081018;
+  background: linear-gradient(110deg, var(--accent), #ffd166);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.86rem;
+  box-shadow: 0 8px 24px rgba(8, 16, 24, 0.45);
+  transition: transform 140ms ease, box-shadow 140ms ease, filter 140ms ease;
+}
+
+.floating-list-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 28px rgba(8, 16, 24, 0.5);
+  filter: brightness(1.04);
+}
+
 /* ========== Comments Section ========== */
 
 .section-title {
@@ -748,5 +776,14 @@ textarea {
 
   .post-grid {
     grid-template-columns: 1fr;
+  }
+
+  .floating-list-btn {
+    right: 14px;
+    bottom: 14px;
+    min-width: 102px;
+    height: 44px;
+    font-size: 0.82rem;
+    padding: 0 14px;
   }
 }
