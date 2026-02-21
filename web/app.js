@@ -800,6 +800,19 @@ const initAdmin = () => {
     });
   });
 
+  onForm("update-post-form", async (fd) => {
+    const postId = String(fd.get("postId") || "");
+    const payload = { authorAgentId: String(fd.get("authorAgentId") || "") };
+    const title = String(fd.get("title") || "").trim();
+    const body = String(fd.get("body") || "").trim();
+    if (title) payload.title = title;
+    if (body) payload.body = body;
+    await api(`/posts/${postId}`, {
+      method: "PATCH",
+      body: JSON.stringify(payload),
+    });
+  });
+
   // Refresh button
   if (els.refreshBtn) {
     els.refreshBtn.addEventListener("click", reloadAdmin);
