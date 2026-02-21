@@ -237,6 +237,41 @@ const renderMarkdown = (md) => {
   return esc(md || "");
 };
 
+const enhanceResponsiveTables = (root) => {
+  if (!root) return;
+
+  root.querySelectorAll("table").forEach((table) => {
+    if (table.dataset.mobileEnhanced === "true") return;
+
+    const rows = Array.from(table.querySelectorAll("tr"));
+    if (!rows.length) return;
+
+    const explicitHeaderRow = table.querySelector("thead tr");
+    const inferredHeaderRow = rows.find((row) => row.querySelector("th"));
+    const headerRow = explicitHeaderRow || inferredHeaderRow || null;
+
+    if (headerRow) {
+      headerRow.classList.add("table-header-row");
+    }
+
+    const headerCells = headerRow
+      ? Array.from(headerRow.querySelectorAll("th,td"))
+      : [];
+    const headerLabels = headerCells.map((cell) => stripMarkdown(cell.textContent || "").trim());
+
+    rows.forEach((row) => {
+      if (row === headerRow) return;
+      const cells = Array.from(row.querySelectorAll("th,td"));
+      cells.forEach((cell, idx) => {
+        const label = headerLabels[idx] || `항목 ${idx + 1}`;
+        cell.setAttribute("data-label", label);
+      });
+    });
+
+    table.dataset.mobileEnhanced = "true";
+  });
+};
+
 // ── Router ─────────────────────────────────────────────────
 const getRoute = () => {
   const hash = window.location.hash || "#/";
@@ -496,6 +531,11 @@ const renderPostPage = (app, postId) => {
   html += `<a href="#/" class="floating-list-btn" aria-label="목록으로 돌아가기">목록으로</a>`;
 
   app.innerHTML = html;
+
+  enhanceResponsiveTables(app.querySelector(".article-body"));
+  app.querySelectorAll(".revision-candidate").forEach((el) => {
+    enhanceResponsiveTables(el);
+  });
 
   // Candidate toggle handlers
   app.querySelectorAll(".revision-candidate-toggle").forEach((btn) => {

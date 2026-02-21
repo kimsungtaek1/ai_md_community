@@ -480,14 +480,33 @@ h2 {
 .article-body table {
   width: 100%;
   table-layout: fixed;
+  margin: 1em 0;
+  border-collapse: collapse;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 .article-body th,
 .article-body td {
+  padding: 10px;
+  border-bottom: 1px solid rgba(159, 198, 224, 0.2);
   white-space: normal;
   word-break: break-word;
   overflow-wrap: anywhere;
   vertical-align: top;
+}
+
+.article-body tr:last-child td,
+.article-body tr:last-child th {
+  border-bottom: 0;
+}
+
+.article-body th {
+  background: rgba(8, 17, 27, 0.75);
+  color: var(--accent-2);
+  font-weight: 600;
+  font-size: 0.82rem;
 }
 
 .article-body a {
@@ -736,6 +755,8 @@ h2 {
   margin: 4px 0 0;
   color: var(--muted);
   font-size: 0.8rem;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .admin-grid {
@@ -816,6 +837,20 @@ textarea {
 /* ========== Responsive ========== */
 
 @media (max-width: 860px) {
+  .top-nav {
+    padding: 12px 14px;
+    gap: 10px;
+  }
+
+  .nav-brand {
+    font-size: 1.02rem;
+    line-height: 1.15;
+  }
+
+  #app {
+    padding: 16px 14px 32px;
+  }
+
   .admin-header {
     flex-direction: column;
   }
@@ -827,10 +862,40 @@ textarea {
 
   .api-tools input {
     width: 100%;
+    min-width: 0;
+  }
+
+  .api-tools .ghost-btn,
+  .api-tools .action-btn {
+    width: 100%;
   }
 
   .action-btn {
     width: 100%;
+  }
+
+  .post-card {
+    padding: 14px;
+  }
+
+  .post-card-meta,
+  .post-card-footer {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .article-body {
+    font-size: 0.92rem;
+    line-height: 1.68;
+  }
+
+  .article-body pre {
+    padding: 10px;
+    font-size: 0.78rem;
+  }
+
+  .section-title {
+    margin-top: 26px;
   }
 
   .post-grid {
@@ -844,5 +909,65 @@ textarea {
     height: 44px;
     font-size: 0.82rem;
     padding: 0 14px;
+  }
+}
+
+@media (max-width: 720px) {
+  .article-body table {
+    border: 0;
+    border-radius: 0;
+    margin: 0.8em 0;
+    background: transparent;
+  }
+
+  .article-body thead,
+  .article-body .table-header-row {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .article-body tbody,
+  .article-body tr,
+  .article-body td,
+  .article-body th {
+    display: block;
+    width: 100%;
+  }
+
+  .article-body tr {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 10px 12px;
+    margin: 0 0 10px;
+    background: rgba(8, 17, 27, 0.68);
+  }
+
+  .article-body td,
+  .article-body th {
+    border: 0;
+    padding: 0;
+  }
+
+  .article-body tr > * + * {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed rgba(159, 198, 224, 0.22);
+  }
+
+  .article-body td::before,
+  .article-body th::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 4px;
+    color: var(--accent-2);
+    font-size: 0.74rem;
+    font-weight: 600;
   }
 }
