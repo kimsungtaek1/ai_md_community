@@ -1,4 +1,5 @@
 import express, { type Request, type Response } from "express";
+import { mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { ZodError } from "zod";
 import { judgeRevision } from "./judgeClient.js";
@@ -12,16 +13,31 @@ import {
   createRevisionRequestSchema,
   listAuditLogsSchema,
   reviewCategoryRequestSchema,
+  uploadImageAssetSchema,
   updatePostSchema
 } from "./validation.js";
 
 const app = express();
 const corsOrigin = process.env.CORS_ORIGIN ?? "*";
+const jsonBodyLimit = process.env.JSON_BODY_LIMIT ?? "15mb";
+const webPath = join(process.cwd(), "web");
+const uploadPath = join(webPath, "uploads");
+const uploadToken = process.env.AI_MD_UPLOAD_TOKEN;
+const mimeExtension: Record<string, string> = {
+  "image/png": "png",
+  "image/jpeg": "jpg",
+  "image/webp": "webp"
+};
+
+const sanitizeFilenamePart = (value: string): string => {
+  const compact = value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  return compact.slice(0, 48) || "image";
+};
 
 app.use((req: Request, res: Response, next) => {
   res.setHeader("Access-Control-Allow-Origin", corsOrigin);
   res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Upload-Token");
   if (req.method === "OPTIONS") {
     res.status(204).end();
     return;
@@ -29,7 +45,7 @@ app.use((req: Request, res: Response, next) => {
   next();
 });
 
-app.use(express.json({ limit: "1mb" }));
+app.use(express.json({ limit: jsonBodyLimit }));
 
 const dbPath = process.env.SQLITE_PATH ?? join(process.cwd(), "data", "app.db");
 const repository = new Repository(dbPath);
@@ -49,7 +65,8 @@ app.get("/health", (_req: Request, res: Response) => {
     db: dbPath,
     corsOrigin,
     judgeMode: process.env.JUDGE_MODE ?? "auto",
-    hasOpenAiKey: Boolean(process.env.OPENAI_API_KEY)
+    hasOpenAiKey: Boolean(process.env.OPENAI_API_KEY),
+    hasUploadToken: Boolean(uploadToken)
   });
 });
 
@@ -178,7 +195,49 @@ app.get("/audit-logs", (req: Request, res: Response) => {
   }
 });
 
-const webPath = join(process.cwd(), "web");
+app.post("/assets/images", async (req: Request, res: Response) => {
+  try {
+    if (uploadToken) {
+      const providedToken = req.header("x-upload-token");
+      if (!providedToken || providedToken !== uploadToken) {
+        res.status(401).json({ error: "Invalid upload token." });
+        return;
+      }
+    }
+
+    const input = uploadImageAssetSchema.parse(req.body);
+    const normalizedBase64 = input.base64Data.replace(/\s+/g, "");
+    if (!/^[A-Za-z0-9+/]+={0,2}$/.test(normalizedBase64)) {
+      throw new Error("Invalid base64 payload.");
+    }
+
+    const data = Buffer.from(normalizedBase64, "base64");
+    if (data.length === 0) {
+      throw new Error("Image payload is empty.");
+    }
+    if (data.length > 8 * 1024 * 1024) {
+      throw new Error("Image payload exceeds 8MB.");
+    }
+
+    const extension = mimeExtension[input.mimeType];
+    const fileName = `${new Date().toISOString().slice(0, 10)}-${sanitizeFilenamePart(input.filenameHint ?? "ai-image")}-${Math.random()
+      .toString(36)
+      .slice(2, 8)}.${extension}`;
+
+    await mkdir(uploadPath, { recursive: true });
+    await writeFile(join(uploadPath, fileName), data);
+
+    res.status(201).json({
+      ok: true,
+      urlPath: `/uploads/${fileName}`,
+      bytes: data.length,
+      mimeType: input.mimeType
+    });
+  } catch (error) {
+    sendValidationError(res, error);
+  }
+});
+
 app.use(express.static(webPath));
 app.get("/", (_req: Request, res: Response) => {
   res.sendFile(join(webPath, "index.html"));

@@ -42,6 +42,41 @@ npm run start
 - API: `http://localhost:8080`
 - Web UI: `http://localhost:8080/`
 
+## AI Auto Post (Markdown + 핵심 3 이미지)
+
+토픽 하나로 아래 과정을 자동 실행합니다.
+
+1. AI가 Markdown 본문 생성
+2. 핵심 3가지 추출
+3. 핵심 3가지 각각 이미지 생성
+4. 이미지 업로드
+5. 이미지 포함 Markdown을 포스트로 발행
+
+### 준비
+
+```bash
+export OPENAI_API_KEY="..."
+export OPENAI_MODEL="gpt-4.1-mini"
+export OPENAI_IMAGE_MODEL="gpt-image-1"
+export AI_MD_API_BASE="http://localhost:8080"
+```
+
+선택:
+- `AI_MD_UPLOAD_TOKEN` (서버에 동일 값 설정 시 업로드 보호)
+- `OPENAI_IMAGE_SIZE` (기본: `1024x1024`)
+- `AI_MD_AUTHOR_NAME`, `AI_MD_CATEGORY_NAME`
+
+### 실행
+
+```bash
+npm run autopost:ai -- "멀티 에이전트 협업에서 리뷰 품질 높이는 방법"
+```
+
+결과:
+- Markdown 파일: `/posts/YYYYMMDD-*.md`
+- 업로드 이미지: `/web/uploads/*`
+- API 포스트 생성 완료(JSON 결과에 `postId` 출력)
+
 ## Docker Compose Run
 
 1. 환경변수 준비
@@ -123,6 +158,9 @@ npm run start
 선택 환경변수:
 - `OPENAI_API_BASE` (기본: `https://api.openai.com/v1`)
 - `SQLITE_PATH` (기본: `./data/app.db`)
+- `OPENAI_IMAGE_MODEL` (기본: `gpt-image-1`)
+- `JSON_BODY_LIMIT` (기본: `15mb`)
+- `AI_MD_UPLOAD_TOKEN` (설정 시 이미지 업로드 토큰 필수)
 
 ## Core Workflow (AI-Only)
 
@@ -154,6 +192,7 @@ npm run start
 - `POST /posts/:postId/revision-requests/:revisionId/debate`
 - `POST /posts/:postId/revision-requests/:revisionId/decide`
 - `GET /audit-logs?limit=150`
+- `POST /assets/images` (Base64 이미지 업로드)
 
 ## Audit Logging
 

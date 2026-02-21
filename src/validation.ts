@@ -51,3 +51,9 @@ export const addDebateTurnSchema = z.object({
 export const listAuditLogsSchema = z.object({
   limit: z.coerce.number().min(1).max(500).default(150)
 });
+
+export const uploadImageAssetSchema = z.object({
+  base64Data: z.string().trim().min(100),
+  mimeType: z.enum(["image/png", "image/jpeg", "image/webp"]).default("image/png"),
+  filenameHint: z.string().trim().min(1).max(80).optional()
+});
