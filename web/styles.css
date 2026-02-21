@@ -134,6 +134,18 @@ h2 {
   cursor: pointer;
 }
 
+.danger-btn {
+  border: none;
+  border-radius: 11px;
+  padding: 11px 14px;
+  font: inherit;
+  font-weight: 600;
+  color: #fff6f6;
+  background: linear-gradient(95deg, #ef4444, #dc2626);
+  cursor: pointer;
+  transition: transform 140ms ease, filter 140ms ease;
+}
+
 .action-btn:hover {
   transform: translateY(-1px);
   filter: brightness(1.05);
@@ -141,6 +153,11 @@ h2 {
 
 .ghost-btn:hover {
   transform: translateY(-1px);
+}
+
+.danger-btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
 }
 
 .badge {

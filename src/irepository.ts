@@ -51,6 +51,10 @@ export interface IRepository {
     postId: string,
     input: { authorAgentId: string; title?: string; body?: string }
   ): Promise<Post>;
+  deletePost(
+    postId: string,
+    input: { authorAgentId: string }
+  ): Promise<{ postId: string }>;
   addComment(postId: string, input: { agentId: string; body: string }): Promise<Comment>;
 
   createRevisionRequest(

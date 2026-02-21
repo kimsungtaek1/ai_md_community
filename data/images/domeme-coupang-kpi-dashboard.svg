@@ -11,26 +11,26 @@
   </defs>
 
   <rect width="1200" height="675" fill="url(#bg3)"/>
-  <text x="72" y="86" fill="#E2E8F0" font-size="40" font-family="Arial, sans-serif" font-weight="700">주간 KPI 운영 대시보드</text>
-  <text x="72" y="122" fill="#CBD5E1" font-size="22" font-family="Arial, sans-serif">총매출보다 원인 KPI를 함께 봅니다</text>
+  <text x="72" y="86" fill="#E2E8F0" font-size="40" font-family="Arial, sans-serif" font-weight="700">주간 핵심지표 운영 대시보드</text>
+  <text x="72" y="122" fill="#CBD5E1" font-size="22" font-family="Arial, sans-serif">총매출보다 원인 지표를 함께 봅니다</text>
 
   <g transform="translate(72,165)">
     <rect width="250" height="140" rx="16" fill="#111827" stroke="#334155" stroke-width="2"/>
-    <text x="22" y="45" fill="#94A3B8" font-size="24" font-family="Arial, sans-serif">CTR</text>
+    <text x="22" y="45" fill="#94A3B8" font-size="24" font-family="Arial, sans-serif">클릭률</text>
     <text x="22" y="100" fill="#E2E8F0" font-size="50" font-family="Arial, sans-serif" font-weight="800">3.0%</text>
     <rect x="190" y="24" width="40" height="40" rx="8" fill="url(#kpi)"/>
   </g>
 
   <g transform="translate(345,165)">
     <rect width="250" height="140" rx="16" fill="#111827" stroke="#334155" stroke-width="2"/>
-    <text x="22" y="45" fill="#94A3B8" font-size="24" font-family="Arial, sans-serif">CVR</text>
+    <text x="22" y="45" fill="#94A3B8" font-size="24" font-family="Arial, sans-serif">전환율</text>
     <text x="22" y="100" fill="#E2E8F0" font-size="50" font-family="Arial, sans-serif" font-weight="800">2.2%</text>
     <rect x="190" y="24" width="40" height="40" rx="8" fill="#A7F3D0"/>
   </g>
 
   <g transform="translate(618,165)">
     <rect width="250" height="140" rx="16" fill="#111827" stroke="#334155" stroke-width="2"/>
-    <text x="22" y="45" fill="#94A3B8" font-size="24" font-family="Arial, sans-serif">AOV</text>
+    <text x="22" y="45" fill="#94A3B8" font-size="24" font-family="Arial, sans-serif">객단가</text>
     <text x="22" y="100" fill="#E2E8F0" font-size="46" font-family="Arial, sans-serif" font-weight="800">19,000</text>
     <rect x="190" y="24" width="40" height="40" rx="8" fill="#FDE68A"/>
   </g>
@@ -60,13 +60,13 @@
     <rect width="253" height="235" rx="16" fill="#0B1220" stroke="#334155" stroke-width="2"/>
     <text x="22" y="40" fill="#CBD5E1" font-size="24" font-family="Arial, sans-serif" font-weight="700">주간 실행 항목</text>
     <text x="22" y="78" fill="#E2E8F0" font-size="20" font-family="Arial, sans-serif">1. 비효율 광고 중단</text>
-    <text x="22" y="112" fill="#E2E8F0" font-size="20" font-family="Arial, sans-serif">2. 상위 SKU 상세 개선</text>
+    <text x="22" y="112" fill="#E2E8F0" font-size="20" font-family="Arial, sans-serif">2. 상위 상품군 상세 개선</text>
     <text x="22" y="146" fill="#E2E8F0" font-size="20" font-family="Arial, sans-serif">3. 묶음 옵션 추가</text>
     <text x="22" y="180" fill="#E2E8F0" font-size="20" font-family="Arial, sans-serif">4. 반품 원인 점검</text>
   </g>
 
   <g transform="translate(72,611)">
     <rect width="1056" height="38" rx="10" fill="#1E293B" stroke="#334155" stroke-width="1.5"/>
-    <text x="24" y="25" fill="#E2E8F0" font-size="19" font-family="Arial, sans-serif">원칙: KPI 주간 점검 후 고마진 SKU 집중</text>
+    <text x="24" y="25" fill="#E2E8F0" font-size="19" font-family="Arial, sans-serif">원칙: 핵심지표 주간 점검 후 고마진 상품군 집중</text>
   </g>
 </svg>

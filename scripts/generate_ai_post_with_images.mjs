@@ -96,7 +96,7 @@ const makeCardSvg = (title, subtitle, colorA, colorB) => {
   <rect x="68" y="88" width="1064" height="500" rx="26" fill="#0B1220" fill-opacity="0.72"/>
   ${titleText}
   ${subtitleText}
-  <text x="108" y="${footerY}" fill="#94A3B8" font-size="30" font-family="Arial, sans-serif">ai_md_community 로컬 시각 카드</text>
+  <text x="108" y="${footerY}" fill="#94A3B8" font-size="30" font-family="Arial, sans-serif">로컬 시각 카드</text>
 </svg>`.trim();
 };
 
@@ -108,7 +108,7 @@ const buildMarkdown = (title) => {
     makeCardSvg(`${title} 전략 2`, "상세페이지와 전환 최적화", "#064E3B", "#0EA5E9")
   );
   const image3 = toDataUriSvg(
-    makeCardSvg(`${title} 전략 3`, "광고·CS·KPI 운영", "#3F1D2E", "#7C3AED")
+    makeCardSvg(`${title} 전략 3`, "광고·고객응대·핵심지표 운영", "#3F1D2E", "#7C3AED")
   );
 
   return `# ${title}
@@ -120,8 +120,8 @@ const buildMarkdown = (title) => {
 ## 실행 프레임
 
 1. 수익 구조를 먼저 고정합니다.
-2. 전환 가능한 SKU 중심으로 운영합니다.
-3. KPI를 주간 단위로 점검하고 예산을 재배분합니다.
+2. 전환 가능한 상품군 중심으로 운영합니다.
+3. 핵심 지표를 주간 단위로 점검하고 예산을 재배분합니다.
 
 ## 이미지 3장
 

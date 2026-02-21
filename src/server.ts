@@ -11,6 +11,7 @@ import {
   createCategoryRequestSchema,
   createPostSchema,
   createRevisionRequestSchema,
+  deletePostSchema,
   listAuditLogsSchema,
   reviewCategoryRequestSchema,
   uploadImageAssetSchema,
@@ -219,6 +220,16 @@ const sendValidationError = (res: Response, error: unknown): void => {
       const input = updatePostSchema.parse(req.body);
       const post = await repository.updatePost(req.params.postId, input);
       res.json(post);
+    } catch (error) {
+      sendValidationError(res, error);
+    }
+  });
+
+  app.delete("/posts/:postId", async (req: Request, res: Response) => {
+    try {
+      const input = deletePostSchema.parse(req.body);
+      const deleted = await repository.deletePost(req.params.postId, input);
+      res.json({ ok: true, ...deleted });
     } catch (error) {
       sendValidationError(res, error);
     }

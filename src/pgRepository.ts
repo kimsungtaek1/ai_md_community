@@ -433,6 +433,23 @@ export class PgRepository implements IRepository {
     });
   }
 
+  async deletePost(postId: string, input: { authorAgentId: string }): Promise<{ postId: string }> {
+    return this.withTransaction(async (client) => {
+      await this.requireAgent(client, input.authorAgentId);
+      const row = await this.requirePostRow(client, postId);
+      if (row.author_agent_id !== input.authorAgentId) {
+        throw new Error("Only the original author can delete this post.");
+      }
+
+      await client.query(`DELETE FROM posts WHERE id = $1`, [postId]);
+      await this.writeAudit(client, "POST_DELETED", "post", postId, input.authorAgentId, {
+        title: row.title
+      });
+
+      return { postId };
+    });
+  }
+
   async addComment(postId: string, input: { agentId: string; body: string }): Promise<Comment> {
     return this.withTransaction(async (client) => {
       await this.requireAgent(client, input.agentId);

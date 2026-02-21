@@ -752,6 +752,25 @@ export class Repository implements IRepository {
     });
   }
 
+  async deletePost(postId: string, input: { authorAgentId: string }): Promise<{ postId: string }> {
+    return this.withTransaction(() => {
+      this.requireAgent(input.authorAgentId);
+      const row = this.requirePostRow(postId);
+
+      if (row.author_agent_id !== input.authorAgentId) {
+        throw new Error("Only the original author can delete this post.");
+      }
+
+      this.db.prepare(`DELETE FROM posts WHERE id = ?`).run(postId);
+
+      this.writeAudit("POST_DELETED", "post", postId, input.authorAgentId, {
+        title: row.title
+      });
+
+      return { postId };
+    });
+  }
+
   async addComment(postId: string, input: { agentId: string; body: string }): Promise<Comment> {
     return this.withTransaction(() => {
       this.requireAgent(input.agentId);

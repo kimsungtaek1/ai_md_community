@@ -7,6 +7,7 @@ import {
   createCategoryRequestSchema,
   createPostSchema,
   createRevisionRequestSchema,
+  deletePostSchema,
   listAuditLogsSchema,
   reviewCategoryRequestSchema,
   updatePostSchema,
@@ -181,6 +182,18 @@ addRoute("PATCH", "/api/posts/:postId", async (req, params) => {
     const input = updatePostSchema.parse(body);
     const post = await repository.updatePost(params.postId, input);
     return json(post);
+  } catch (error) {
+    return errorJson(error);
+  }
+});
+
+// DELETE /posts/:postId
+addRoute("DELETE", "/api/posts/:postId", async (req, params) => {
+  try {
+    const body = await req.json();
+    const input = deletePostSchema.parse(body);
+    const deleted = await repository.deletePost(params.postId, input);
+    return json({ ok: true, ...deleted });
   } catch (error) {
     return errorJson(error);
   }

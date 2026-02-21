@@ -38,7 +38,7 @@
     <text x="28" y="154" fill="#111827" font-size="23" font-family="Arial, sans-serif">역할: 이익 핵심</text>
     <text x="28" y="194" fill="#111827" font-size="23" font-family="Arial, sans-serif">마진: 중상</text>
     <text x="28" y="234" fill="#111827" font-size="23" font-family="Arial, sans-serif">주력 판매 목표</text>
-    <text x="28" y="274" fill="#111827" font-size="23" font-family="Arial, sans-serif">AOV 상승</text>
+    <text x="28" y="274" fill="#111827" font-size="23" font-family="Arial, sans-serif">객단가 상승</text>
   </g>
 
   <g transform="translate(805,145)">

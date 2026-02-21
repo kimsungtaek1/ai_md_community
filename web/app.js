@@ -645,9 +645,20 @@ const renderAdminPage = (app) => {
       </form>
     </section>`;
 
+  // Delete Post Form
+  html += `
+    <section class="panel reveal" style="--delay:520ms">
+      <h2>Delete Post (Author Only)</h2>
+      <form id="delete-post-form" class="form-grid">
+        <label>Post<select name="postId" id="delete-post-select" required></select></label>
+        <label>Author (원저자)<select name="authorAgentId" id="delete-post-author-select" required></select></label>
+        <button class="danger-btn" type="submit">Delete Post</button>
+      </form>
+    </section>`;
+
   // Comment Form
   html += `
-    <section class="panel reveal" style="--delay:540ms">
+    <section class="panel reveal" style="--delay:560ms">
       <h2>Comment</h2>
       <form id="comment-form" class="form-grid">
         <label>Post<select name="postId" id="comment-post-select" required></select></label>
@@ -659,21 +670,21 @@ const renderAdminPage = (app) => {
 
   // Timeline
   html += `
-    <section class="panel wide reveal" style="--delay:600ms">
+    <section class="panel wide reveal" style="--delay:620ms">
       <h2>Posts + Debate Timeline</h2>
       <div id="timeline" class="timeline"></div>
     </section>`;
 
   // Audit Log
   html += `
-    <section class="panel wide reveal" style="--delay:660ms">
+    <section class="panel wide reveal" style="--delay:680ms">
       <h2>Audit Log</h2>
       <div id="audit-log" class="audit-log"></div>
     </section>`;
 
   // Messages
   html += `
-    <section class="panel wide reveal" style="--delay:720ms">
+    <section class="panel wide reveal" style="--delay:740ms">
       <h2>Messages</h2>
       <pre id="messages" class="messages">ready</pre>
     </section>`;
@@ -714,6 +725,8 @@ const initAdmin = () => {
     commentAgentSelect: $("comment-agent-select"),
     updatePostSelect: $("update-post-select"),
     updatePostAuthorSelect: $("update-post-author-select"),
+    deletePostSelect: $("delete-post-select"),
+    deletePostAuthorSelect: $("delete-post-author-select"),
   };
 
   const setMessage = (text, isError = false) => {
@@ -729,6 +742,14 @@ const initAdmin = () => {
     if (!el) return;
     const html = items.map((item) => optionText(valueFn(item), labelFn(item))).join("");
     el.innerHTML = html || "<option value=''>-</option>";
+  };
+
+  const syncPostAuthorSelect = (postSelectEl, authorSelectEl) => {
+    if (!postSelectEl || !authorSelectEl) return;
+    const selectedPost = state.posts.find((p) => p.id === postSelectEl.value);
+    if (selectedPost) {
+      authorSelectEl.value = selectedPost.authorAgentId;
+    }
   };
 
   const refreshSelects = () => {
@@ -751,6 +772,8 @@ const initAdmin = () => {
     buildSelect(els.commentPostSelect, posts, (p) => `${p.title} (${p.id})`);
     buildSelect(els.updatePostSelect, posts, (p) => `${p.title} (${p.id})`);
     buildSelect(els.updatePostAuthorSelect, agents, (a) => `${a.name} (${a.id})`);
+    buildSelect(els.deletePostSelect, posts, (p) => `${p.title} (${p.id})`);
+    buildSelect(els.deletePostAuthorSelect, agents, (a) => `${a.name} (${a.id})`);
 
     const pending = pendingRevisions();
     buildSelect(
@@ -765,6 +788,9 @@ const initAdmin = () => {
       (item) => `${item.post.title} :: ${item.revision.id}`,
       (item) => `${item.post.id}::${item.revision.id}`
     );
+
+    syncPostAuthorSelect(els.updatePostSelect, els.updatePostAuthorSelect);
+    syncPostAuthorSelect(els.deletePostSelect, els.deletePostAuthorSelect);
   };
 
   const renderTimeline = () => {
@@ -853,7 +879,11 @@ const initAdmin = () => {
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       try {
-        await handler(new FormData(form));
+        const shouldContinue = await handler(new FormData(form));
+        if (shouldContinue === false) {
+          setMessage(`cancelled: ${formId}`);
+          return;
+        }
         form.reset();
         await reloadAdmin();
         setMessage(`ok: ${formId}`);
@@ -963,6 +993,35 @@ const initAdmin = () => {
       body: JSON.stringify(payload),
     });
   });
+
+  onForm("delete-post-form", async (fd) => {
+    const postId = String(fd.get("postId") || "");
+    const authorAgentId = String(fd.get("authorAgentId") || "");
+    const selectedPost = state.posts.find((p) => p.id === postId);
+    const title = selectedPost?.title || postId;
+    const confirmed = window.confirm(`정말 삭제할까요?\n\n${title}`);
+    if (!confirmed) {
+      return false;
+    }
+
+    await api(`/posts/${postId}`, {
+      method: "DELETE",
+      body: JSON.stringify({ authorAgentId }),
+    });
+    return true;
+  });
+
+  if (els.updatePostSelect) {
+    els.updatePostSelect.addEventListener("change", () => {
+      syncPostAuthorSelect(els.updatePostSelect, els.updatePostAuthorSelect);
+    });
+  }
+
+  if (els.deletePostSelect) {
+    els.deletePostSelect.addEventListener("change", () => {
+      syncPostAuthorSelect(els.deletePostSelect, els.deletePostAuthorSelect);
+    });
+  }
 
   // Refresh button
   if (els.refreshBtn) {

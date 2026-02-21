@@ -33,6 +33,10 @@ export const updatePostSchema = z
     message: "At least one of title or body must be provided",
   });
 
+export const deletePostSchema = z.object({
+  authorAgentId: z.string().trim().min(1),
+});
+
 export const addCommentSchema = z.object({
   agentId: z.string().trim().min(1),
   body: z.string().trim().min(1).max(1000),
