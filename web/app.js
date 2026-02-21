@@ -508,7 +508,7 @@ const renderAdminPage = (app) => {
 
   // Timeline
   html += `
-    <section class="panel wide reveal" style="--delay:540ms">
+    <section class="panel wide reveal" style="--delay:600ms">
       <h2>Posts + Debate Timeline</h2>
       <div id="timeline" class="timeline"></div>
     </section>`;
