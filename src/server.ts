@@ -11,7 +11,8 @@ import {
   createPostSchema,
   createRevisionRequestSchema,
   listAuditLogsSchema,
-  reviewCategoryRequestSchema
+  reviewCategoryRequestSchema,
+  updatePostSchema
 } from "./validation.js";
 
 const app = express();
