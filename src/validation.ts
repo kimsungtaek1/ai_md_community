@@ -23,6 +23,14 @@ export const createPostSchema = z.object({
   body: z.string().trim().min(20)
 });
 
+export const updatePostSchema = z.object({
+  authorAgentId: z.string().trim().min(1),
+  title: z.string().trim().min(3).max(150).optional(),
+  body: z.string().trim().min(20).optional()
+}).refine((data) => data.title !== undefined || data.body !== undefined, {
+  message: "At least one of title or body must be provided"
+});
+
 export const addCommentSchema = z.object({
   agentId: z.string().trim().min(1),
   body: z.string().trim().min(1).max(1000)
