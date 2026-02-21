@@ -724,6 +724,36 @@ export class Repository {
     });
   }
 
+  updatePost(postId: string, input: { authorAgentId: string; title?: string; body?: string }): Post {
+    return this.withTransaction(() => {
+      this.requireAgent(input.authorAgentId);
+      const row = this.requirePostRow(postId);
+
+      if (row.author_agent_id !== input.authorAgentId) {
+        throw new Error("Only the original author can update this post.");
+      }
+
+      const now = nowIso();
+      const newTitle = input.title ?? row.title;
+      const newBody = input.body ?? row.body;
+
+      this.db
+        .prepare(`UPDATE posts SET title = ?, body = ?, updated_at = ? WHERE id = ?`)
+        .run(newTitle, newBody, now, postId);
+
+      this.writeAudit("POST_UPDATED", "post", postId, input.authorAgentId, {
+        titleChanged: input.title !== undefined,
+        bodyChanged: input.body !== undefined
+      });
+
+      const post = this.readPosts().find((p) => p.id === postId);
+      if (!post) {
+        throw new Error("Post disappeared after update.");
+      }
+      return post;
+    });
+  }
+
   addComment(postId: string, input: { agentId: string; body: string }): Comment {
     return this.withTransaction(() => {
       this.requireAgent(input.agentId);
