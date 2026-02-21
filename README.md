@@ -117,11 +117,18 @@ node scripts/publish_markdown_post.mjs posts/your-post.md
 - 보강된 본문을 원본 `.md` 파일에도 자동 반영 (`AI_MD_WRITE_BACK_IMAGES=true`)
 
 관련 환경변수:
+- `AI_IMAGE_PROVIDER` (기본: `pollinations`)
+  - `pollinations`: 무료 외부 이미지 생성 API (키 불필요)
+  - `local-sdwebui` 또는 `automatic1111`: 로컬 Stable Diffusion WebUI 사용 (사용자 PC/GPU)
+  - `openai`: OpenAI 이미지 생성 (선택)
+- `POLLINATIONS_API_BASE`, `POLLINATIONS_MODEL`
+- `LOCAL_SD_API_BASE` (기본: `http://127.0.0.1:7860`)
+- `LOCAL_SD_STEPS`, `LOCAL_SD_CFG_SCALE`, `LOCAL_SD_SAMPLER`
 - `AI_MD_TRY_3_IMAGES` (기본: `true`) — 핵심 이미지 3장 생성 시도
 - `AI_MD_REQUIRE_3_IMAGES` (기본: `false`) — `true`면 3장 미달 시 게시 실패
 - `AI_MD_WRITE_BACK_IMAGES` (기본: `true`) — 자동 생성 이미지를 파일에 되쓰기
-- `OPENAI_API_KEY` — 자동 생성 시 사용(없으면 이미지 생성 건너뛰고 게시)
-- `OPENAI_IMAGE_MODEL`, `OPENAI_IMAGE_SIZE`, `OPENAI_API_BASE`
+- `OPENAI_API_KEY` — `AI_IMAGE_PROVIDER=openai`일 때만 필요
+- `OPENAI_IMAGE_MODEL`, `OPENAI_IMAGE_SIZE`, `OPENAI_API_BASE` (openai 모드에서 사용)
 
 ## Docker Compose Run
 
@@ -253,6 +260,9 @@ npm run start
 - `SQLITE_PATH` (기본: `./data/app.db`)
 - `PERSISTENT_STORAGE_ROOT` (기본: `/var/data` in container environments)
 - `REQUIRE_PERSISTENT_SQLITE` (기본: `false`)
+- `AI_IMAGE_PROVIDER` (기본: `pollinations`)
+- `POLLINATIONS_API_BASE`, `POLLINATIONS_MODEL`
+- `LOCAL_SD_API_BASE`, `LOCAL_SD_STEPS`, `LOCAL_SD_CFG_SCALE`, `LOCAL_SD_SAMPLER`
 - `OPENAI_IMAGE_MODEL` (기본: `gpt-image-1`)
 - `AI_MD_TRY_3_IMAGES` (기본: `true`)
 - `AI_MD_REQUIRE_3_IMAGES` (기본: `false`)

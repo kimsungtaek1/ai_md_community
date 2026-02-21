@@ -20,8 +20,15 @@ const uploadToken = process.env.AI_MD_UPLOAD_TOKEN;
 
 const openAiApiBase = (process.env.OPENAI_API_BASE || "https://api.openai.com/v1").replace(/\/$/, "");
 const openAiApiKey = process.env.OPENAI_API_KEY;
-const imageModel = process.env.OPENAI_IMAGE_MODEL || "gpt-image-1";
 const imageSize = process.env.OPENAI_IMAGE_SIZE || "1024x1024";
+const imageProvider = (process.env.AI_IMAGE_PROVIDER || "pollinations").trim().toLowerCase();
+const imageModel = process.env.OPENAI_IMAGE_MODEL || "gpt-image-1";
+const pollinationsApiBase = (process.env.POLLINATIONS_API_BASE || "https://image.pollinations.ai").replace(/\/$/, "");
+const pollinationsModel = process.env.POLLINATIONS_MODEL || "flux";
+const localSdApiBase = (process.env.LOCAL_SD_API_BASE || "http://127.0.0.1:7860").replace(/\/$/, "");
+const localSdSteps = Number(process.env.LOCAL_SD_STEPS || 24);
+const localSdCfgScale = Number(process.env.LOCAL_SD_CFG_SCALE || 6.5);
+const localSdSampler = process.env.LOCAL_SD_SAMPLER || "DPM++ 2M Karras";
 
 const parseBoolean = (value, fallback) => {
   if (value === undefined) return fallback;
@@ -42,6 +49,19 @@ const readMarkdown = async (path) => {
   const text = await readFile(path, "utf8");
   return text.replace(/\r\n/g, "\n").trim();
 };
+
+const parseImageSize = (raw) => {
+  const match = String(raw).trim().match(/^(\d{2,5})x(\d{2,5})$/i);
+  if (!match) {
+    return { width: 1024, height: 1024 };
+  }
+  return {
+    width: Math.max(128, Math.min(2048, Number(match[1]))),
+    height: Math.max(128, Math.min(2048, Number(match[2])))
+  };
+};
+
+const { width: imageWidth, height: imageHeight } = parseImageSize(imageSize);
 
 const clampTitle = (title) => {
   const compact = title.replace(/\s+/g, " ").trim();
@@ -91,7 +111,7 @@ const api = async (method, path, body, extraHeaders = {}) => {
 
 const openAi = async (path, payload) => {
   if (!openAiApiKey) {
-    throw new Error("OPENAI_API_KEY is required to auto-generate missing images.");
+    throw new Error("OPENAI_API_KEY is required when AI_IMAGE_PROVIDER=openai.");
   }
 
   const res = await fetch(`${openAiApiBase}${path}`, {
@@ -161,23 +181,28 @@ const fetchBufferFromUrl = async (url) => {
   }
 
   const arrayBuffer = await res.arrayBuffer();
-  const contentType = (res.headers.get("content-type") || "image/png").split(";")[0].trim();
+  const contentType = (res.headers.get("content-type") || "application/octet-stream").split(";")[0].trim();
+  if (!contentType.startsWith("image/")) {
+    const message = Buffer.from(arrayBuffer).toString("utf8").slice(0, 180);
+    throw new Error(`Image endpoint returned non-image content (${contentType}): ${message}`);
+  }
   const base64Data = Buffer.from(arrayBuffer).toString("base64");
   return { base64Data, mimeType: contentType };
 };
 
-const generateOneImage = async (title, focus) => {
-  const prompt = [
-    "Create a clean editorial illustration for a Korean markdown article.",
-    `Article title: ${title}`,
-    `Focus: ${focus}`,
-    "Style: minimal, high-contrast, modern infographic mood, no watermark, no logo, no text overlay."
-  ].join("\n");
+const buildImagePrompt = (title, focus) => [
+  "Create a clean editorial illustration for a Korean markdown article.",
+  `Article title: ${title}`,
+  `Focus: ${focus}`,
+  "Style: minimal, high-contrast, modern infographic mood, no watermark, no logo, no text overlay."
+].join("\n");
 
+const generateWithOpenAi = async (title, focus) => {
+  const prompt = buildImagePrompt(title, focus);
   const generated = await openAi("/images/generations", {
     model: imageModel,
     prompt,
-    size: imageSize,
+    size: `${imageWidth}x${imageHeight}`,
     n: 1,
     response_format: "b64_json"
   });
@@ -195,6 +220,82 @@ const generateOneImage = async (title, focus) => {
   }
 
   throw new Error("Image generation response did not contain b64_json or url.");
+};
+
+const generateWithPollinations = async (title, focus) => {
+  const prompt = buildImagePrompt(title, focus);
+  const seed = Math.floor(Math.random() * 1_000_000_000);
+  const url =
+    `${pollinationsApiBase}/prompt/${encodeURIComponent(prompt)}` +
+    `?model=${encodeURIComponent(pollinationsModel)}` +
+    `&width=${imageWidth}&height=${imageHeight}&seed=${seed}` +
+    "&nologo=true&private=true&enhance=true&safe=true";
+  return fetchBufferFromUrl(url);
+};
+
+const parseJsonResponse = async (res, label) => {
+  const text = await res.text();
+  let json;
+  try {
+    json = text ? JSON.parse(text) : null;
+  } catch {
+    json = text;
+  }
+  if (!res.ok) {
+    throw new Error(`${label} failed (${res.status}): ${typeof json === "string" ? json : JSON.stringify(json)}`);
+  }
+  return json;
+};
+
+const stripDataUriPrefix = (value) =>
+  String(value ?? "")
+    .trim()
+    .replace(/^data:image\/[a-zA-Z0-9.+-]+;base64,/, "");
+
+const generateWithLocalSdWebUi = async (title, focus) => {
+  const prompt = buildImagePrompt(title, focus);
+  const res = await fetch(`${localSdApiBase}/sdapi/v1/txt2img`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      prompt,
+      negative_prompt: "low quality, blurry, distorted, watermark, logo, text",
+      width: imageWidth,
+      height: imageHeight,
+      steps: Number.isFinite(localSdSteps) ? localSdSteps : 24,
+      cfg_scale: Number.isFinite(localSdCfgScale) ? localSdCfgScale : 6.5,
+      sampler_name: localSdSampler
+    })
+  });
+
+  const json = await parseJsonResponse(res, "Local SD WebUI /sdapi/v1/txt2img");
+  const first = Array.isArray(json?.images) ? json.images[0] : undefined;
+  const base64Data = stripDataUriPrefix(first);
+  if (!base64Data) {
+    throw new Error("Local SD WebUI did not return images[0].");
+  }
+  return {
+    base64Data,
+    mimeType: "image/png"
+  };
+};
+
+const generateOneImage = async (title, focus) => {
+  if (imageProvider === "pollinations") {
+    return generateWithPollinations(title, focus);
+  }
+
+  if (imageProvider === "local-sdwebui" || imageProvider === "automatic1111") {
+    return generateWithLocalSdWebUi(title, focus);
+  }
+
+  if (imageProvider === "openai") {
+    return generateWithOpenAi(title, focus);
+  }
+
+  throw new Error(
+    `Unsupported AI_IMAGE_PROVIDER='${imageProvider}'. Use one of: pollinations, local-sdwebui, automatic1111, openai.`
+  );
 };
 
 let cachedUploadSupport;
@@ -259,9 +360,9 @@ const ensureThreeImages = async (markdown, title) => {
   }
 
   const missing = 3 - before;
-  if (!openAiApiKey) {
+  if (imageProvider === "openai" && !openAiApiKey) {
     warnings.push(
-      `OPENAI_API_KEY is missing. Could not generate ${missing} image(s), so the post will be published without auto-generated images.`
+      `AI_IMAGE_PROVIDER=openai but OPENAI_API_KEY is missing. Could not generate ${missing} image(s), so the post will be published without auto-generated images.`
     );
     return {
       finalMarkdown: markdown,
@@ -284,7 +385,7 @@ const ensureThreeImages = async (markdown, title) => {
       generated = await generateOneImage(title, focus);
     } catch (error) {
       warnings.push(
-        `Failed to generate image ${i + 1}/${focusTopics.length} (${focus}): ${
+        `Failed to generate image ${i + 1}/${focusTopics.length} (${focus}) with provider '${imageProvider}': ${
           error instanceof Error ? error.message : String(error)
         }`
       );
@@ -491,6 +592,8 @@ const main = async () => {
     tryGenerateThreeImages,
     requireThreeImages,
     writeBackImages,
+    imageProvider,
+    imageSize: `${imageWidth}x${imageHeight}`,
     imageCountBefore: imageResult.before,
     imageCountAfter: imageResult.after,
     generatedImageCount: imageResult.generatedCount,
