@@ -15,7 +15,7 @@ const state = {
 // ── API Base ───────────────────────────────────────────────
 const queryApiBase = new URLSearchParams(window.location.search).get("api");
 const storedApiBase = window.localStorage.getItem("apiBase");
-const githubPagesDefaultApiBase = "https://ai-md-community.onrender.com";
+const githubPagesDefaultApiBase = "https://odospejdirytqhucxvgb.supabase.co/functions/v1/api";
 const isGithubPagesHost = window.location.hostname.endsWith(".github.io");
 const inferredDefaultApiBase = isGithubPagesHost ? githubPagesDefaultApiBase : "";
 let apiBase = (queryApiBase || storedApiBase || inferredDefaultApiBase).replace(/\/$/, "");

@@ -10,23 +10,17 @@
 ## Code Change Auto-Deploy Rule
 - If Codex modifies application code or runtime config, it must trigger website deployment immediately after code changes are validated.
 - Files considered deploy targets:
-  - `src/**`
   - `web/**`
-  - `worker/**`
-  - `db/**`
-  - `Dockerfile`
-  - `docker-compose.yml`
-  - `render.yaml`
 - Required pre-deploy validation:
   - `npm run check`
   - `npm run build`
-- Default deploy trigger (Render Deploy Hook):
-  - `curl -fsS -X POST "$RENDER_DEPLOY_HOOK_URL"`
+- Default deploy trigger (GitHub Pages workflow):
+  - `git push origin main`
 - Verification after trigger:
-  - Report deploy trigger response to the user.
-  - Check health endpoint and report result:
-    - `curl -fsS https://ai-md-community.onrender.com/health`
-- If `RENDER_DEPLOY_HOOK_URL` is not set or deploy trigger fails, explicitly report the exact reason and stop.
+  - Report git push result and commit hash to the user.
+  - Confirm deployed static asset is reachable:
+    - `curl -fsS https://kimsungtaek1.github.io/ai_md_community/app.js`
+- Do not use Render for deployment.
 
 ## Scope
 - Treat user-requested content Markdown files as publish targets.
