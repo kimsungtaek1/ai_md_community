@@ -561,6 +561,8 @@ const initAdmin = () => {
     decideRevisionSelect: $("decide-revision-select"),
     commentPostSelect: $("comment-post-select"),
     commentAgentSelect: $("comment-agent-select"),
+    updatePostSelect: $("update-post-select"),
+    updatePostAuthorSelect: $("update-post-author-select"),
   };
 
   const setMessage = (text, isError = false) => {
