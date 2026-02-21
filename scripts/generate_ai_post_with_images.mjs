@@ -26,11 +26,66 @@ const slugify = (value) => {
 
 const toDataUriSvg = (svg) => `data:image/svg+xml;base64,${Buffer.from(svg, "utf8").toString("base64")}`;
 
+const escapeXml = (value) =>
+  String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+
+const splitLines = (text, maxCharsPerLine, maxLines) => {
+  const source = String(text).trim();
+  if (!source) return [""];
+
+  const lines = [];
+  let current = "";
+
+  const flush = () => {
+    if (current.trim()) {
+      lines.push(current.trim());
+      current = "";
+    }
+  };
+
+  for (const ch of source) {
+    current += ch;
+    if (current.length >= maxCharsPerLine) {
+      flush();
+      if (lines.length >= maxLines) break;
+    }
+  }
+  flush();
+
+  if (lines.length === 0) return [source.slice(0, maxCharsPerLine)];
+  if (lines.length > maxLines) return lines.slice(0, maxLines);
+
+  const consumed = lines.join("").length;
+  if (consumed < source.length) {
+    const lastIndex = Math.max(0, lines.length - 1);
+    lines[lastIndex] = `${lines[lastIndex].slice(0, Math.max(1, maxCharsPerLine - 1)).trim()}…`;
+  }
+
+  return lines;
+};
+
 const makeCardSvg = (title, subtitle, colorA, colorB) => {
-  const safeTitle = String(title).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  const safeSubtitle = String(subtitle).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const titleLines = splitLines(title, 16, 2).map(escapeXml);
+  const subtitleLines = splitLines(subtitle, 26, 2).map(escapeXml);
+  const ariaLabel = escapeXml(title);
+  const titleY = 180;
+  const titleLineHeight = 64;
+  const subtitleY = titleY + titleLines.length * titleLineHeight + 28;
+  const subtitleLineHeight = 44;
+  const footerY = subtitleY + subtitleLines.length * subtitleLineHeight + 70;
+
+  const titleText = titleLines
+    .map((line, idx) => `<text x="108" y="${titleY + idx * titleLineHeight}" fill="#E2E8F0" font-size="52" font-family="Arial, sans-serif" font-weight="700">${line}</text>`)
+    .join("\n  ");
+  const subtitleText = subtitleLines
+    .map((line, idx) => `<text x="108" y="${subtitleY + idx * subtitleLineHeight}" fill="#CBD5E1" font-size="34" font-family="Arial, sans-serif">${line}</text>`)
+    .join("\n  ");
+
   return `
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-label="${safeTitle}">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-label="${ariaLabel}">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="${colorA}"/>
@@ -39,9 +94,9 @@ const makeCardSvg = (title, subtitle, colorA, colorB) => {
   </defs>
   <rect width="1200" height="675" fill="url(#bg)"/>
   <rect x="68" y="88" width="1064" height="500" rx="26" fill="#0B1220" fill-opacity="0.72"/>
-  <text x="108" y="210" fill="#E2E8F0" font-size="56" font-family="Arial, sans-serif" font-weight="700">${safeTitle}</text>
-  <text x="108" y="286" fill="#CBD5E1" font-size="34" font-family="Arial, sans-serif">${safeSubtitle}</text>
-  <text x="108" y="430" fill="#94A3B8" font-size="30" font-family="Arial, sans-serif">ai_md_community 로컬 시각 카드</text>
+  ${titleText}
+  ${subtitleText}
+  <text x="108" y="${footerY}" fill="#94A3B8" font-size="30" font-family="Arial, sans-serif">ai_md_community 로컬 시각 카드</text>
 </svg>`.trim();
 };
 

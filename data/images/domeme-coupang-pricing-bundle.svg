@@ -19,41 +19,41 @@
   </defs>
 
   <rect width="1200" height="675" fill="url(#bg2)"/>
-  <text x="72" y="86" fill="#F0F4F8" font-size="42" font-family="Arial, sans-serif" font-weight="700">마진 보호를 위한 묶음 가격 전략</text>
-  <text x="72" y="124" fill="#D9E2EC" font-size="24" font-family="Arial, sans-serif">단가 경쟁보다 비교 기준을 바꿉니다.</text>
+  <text x="72" y="86" fill="#F0F4F8" font-size="40" font-family="Arial, sans-serif" font-weight="700">마진 보호를 위한 묶음 가격 전략</text>
+  <text x="72" y="122" fill="#D9E2EC" font-size="22" font-family="Arial, sans-serif">단가 경쟁보다 비교 기준을 바꿉니다</text>
 
   <g transform="translate(95,190)">
     <rect x="0" y="0" width="300" height="355" rx="20" fill="url(#cardA)"/>
     <text x="28" y="58" fill="#3D2200" font-size="30" font-family="Arial, sans-serif" font-weight="700">단품</text>
-    <text x="28" y="106" fill="#3D2200" font-size="50" font-family="Arial, sans-serif" font-weight="800">9,900원</text>
-    <text x="28" y="154" fill="#4A2E00" font-size="24" font-family="Arial, sans-serif">역할: 유입 확보</text>
-    <text x="28" y="198" fill="#4A2E00" font-size="24" font-family="Arial, sans-serif">마진: 낮음</text>
-    <text x="28" y="242" fill="#4A2E00" font-size="24" font-family="Arial, sans-serif">전환 기준점</text>
+    <text x="28" y="106" fill="#3D2200" font-size="48" font-family="Arial, sans-serif" font-weight="800">9,900원</text>
+    <text x="28" y="154" fill="#4A2E00" font-size="23" font-family="Arial, sans-serif">역할: 유입 확보</text>
+    <text x="28" y="194" fill="#4A2E00" font-size="23" font-family="Arial, sans-serif">마진: 낮음</text>
+    <text x="28" y="234" fill="#4A2E00" font-size="23" font-family="Arial, sans-serif">전환 기준점</text>
   </g>
 
   <g transform="translate(450,170)">
     <rect x="0" y="0" width="300" height="395" rx="20" fill="url(#cardB)"/>
     <text x="28" y="58" fill="#111827" font-size="30" font-family="Arial, sans-serif" font-weight="700">3개 묶음</text>
-    <text x="28" y="106" fill="#111827" font-size="50" font-family="Arial, sans-serif" font-weight="800">24,900원</text>
-    <text x="28" y="154" fill="#111827" font-size="24" font-family="Arial, sans-serif">역할: 이익 핵심</text>
-    <text x="28" y="198" fill="#111827" font-size="24" font-family="Arial, sans-serif">마진: 중상</text>
-    <text x="28" y="242" fill="#111827" font-size="24" font-family="Arial, sans-serif">주력 판매 목표</text>
-    <text x="28" y="286" fill="#111827" font-size="24" font-family="Arial, sans-serif">AOV 상승</text>
+    <text x="28" y="106" fill="#111827" font-size="48" font-family="Arial, sans-serif" font-weight="800">24,900원</text>
+    <text x="28" y="154" fill="#111827" font-size="23" font-family="Arial, sans-serif">역할: 이익 핵심</text>
+    <text x="28" y="194" fill="#111827" font-size="23" font-family="Arial, sans-serif">마진: 중상</text>
+    <text x="28" y="234" fill="#111827" font-size="23" font-family="Arial, sans-serif">주력 판매 목표</text>
+    <text x="28" y="274" fill="#111827" font-size="23" font-family="Arial, sans-serif">AOV 상승</text>
   </g>
 
   <g transform="translate(805,145)">
     <rect x="0" y="0" width="300" height="445" rx="20" fill="url(#cardC)"/>
     <text x="28" y="58" fill="#052E24" font-size="30" font-family="Arial, sans-serif" font-weight="700">5개 구성</text>
-    <text x="28" y="106" fill="#052E24" font-size="50" font-family="Arial, sans-serif" font-weight="800">37,900원</text>
-    <text x="28" y="154" fill="#052E24" font-size="24" font-family="Arial, sans-serif">역할: 최대 마진</text>
-    <text x="28" y="198" fill="#052E24" font-size="24" font-family="Arial, sans-serif">마진: 최상</text>
-    <text x="28" y="242" fill="#052E24" font-size="24" font-family="Arial, sans-serif">재구매 준비</text>
-    <text x="28" y="286" fill="#052E24" font-size="24" font-family="Arial, sans-serif">배송 효율</text>
-    <text x="28" y="330" fill="#052E24" font-size="24" font-family="Arial, sans-serif">할인 체감 강화</text>
+    <text x="28" y="106" fill="#052E24" font-size="48" font-family="Arial, sans-serif" font-weight="800">37,900원</text>
+    <text x="28" y="154" fill="#052E24" font-size="23" font-family="Arial, sans-serif">역할: 최대 마진</text>
+    <text x="28" y="194" fill="#052E24" font-size="23" font-family="Arial, sans-serif">마진: 최상</text>
+    <text x="28" y="234" fill="#052E24" font-size="23" font-family="Arial, sans-serif">재구매 준비</text>
+    <text x="28" y="274" fill="#052E24" font-size="23" font-family="Arial, sans-serif">배송 효율</text>
+    <text x="28" y="314" fill="#052E24" font-size="23" font-family="Arial, sans-serif">할인 체감 강화</text>
   </g>
 
   <g transform="translate(72,611)">
     <rect width="1056" height="38" rx="10" fill="#334E68" stroke="#9FB3C8" stroke-width="1.5"/>
-    <text x="22" y="25" fill="#F0F4F8" font-size="21" font-family="Arial, sans-serif">운영 목표: 단품은 클릭 유지, 묶음은 순이익 확대</text>
+    <text x="22" y="25" fill="#F0F4F8" font-size="20" font-family="Arial, sans-serif">목표: 단품은 클릭, 묶음은 이익 확대</text>
   </g>
 </svg>
