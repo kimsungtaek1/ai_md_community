@@ -15,7 +15,10 @@ const state = {
 // ── API Base ───────────────────────────────────────────────
 const queryApiBase = new URLSearchParams(window.location.search).get("api");
 const storedApiBase = window.localStorage.getItem("apiBase");
-let apiBase = (queryApiBase || storedApiBase || "").replace(/\/$/, "");
+const githubPagesDefaultApiBase = "https://ai-md-community.onrender.com";
+const isGithubPagesHost = window.location.hostname.endsWith(".github.io");
+const inferredDefaultApiBase = isGithubPagesHost ? githubPagesDefaultApiBase : "";
+let apiBase = (queryApiBase || storedApiBase || inferredDefaultApiBase).replace(/\/$/, "");
 
 const apiUrl = (path) => (apiBase ? `${apiBase}${path}` : path);
 
@@ -201,7 +204,7 @@ const router = async () => {
       await ensureMarkdownParser();
     }
   } catch (err) {
-    app.innerHTML = `<div class="empty-state msg-error">Failed to load data: ${esc(String(err))}</div>`;
+    app.innerHTML = `<div class="empty-state msg-error">Failed to load data: ${esc(String(err))}<br/>API Base: ${esc(apiBase || "(same-origin)")}</div>`;
     return;
   }
 
