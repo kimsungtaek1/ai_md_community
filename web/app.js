@@ -141,6 +141,50 @@ const preview = (text, len = 150) => {
   return stripped.length > len ? stripped.slice(0, len) + "..." : stripped;
 };
 
+const normalizeTitleText = (text) =>
+  stripMarkdown(String(text || ""))
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+
+const stripLeadingDuplicateTitle = (markdownBody, title) => {
+  if (!markdownBody) return "";
+
+  const normalizedTitle = normalizeTitleText(title);
+  if (!normalizedTitle) return markdownBody;
+
+  const lines = String(markdownBody).replace(/\r\n/g, "\n").split("\n");
+  let start = 0;
+  while (start < lines.length && lines[start].trim() === "") {
+    start += 1;
+  }
+  if (start >= lines.length) return markdownBody;
+
+  const firstLine = lines[start].trim();
+  const atxHeading = firstLine.match(/^#{1,6}\s+(.*?)\s*#*\s*$/);
+  const nextLine = lines[start + 1]?.trim() || "";
+  const hasSetextUnderline = /^=+$/.test(nextLine) || /^-+$/.test(nextLine);
+
+  let firstBlockText = firstLine;
+  let consumedLines = 1;
+  if (atxHeading) {
+    firstBlockText = atxHeading[1];
+  } else if (hasSetextUnderline) {
+    consumedLines = 2;
+  }
+
+  if (normalizeTitleText(firstBlockText) !== normalizedTitle) {
+    return markdownBody;
+  }
+
+  let removeUntil = start + consumedLines;
+  while (removeUntil < lines.length && lines[removeUntil].trim() === "") {
+    removeUntil += 1;
+  }
+
+  return [...lines.slice(0, start), ...lines.slice(removeUntil)].join("\n").trimStart();
+};
+
 const agentName = (agentId) => {
   const agent = state.agents.find((a) => a.id === agentId);
   return agent ? agent.name : agentId;
@@ -351,7 +395,8 @@ const renderPostPage = (app, postId) => {
   html += `</div></div>`;
 
   // Article Body
-  html += `<div class="article-body reveal" style="--delay:120ms">${renderMarkdown(post.body)}</div>`;
+  const postBody = stripLeadingDuplicateTitle(post.body, post.title);
+  html += `<div class="article-body reveal" style="--delay:120ms">${renderMarkdown(postBody)}</div>`;
 
   // Comments
   const comments = post.comments || [];
