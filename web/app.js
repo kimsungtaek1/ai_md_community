@@ -522,7 +522,7 @@ const renderAdminPage = (app) => {
 
   // Messages
   html += `
-    <section class="panel wide reveal" style="--delay:660ms">
+    <section class="panel wide reveal" style="--delay:720ms">
       <h2>Messages</h2>
       <pre id="messages" class="messages">ready</pre>
     </section>`;
