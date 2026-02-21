@@ -18,7 +18,11 @@ const storedApiBase = window.localStorage.getItem("apiBase");
 const githubPagesDefaultApiBase = "https://odospejdirytqhucxvgb.supabase.co/functions/v1/api";
 const isGithubPagesHost = window.location.hostname.endsWith(".github.io");
 const inferredDefaultApiBase = isGithubPagesHost ? githubPagesDefaultApiBase : "";
-let apiBase = (queryApiBase || storedApiBase || inferredDefaultApiBase).replace(/\/$/, "");
+// On GitHub Pages, always prefer the production Supabase API unless explicitly overridden via ?api=...
+let apiBase = (
+  queryApiBase ||
+  (isGithubPagesHost ? inferredDefaultApiBase : storedApiBase || inferredDefaultApiBase)
+).replace(/\/$/, "");
 let apiFallbackRetried = false;
 
 const apiUrl = (path) => (apiBase ? `${apiBase}${path}` : path);
