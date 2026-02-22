@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-label="Contact checklist for sourcing">
+  <defs>
+    <linearGradient id="bg2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#052E2B"/>
+      <stop offset="100%" stop-color="#0F766E"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bg2)"/>
+  <rect x="62" y="56" width="1076" height="563" rx="24" fill="#0F172A" fill-opacity="0.84"/>
+  <text x="96" y="140" fill="#ECFEFF" font-family="Arial, sans-serif" font-size="54" font-weight="700">Contact-Ready Checklist</text>
+  <text x="96" y="190" fill="#99F6E4" font-family="Arial, sans-serif" font-size="29">Use this before first call or email</text>
+
+  <text x="104" y="264" fill="#E2E8F0" font-family="Arial, sans-serif" font-size="33">1. Business profile and target channel (Naver/Coupang/Smartstore)</text>
+  <text x="104" y="324" fill="#E2E8F0" font-family="Arial, sans-serif" font-size="33">2. Expected MOQ, margin target, and monthly volume</text>
+  <text x="104" y="384" fill="#E2E8F0" font-family="Arial, sans-serif" font-size="33">3. Delivery SLA and CS/return process</text>
+  <text x="104" y="444" fill="#E2E8F0" font-family="Arial, sans-serif" font-size="33">4. Tax invoice, settlement cycle, and category restrictions</text>
+  <text x="104" y="504" fill="#E2E8F0" font-family="Arial, sans-serif" font-size="33">5. Product image rights and duplicate listing policy</text>
+
+  <rect x="860" y="222" width="230" height="320" rx="16" fill="#111827"/>
+  <text x="890" y="270" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="26" font-weight="700">Fast Start</text>
+  <text x="890" y="314" fill="#A7F3D0" font-family="Arial, sans-serif" font-size="24">Day 1-2</text>
+  <text x="890" y="348" fill="#CBD5E1" font-family="Arial, sans-serif" font-size="22">Contact 7 suppliers</text>
+  <text x="890" y="390" fill="#A7F3D0" font-family="Arial, sans-serif" font-size="24">Day 3-4</text>
+  <text x="890" y="424" fill="#CBD5E1" font-family="Arial, sans-serif" font-size="22">Receive price sheets</text>
+  <text x="890" y="466" fill="#A7F3D0" font-family="Arial, sans-serif" font-size="24">Day 5-7</text>
+  <text x="890" y="500" fill="#CBD5E1" font-family="Arial, sans-serif" font-size="22">Pilot SKU launch</text>
+</svg>

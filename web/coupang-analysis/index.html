@@ -1,0 +1,2587 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>쿠팡 여성의류 TOP 10 상세페이지 완전 분석</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --navy: #0a0e27;
+  --navy-light: #121638;
+  --navy-mid: #1a1f4a;
+  --purple: #6c5ce7;
+  --purple-light: #a29bfe;
+  --purple-dark: #4a3db5;
+  --pink: #fd79a8;
+  --pink-light: #fab1c4;
+  --cyan: #00cec9;
+  --cyan-light: #81ecec;
+  --white: #ffffff;
+  --gray-100: #f8f9fa;
+  --gray-200: #e9ecef;
+  --gray-300: #dee2e6;
+  --gray-400: #ced4da;
+  --gray-500: #adb5bd;
+  --gray-600: #6c757d;
+  --gray-700: #495057;
+  --gray-800: #343a40;
+  --text-primary: #e8e8f0;
+  --text-secondary: #a0a3c4;
+  --text-muted: #6b6f94;
+  --card-bg: rgba(26, 31, 74, 0.6);
+  --card-border: rgba(108, 92, 231, 0.2);
+  --card-hover: rgba(108, 92, 231, 0.1);
+  --gradient-primary: linear-gradient(135deg, #6c5ce7, #a29bfe);
+  --gradient-accent: linear-gradient(135deg, #fd79a8, #a29bfe);
+  --gradient-bg: linear-gradient(180deg, #0a0e27 0%, #121638 50%, #1a1040 100%);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.2);
+  --shadow-md: 0 4px 20px rgba(0,0,0,0.3);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,0.4);
+  --shadow-glow: 0 0 30px rgba(108,92,231,0.15);
+  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  scroll-padding-top: 80px;
+}
+
+body {
+  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--gradient-bg);
+  color: var(--text-primary);
+  line-height: 1.7;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--navy); }
+::-webkit-scrollbar-thumb { background: var(--purple); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--purple-light); }
+
+/* ===== NAVIGATION ===== */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(10, 14, 39, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--card-border);
+  transition: var(--transition);
+}
+
+.nav.scrolled {
+  background: rgba(10, 14, 39, 0.95);
+  box-shadow: var(--shadow-md);
+}
+
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+.nav-logo {
+  font-weight: 800;
+  font-size: 1.1rem;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  white-space: nowrap;
+}
+
+.nav-links {
+  display: flex;
+  gap: 4px;
+  list-style: none;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.nav-links::-webkit-scrollbar { display: none; }
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  transition: var(--transition);
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: var(--white);
+  background: rgba(108, 92, 231, 0.2);
+}
+
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 8px;
+  background: none;
+  border: none;
+}
+.nav-hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--text-primary);
+  border-radius: 2px;
+  transition: var(--transition);
+}
+
+/* ===== HERO ===== */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 120px 24px 80px;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 600px 400px at 30% 40%, rgba(108, 92, 231, 0.2) 0%, transparent 70%),
+    radial-gradient(ellipse 500px 350px at 70% 60%, rgba(253, 121, 168, 0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 400px 300px at 50% 80%, rgba(0, 206, 201, 0.08) 0%, transparent 70%);
+  animation: heroPulse 8s ease-in-out infinite alternate;
+}
+
+@keyframes heroPulse {
+  0% { opacity: 0.8; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1.05); }
+}
+
+.hero-particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--purple-light);
+  opacity: 0;
+  animation: particleFloat linear infinite;
+}
+
+@keyframes particleFloat {
+  0% { opacity: 0; transform: translateY(100vh) scale(0); }
+  10% { opacity: 0.6; }
+  90% { opacity: 0.6; }
+  100% { opacity: 0; transform: translateY(-20px) scale(1); }
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  background: rgba(108, 92, 231, 0.15);
+  border: 1px solid rgba(108, 92, 231, 0.3);
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--purple-light);
+  margin-bottom: 24px;
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.hero-badge::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cyan);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.5); }
+}
+
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 900;
+  line-height: 1.2;
+  margin-bottom: 20px;
+  animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+.hero h1 .gradient-text {
+  background: linear-gradient(135deg, #a29bfe 0%, #fd79a8 50%, #00cec9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% auto;
+  animation: gradientShift 4s ease-in-out infinite alternate;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+.hero-subtitle {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  color: var(--text-secondary);
+  font-weight: 400;
+  line-height: 1.6;
+  margin-bottom: 40px;
+  animation: fadeInUp 0.8s ease-out 0.6s both;
+}
+
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  animation: fadeInUp 0.8s ease-out 0.8s both;
+}
+
+.hero-stat {
+  text-align: center;
+}
+
+.hero-stat-value {
+  font-size: 2rem;
+  font-weight: 800;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-stat-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.hero-cta {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 40px;
+  animation: fadeInUp 0.8s ease-out 1s both;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  background: var(--gradient-primary);
+  color: var(--white);
+  border: none;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(108, 92, 231, 0.4);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--card-border);
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btn-outline:hover {
+  border-color: var(--purple);
+  background: rgba(108, 92, 231, 0.1);
+  transform: translateY(-2px);
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== SECTIONS ===== */
+.section {
+  padding: 100px 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.section-number {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--purple-light);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.section-title {
+  font-size: clamp(1.6rem, 3.5vw, 2.5rem);
+  font-weight: 800;
+  margin-bottom: 16px;
+  line-height: 1.3;
+}
+
+.section-desc {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* ===== BRAND CARDS ===== */
+.brands-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 24px;
+}
+
+.brand-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: var(--transition);
+  cursor: pointer;
+  position: relative;
+}
+
+.brand-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-lg);
+  padding: 1px;
+  background: linear-gradient(135deg, transparent 40%, var(--purple) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.brand-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-glow);
+}
+
+.brand-card:hover::before {
+  opacity: 1;
+}
+
+.brand-card-header {
+  padding: 24px 24px 16px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.brand-info {
+  flex: 1;
+}
+
+.brand-rank {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  color: var(--white);
+  font-size: 0.8rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.brand-name-kr {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.brand-name-en {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.brand-tag {
+  padding: 4px 12px;
+  background: rgba(108, 92, 231, 0.15);
+  border: 1px solid rgba(108, 92, 231, 0.25);
+  border-radius: 50px;
+  font-size: 0.72rem;
+  color: var(--purple-light);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.brand-price {
+  padding: 0 24px;
+  font-size: 0.9rem;
+  color: var(--cyan-light);
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.brand-features {
+  padding: 0 24px 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.brand-feature {
+  padding: 3px 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50px;
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+}
+
+/* Brand Mockup */
+.brand-mockup {
+  padding: 0 24px 24px;
+}
+
+.mockup-container {
+  background: var(--navy);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.mockup-browser-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.mockup-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+.mockup-dot:nth-child(1) { background: #ff5f57; }
+.mockup-dot:nth-child(2) { background: #ffbd2e; }
+.mockup-dot:nth-child(3) { background: #28c940; }
+
+.mockup-url {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  margin-left: 8px;
+}
+
+.mockup-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 160px;
+}
+
+.mockup-block {
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.mockup-block::after {
+  content: attr(data-label);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.55rem;
+  color: rgba(255, 255, 255, 0.5);
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+/* Brand-specific mockup styles */
+.mockup-topten .m-hero { background: #f0f0f0; height: 60px; }
+.mockup-topten .m-model { background: #e8e8e8; height: 45px; }
+.mockup-topten .m-size { background: #d0e8ff; height: 20px; }
+.mockup-topten .m-detail { background: #f5f5f5; height: 25px; }
+
+.mockup-mixxo .m-hero { background: linear-gradient(135deg, #f5e6d3, #e8d5c4); height: 55px; }
+.mockup-mixxo .m-coord { background: linear-gradient(135deg, #e8d5c4, #d4c0b0); height: 40px; }
+.mockup-mixxo .m-office { background: #f0e6db; height: 30px; }
+.mockup-mixxo .m-detail { background: #faf5f0; height: 25px; }
+
+.mockup-spao .m-hero { background: linear-gradient(135deg, #ffe0e6, #e0e8ff); height: 55px; }
+.mockup-spao .m-colors { background: linear-gradient(90deg, #ff9a9e, #a18cd1, #fbc2eb, #84fab0); height: 20px; }
+.mockup-spao .m-collab { background: #fff0f5; height: 35px; }
+.mockup-spao .m-detail { background: #f8f0ff; height: 25px; }
+
+.mockup-8seconds .m-hero { background: linear-gradient(135deg, #c9c9c9, #e8e8e8); height: 70px; }
+.mockup-8seconds .m-mood { background: #e0e0e0; height: 40px; }
+.mockup-8seconds .m-minimal { background: #f2f2f2; height: 15px; }
+.mockup-8seconds .m-detail { background: #f8f8f8; height: 20px; }
+
+.mockup-attrangs .m-review { background: linear-gradient(135deg, #fde2e9, #f5c6d0); height: 30px; }
+.mockup-attrangs .m-hero { background: #fce4ec; height: 45px; }
+.mockup-attrangs .m-body { background: linear-gradient(135deg, #f8e8f0, #e8d0e0); height: 35px; }
+.mockup-attrangs .m-size { background: #fdf0f5; height: 25px; }
+.mockup-attrangs .m-cta { background: linear-gradient(135deg, #ff6b81, #ff4757); height: 18px; }
+
+.mockup-shesmiss .m-hero { background: linear-gradient(135deg, #f5efe8, #ede5d8); height: 55px; }
+.mockup-shesmiss .m-fabric { background: #e8ddd0; height: 35px; }
+.mockup-shesmiss .m-closeup { background: #f0e8dd; height: 30px; }
+.mockup-shesmiss .m-detail { background: #faf5f0; height: 25px; }
+
+.mockup-codes .m-hero { background: linear-gradient(135deg, #2d3436, #636e72); height: 60px; }
+.mockup-codes .m-street { background: #4a4a4a; height: 40px; }
+.mockup-codes .m-action { background: linear-gradient(135deg, #e17055, #d63031); height: 20px; }
+.mockup-codes .m-detail { background: #f0f0f0; height: 25px; }
+
+.mockup-lap .m-hero { background: #f5f5f5; height: 65px; }
+.mockup-lap .m-simple { background: #ebebeb; height: 35px; }
+.mockup-lap .m-minimal { background: #f8f8f8; height: 20px; }
+.mockup-lap .m-detail { background: #fafafa; height: 25px; }
+
+.mockup-zara .m-hero { background: linear-gradient(135deg, #e0e0e0, #f5f5f5); height: 80px; }
+.mockup-zara .m-editorial { background: #ececec; height: 45px; }
+.mockup-zara .m-space { background: #f8f8f8; height: 10px; }
+.mockup-zara .m-minimal { background: #fafafa; height: 12px; }
+
+.mockup-hm .m-hero { background: #f0f0f0; height: 55px; }
+.mockup-hm .m-sustain { background: linear-gradient(135deg, #c8e6c9, #a5d6a7); height: 25px; }
+.mockup-hm .m-material { background: #e8f5e9; height: 30px; }
+.mockup-hm .m-global { background: #f5f5f5; height: 25px; }
+.mockup-hm .m-detail { background: #fafafa; height: 20px; }
+
+/* Brand detail expansion */
+.brand-detail {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.brand-card.expanded .brand-detail {
+  max-height: 600px;
+}
+
+.brand-detail-inner {
+  padding: 0 24px 24px;
+  border-top: 1px solid var(--card-border);
+  padding-top: 16px;
+}
+
+.brand-detail-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--purple-light);
+  margin-bottom: 10px;
+}
+
+.brand-detail-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.brand-detail-list li {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  padding-left: 16px;
+  position: relative;
+  line-height: 1.5;
+}
+
+.brand-detail-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--purple);
+}
+
+.brand-expand-hint {
+  padding: 12px 24px;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+  transition: var(--transition);
+}
+
+.brand-card:hover .brand-expand-hint {
+  color: var(--purple-light);
+}
+
+.brand-card.expanded .brand-expand-hint .hint-text::after {
+  content: '접기';
+}
+
+.brand-card:not(.expanded) .brand-expand-hint .hint-text::after {
+  content: '클릭하여 상세 보기';
+}
+
+/* ===== COMMON STRUCTURE (Section 2) ===== */
+.structure-flow {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.structure-line {
+  position: absolute;
+  left: 28px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--purple), var(--pink), var(--cyan));
+  opacity: 0.3;
+}
+
+.structure-step {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 32px;
+  position: relative;
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.structure-step.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.step-number {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1.1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.step-number.purple { background: linear-gradient(135deg, #6c5ce7, #a29bfe); color: #fff; }
+.step-number.pink { background: linear-gradient(135deg, #fd79a8, #fab1c4); color: #fff; }
+.step-number.cyan { background: linear-gradient(135deg, #00cec9, #81ecec); color: var(--navy); }
+.step-number.blue { background: linear-gradient(135deg, #0984e3, #74b9ff); color: #fff; }
+.step-number.orange { background: linear-gradient(135deg, #e17055, #fab1a0); color: #fff; }
+.step-number.green { background: linear-gradient(135deg, #00b894, #55efc4); color: var(--navy); }
+.step-number.yellow { background: linear-gradient(135deg, #fdcb6e, #ffeaa7); color: var(--navy); }
+.step-number.red { background: linear-gradient(135deg, #d63031, #ff7675); color: #fff; }
+.step-number.teal { background: linear-gradient(135deg, #00cec9, #81ecec); color: var(--navy); }
+
+.step-content {
+  flex: 1;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  padding: 20px 24px;
+  transition: var(--transition);
+}
+
+.step-content:hover {
+  border-color: rgba(108, 92, 231, 0.4);
+  box-shadow: var(--shadow-glow);
+}
+
+.step-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.step-title-en {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.step-desc {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ===== COMPARISON (Section 3) ===== */
+.comparison-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 48px;
+  flex-wrap: wrap;
+}
+
+.comp-tab {
+  padding: 10px 24px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.comp-tab:hover {
+  border-color: var(--purple);
+  color: var(--text-primary);
+}
+
+.comp-tab.active {
+  background: var(--gradient-primary);
+  border-color: transparent;
+  color: var(--white);
+}
+
+.comparison-panels {
+  position: relative;
+}
+
+.comp-panel {
+  display: none;
+  animation: fadeInUp 0.4s ease-out;
+}
+
+.comp-panel.active {
+  display: block;
+}
+
+.comp-group {
+  margin-bottom: 28px;
+}
+
+.comp-group-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  padding-left: 16px;
+  border-left: 3px solid var(--purple);
+}
+
+.comp-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 12px;
+}
+
+.comp-item {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  transition: var(--transition);
+}
+
+.comp-item:hover {
+  border-color: rgba(108, 92, 231, 0.4);
+}
+
+.comp-item-brands {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.comp-brand-chip {
+  padding: 2px 10px;
+  border-radius: 50px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.chip-white { background: rgba(255,255,255,0.1); color: #f0f0f0; }
+.chip-ivory { background: rgba(245,230,210,0.15); color: #f5e6d3; }
+.chip-gray { background: rgba(200,200,200,0.1); color: #c8c8c8; }
+.chip-pink { background: rgba(253,121,168,0.15); color: #fd79a8; }
+.chip-black { background: rgba(40,40,40,0.3); color: #e0e0e0; border: 1px solid rgba(255,255,255,0.1); }
+
+.comp-item-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* Visual bar charts for text ratio */
+.ratio-bar-container {
+  margin-top: 10px;
+}
+
+.ratio-bar {
+  display: flex;
+  height: 24px;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.ratio-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--white);
+}
+
+.ratio-text-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 600;
+}
+
+/* Color swatches */
+.color-swatch-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+}
+
+.color-swatch {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+}
+
+.swatch-info {
+  flex: 1;
+}
+
+.swatch-hex {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-family: monospace;
+}
+
+.swatch-brands {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+/* ===== GUIDE (Section 4) ===== */
+.guide-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.guide-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.guide-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+}
+
+.guide-card:nth-child(1)::before { background: var(--gradient-primary); }
+.guide-card:nth-child(2)::before { background: var(--gradient-accent); }
+.guide-card:nth-child(3)::before { background: linear-gradient(135deg, #00cec9, #81ecec); }
+.guide-card:nth-child(4)::before { background: linear-gradient(135deg, #fdcb6e, #e17055); }
+.guide-card:nth-child(5)::before { background: linear-gradient(135deg, #00b894, #55efc4); }
+.guide-card:nth-child(6)::before { background: linear-gradient(135deg, #0984e3, #74b9ff); }
+
+.guide-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-glow);
+}
+
+.guide-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  margin-bottom: 16px;
+}
+
+.guide-card:nth-child(1) .guide-icon { background: rgba(108,92,231,0.15); }
+.guide-card:nth-child(2) .guide-icon { background: rgba(253,121,168,0.15); }
+.guide-card:nth-child(3) .guide-icon { background: rgba(0,206,201,0.15); }
+.guide-card:nth-child(4) .guide-icon { background: rgba(253,203,110,0.15); }
+.guide-card:nth-child(5) .guide-icon { background: rgba(0,184,148,0.15); }
+.guide-card:nth-child(6) .guide-icon { background: rgba(9,132,227,0.15); }
+
+.guide-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.guide-value {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.guide-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* ===== CHECKLIST (Section 5) ===== */
+.checklist-container {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.checklist-progress {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: 24px 28px;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.progress-label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.progress-bar-track {
+  width: 100%;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: var(--gradient-primary);
+  border-radius: 6px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.progress-bar-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.progress-text {
+  font-size: 1.5rem;
+  font-weight: 800;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.checklist-items {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.checklist-item {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  transition: var(--transition);
+  user-select: none;
+}
+
+.checklist-item:hover {
+  border-color: rgba(108, 92, 231, 0.4);
+  background: rgba(108, 92, 231, 0.05);
+}
+
+.checklist-item.checked {
+  border-color: rgba(0, 206, 201, 0.3);
+  background: rgba(0, 206, 201, 0.05);
+}
+
+.check-box {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: 2px solid var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: var(--transition);
+}
+
+.checklist-item.checked .check-box {
+  background: var(--cyan);
+  border-color: var(--cyan);
+}
+
+.check-box svg {
+  width: 14px;
+  height: 14px;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: var(--transition);
+}
+
+.checklist-item.checked .check-box svg {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.check-label {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  transition: var(--transition);
+}
+
+.checklist-item.checked .check-label {
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+
+.checklist-reset {
+  display: block;
+  margin: 24px auto 0;
+  padding: 10px 28px;
+  background: transparent;
+  border: 1px solid var(--card-border);
+  border-radius: 50px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.checklist-reset:hover {
+  border-color: #d63031;
+  color: #ff7675;
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  text-align: center;
+  padding: 60px 24px;
+  border-top: 1px solid var(--card-border);
+  margin-top: 40px;
+}
+
+.footer-text {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.8;
+}
+
+.footer-text a {
+  color: var(--purple-light);
+  text-decoration: none;
+}
+
+/* ===== SCROLL ANIMATIONS ===== */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.animate-on-scroll.delay-1 { transition-delay: 0.1s; }
+.animate-on-scroll.delay-2 { transition-delay: 0.2s; }
+.animate-on-scroll.delay-3 { transition-delay: 0.3s; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .nav-links.open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    background: rgba(10, 14, 39, 0.98);
+    padding: 16px;
+    border-bottom: 1px solid var(--card-border);
+    gap: 4px;
+  }
+  .nav-hamburger { display: flex; }
+
+  .hero { padding: 100px 20px 60px; min-height: auto; }
+  .hero-stats { gap: 24px; }
+  .hero-cta { flex-direction: column; align-items: center; }
+
+  .section { padding: 60px 16px; }
+  .brands-grid { grid-template-columns: 1fr; }
+  .guide-grid { grid-template-columns: 1fr; }
+  .comp-items { grid-template-columns: 1fr; }
+
+  .structure-step { gap: 16px; }
+  .step-number { width: 44px; height: 44px; font-size: 0.9rem; }
+  .structure-line { left: 21px; }
+
+  .comparison-tabs { gap: 6px; }
+  .comp-tab { padding: 8px 16px; font-size: 0.78rem; }
+}
+
+@media (max-width: 480px) {
+  .brands-grid { grid-template-columns: 1fr; gap: 16px; }
+  .brand-card-header { padding: 18px 18px 12px; }
+  .brand-price { padding: 0 18px; }
+  .brand-features { padding: 0 18px 12px; }
+  .brand-mockup { padding: 0 18px 18px; }
+  .brand-detail-inner { padding: 0 18px 18px; padding-top: 14px; }
+  .brand-expand-hint { padding: 10px 18px; }
+
+  .hero-stat-value { font-size: 1.6rem; }
+}
+
+/* ===== BACK TO TOP ===== */
+.back-to-top {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  border: none;
+  color: var(--white);
+  font-size: 1.2rem;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: var(--transition);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-md);
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.back-to-top:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(108, 92, 231, 0.5);
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <div class="nav-logo">쿠팡 TOP10 분석</div>
+    <button class="nav-hamburger" id="hamburger" aria-label="메뉴 열기">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#brands">브랜드 소개</a></li>
+      <li><a href="#structure">공통 구조</a></li>
+      <li><a href="#comparison">차이점 비교</a></li>
+      <li><a href="#guide">제작 가이드</a></li>
+      <li><a href="#checklist">체크리스트</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero" id="hero">
+  <div class="hero-bg">
+    <div class="hero-particles" id="particles"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge">2026 최신 분석</div>
+    <h1>
+      쿠팡 여성의류<br>
+      <span class="gradient-text">TOP 10 상세페이지 완전 분석</span>
+    </h1>
+    <p class="hero-subtitle">
+      베스트셀러 브랜드의 상세페이지 구조를 분석하여<br>
+      매출을 극대화하는 전략을 알아보세요
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-value">10</div>
+        <div class="hero-stat-label">분석 브랜드</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">9</div>
+        <div class="hero-stat-label">공통 구조 단계</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">5</div>
+        <div class="hero-stat-label">비교 카테고리</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">12</div>
+        <div class="hero-stat-label">체크리스트 항목</div>
+      </div>
+    </div>
+    <div class="hero-cta">
+      <a href="#brands" class="btn-primary">분석 시작하기 &#8595;</a>
+      <a href="#checklist" class="btn-outline">체크리스트 바로가기</a>
+    </div>
+  </div>
+</section>
+
+<!-- Section 1: 10개 브랜드 소개 -->
+<section class="section" id="brands">
+  <div class="section-header animate-on-scroll">
+    <div class="section-number">SECTION 01</div>
+    <h2 class="section-title">10개 브랜드 소개</h2>
+    <p class="section-desc">쿠팡 여성의류 카테고리에서 가장 많이 팔리는 TOP 10 브랜드의 상세페이지 스타일을 분석합니다</p>
+  </div>
+
+  <div class="brands-grid">
+
+    <!-- 1. 탑텐 -->
+    <div class="brand-card animate-on-scroll" onclick="toggleBrandDetail(this)">
+      <div class="brand-card-header">
+        <div class="brand-info">
+          <div class="brand-rank">1</div>
+          <div class="brand-name-kr">탑텐</div>
+          <div class="brand-name-en">TOPTEN</div>
+        </div>
+        <div class="brand-tag">SPA 브랜드</div>
+      </div>
+      <div class="brand-price">9,900 ~ 39,900원</div>
+      <div class="brand-features">
+        <span class="brand-feature">극도의 가성비</span>
+        <span class="brand-feature">화이트 배경</span>
+        <span class="brand-feature">모델 착용 중심</span>
+        <span class="brand-feature">사이즈 가이드 상세</span>
+      </div>
+      <div class="brand-mockup">
+        <div class="mockup-container">
+          <div class="mockup-browser-bar">
+            <div class="mockup-dot"></div><div class="mockup-dot"></div><div class="mockup-dot"></div>
+            <div class="mockup-url">coupang.com/topten</div>
+          </div>
+          <div class="mockup-layout mockup-topten">
+            <div class="mockup-block m-hero" data-label="모델 전신 (화이트 배경)"></div>
+            <div class="mockup-block m-model" data-label="다각도 착용샷"></div>
+            <div class="mockup-block m-size" data-label="상세 사이즈 가이드"></div>
+            <div class="mockup-block m-detail" data-label="제품 상세정보"></div>
+          </div>
+        </div>
+      </div>
+      <div class="brand-detail">
+        <div class="brand-detail-inner">
+          <div class="brand-detail-title">상세페이지 특징 분석</div>
+          <ul class="brand-detail-list">
+            <li>깔끔한 화이트 배경으로 제품에 집중</li>
+            <li>정면/측면/후면 모델 착용 사진 필수 포함</li>
+            <li>cm 단위의 매우 상세한 사이즈 차트 제공</li>
+            <li>가격 대비 성능을 강조하는 할인율 표시</li>
+            <li>컬러 바리에이션을 한눈에 비교 가능</li>
+            <li>배송 마감 시간과 택배사 정보 상단 노출</li>
+          </ul>
+        </div>
+      </div>
+      <div class="brand-expand-hint"><span class="hint-text"></span></div>
+    </div>
+
+    <!-- 2. 미쏘 -->
+    <div class="brand-card animate-on-scroll delay-1" onclick="toggleBrandDetail(this)">
+      <div class="brand-card-header">
+        <div class="brand-info">
+          <div class="brand-rank">2</div>
+          <div class="brand-name-kr">미쏘</div>
+          <div class="brand-name-en">MIXXO</div>
+        </div>
+        <div class="brand-tag">이랜드 여성 SPA</div>
+      </div>
+      <div class="brand-price">19,900 ~ 59,900원</div>
+      <div class="brand-features">
+        <span class="brand-feature">오피스룩/데일리룩</span>
+        <span class="brand-feature">세련된 톤앤매너</span>
+        <span class="brand-feature">코디 제안 풍부</span>
+      </div>
+      <div class="brand-mockup">
+        <div class="mockup-container">
+          <div class="mockup-browser-bar">
+            <div class="mockup-dot"></div><div class="mockup-dot"></div><div class="mockup-dot"></div>
+            <div class="mockup-url">coupang.com/mixxo</div>
+          </div>
+          <div class="mockup-layout mockup-mixxo">
+            <div class="mockup-block m-hero" data-label="오피스 배경 모델컷"></div>
+            <div class="mockup-block m-coord" data-label="코디 제안 이미지"></div>
+            <div class="mockup-block m-office" data-label="세련된 라이프스타일"></div>
+            <div class="mockup-block m-detail" data-label="소재/사이즈 인포그래픽"></div>
+          </div>
+        </div>
+      </div>
+      <div class="brand-detail">
+        <div class="brand-detail-inner">
+          <div class="brand-detail-title">상세페이지 특징 분석</div>
+          <ul class="brand-detail-list">
+            <li>아이보리/크림 톤의 따뜻한 배경색 사용</li>
+            <li>오피스/도시 배경의 세련된 라이프스타일 촬영</li>
+            <li>같은 제품의 다양한 코디 제안 이미지 3~5세트</li>
+            <li>인포그래픽 스타일 사이즈 가이드 (일러스트 + 수치)</li>
+            <li>시즌 트렌드 키워드를 활용한 감성 카피</li>
+            <li>직장인 여성 타겟에 맞춘 TPO 제안</li>
+          </ul>
+        </div>
+      </div>
+      <div class="brand-expand-hint"><span class="hint-text"></span></div>
+    </div>
+
+    <!-- 3. 스파오 -->
+    <div class="brand-card animate-on-scroll delay-2" onclick="toggleBrandDetail(this)">
+      <div class="brand-card-header">
+        <div class="brand-info">
+          <div class="brand-rank">3</div>
+          <div class="brand-name-kr">스파오</div>
+          <div class="brand-name-en">SPAO</div>
+        </div>
+        <div class="brand-tag">국산 SPA</div>
+      </div>
+      <div class="brand-price">9,900 ~ 49,900원</div>
+      <div class="brand-features">
+        <span class="brand-feature">콜라보 상품 강점</span>
+        <span class="brand-feature">트렌디한 이미지</span>
+        <span class="brand-feature">컬러 바리에이션 풍부</span>
+      </div>
+      <div class="brand-mockup">
+        <div class="mockup-container">
+          <div class="mockup-browser-bar">
+            <div class="mockup-dot"></div><div class="mockup-dot"></div><div class="mockup-dot"></div>
+            <div class="mockup-url">coupang.com/spao</div>
+          </div>
+          <div class="mockup-layout mockup-spao">
+            <div class="mockup-block m-hero" data-label="트렌디 모델컷"></div>
+            <div class="mockup-block m-colors" data-label="컬러 바리에이션"></div>
+            <div class="mockup-block m-collab" data-label="콜라보/캐릭터 영역"></div>
+            <div class="mockup-block m-detail" data-label="사이즈/소재 정보"></div>
+          </div>
+        </div>
+      </div>
+      <div class="brand-detail">
+        <div class="brand-detail-inner">
+          <div class="brand-detail-title">상세페이지 특징 분석</div>
+          <ul class="brand-detail-list">
+            <li>밝고 깨끗한 스튜디오 화이트 배경 촬영</li>
+            <li>콜라보 상품의 캐릭터/로고를 크게 노출</li>
+            <li>5~10가지 이상의 풍부한 컬러 옵션 나열</li>
+            <li>MZ세대 타겟에 맞춘 트렌디한 카피 활용</li>
+            <li>시즌 한정, 콜라보 한정 등 희소성 강조</li>
+            <li>간결한 표 형태 사이즈 가이드</li>
+          </ul>
+        </div>
+      </div>
+      <div class="brand-expand-hint"><span class="hint-text"></span></div>
+    </div>
+
+    <!-- 4. 에잇세컨즈 -->
+    <div class="brand-card animate-on-scroll" onclick="toggleBrandDetail(this)">
+      <div class="brand-card-header">
+        <div class="brand-info">
+          <div class="brand-rank">4</div>
+          <div class="brand-name-kr">에잇세컨즈</div>
+          <div class="brand-name-en">8Seconds</div>
+        </div>
+        <div class="brand-tag">삼성물산</div>
+      </div>
+      <div class="brand-price">19,900 ~ 79,900원</div>
+      <div class="brand-features">
+        <span class="brand-feature">감성적 무드</span>
+        <span class="brand-feature">라이프스타일 이미지</span>
+        <span class="brand-feature">고급스러운 톤</span>
+      </div>
+      <div class="brand-mockup">
+        <div class="mockup-container">
+          <div class="mockup-browser-bar">
+            <div class="mockup-dot"></div><div class="mockup-dot"></div><div class="mockup-dot"></div>
+            <div class="mockup-url">coupang.com/8seconds</div>
+          </div>
+          <div class="mockup-layout mockup-8seconds">
+            <div class="mockup-block m-hero" data-label="에디토리얼 무드 사진"></div>
+            <div class="mockup-block m-mood" data-label="라이프스타일 이미지"></div>
+            <div class="mockup-block m-minimal" data-label="여백"></div>
+            <div class="mockup-block m-detail" data-label="최소한 상세정보"></div>
+          </div>
+        </div>
+      </div>
+      <div class="brand-detail">
+        <div class="brand-detail-inner">
+          <div class="brand-detail-title">상세페이지 특징 분석</div>
+          <ul class="brand-detail-list">
+            <li>라이트그레이 배경의 에디토리얼 무드 촬영</li>
+            <li>아웃도어/카페 등 라이프스타일 배경 적극 활용</li>
+            <li>텍스트는 최소화하고 이미지로 브랜드 감성 전달</li>
+            <li>인포그래픽 스타일의 세련된 사이즈 가이드</li>
+            <li>브랜드 무드로 자연스러운 구매 전환 유도</li>
+            <li>고급스러운 톤 유지를 위한 일관된 색감 관리</li>
+          </ul>
+        </div>
+      </div>
+      <div class="brand-expand-hint"><span class="hint-text"></span></div>
+    </div>
+
+    <!-- 5. 아뜨랑스 -->
+    <div class="brand-card animate-on-scroll delay-1" onclick="toggleBrandDetail(this)">
+      <div class="brand-card-header">
+        <div class="brand-info">
+          <div class="brand-rank">5</div>
+          <div class="brand-name-kr">아뜨랑스</div>
+          <div class="brand-name-en">Attrangs</div>
+        </div>
+        <div class="brand-tag">온라인 여성의류</div>
+      </div>
+      <div class="brand-price">9,900 ~ 49,900원</div>
+      <div class="brand-features">
+        <span class="brand-feature">리뷰 활용 극대화</span>
+        <span class="brand-feature">실착 리뷰 포함</span>
+        <span class="brand-feature">다양한 체형 모델</span>
+      </div>
+      <div class="brand-mockup">
+        <div class="mockup-container">
+          <div class="mockup-browser-bar">
+            <div class="mockup-dot"></div><div class="mockup-dot"></div><div class="mockup-dot"></div>
+            <div class="mockup-url">coupang.com/attrangs</div>
+          </div>
+          <div class="mockup-layout mockup-attrangs">
+            <div class="mockup-block m-review" data-label="리뷰 수/별점 강조"></div>
+            <div class="mockup-block m-hero" data-label="다양한 체형 모델"></div>
+            <div class="mockup-block m-body" data-label="실착 리뷰 사진"></div>
+            <div class="mockup-block m-size" data-label="체형별 사이즈 비교"></div>
+            <div class="mockup-block m-cta" data-label="한정 수량 CTA"></div>
+          </div>
+        </div>
+      </div>
+      <div class="brand-detail">
+        <div class="brand-detail-inner">
+          <div class="brand-detail-title">상세페이지 특징 분석</div>
+          <ul class="brand-detail-list">
+            <li>소프트 핑크/라벤더 톤으로 여성 타겟 강조</li>
+            <li>실제 고객 리뷰 사진을 상세페이지에 삽입</li>
+            <li>155cm~170cm 다양한 키/체형 모델 착용 비교</li>
+            <li>고객 페인포인트를 텍스트로 적극 공감</li>
+            <li>"한정 수량", "금주 마감" 등 긴급성 CTA 활용</li>
+            <li>이미지 60%, 텍스트 40%의 높은 텍스트 비중</li>
+          </ul>
+        </div>
+      </div>
+      <div class="brand-expand-hint"><span class="hint-text"></span></div>
+    </div>
+
+    <!-- 6. 쉬즈미스 -->
+    <div class="brand-card animate-on-scroll delay-2" onclick="toggleBrandDetail(this)">
+      <div class="brand-card-header">
+        <div class="brand-info">
+          <div class="brand-rank">6</div>
+          <div class="brand-name-kr">쉬즈미스</div>
+          <div class="brand-name-en">She's Miss</div>
+        </div>
+        <div class="brand-tag">여성복 전문</div>
+      </div>
+      <div class="brand-price">29,900 ~ 89,900원</div>
+      <div class="brand-features">
+        <span class="brand-feature">프리미엄 소재 강조</span>
+        <span class="brand-feature">디테일 클로즈업 풍부</span>
+      </div>
+      <div class="brand-mockup">
+        <div class="mockup-container">
+          <div class="mockup-browser-bar">
+            <div class="mockup-dot"></div><div class="mockup-dot"></div><div class="mockup-dot"></div>
+            <div class="mockup-url">coupang.com/shesmiss</div>
+          </div>
+          <div class="mockup-layout mockup-shesmiss">
+            <div class="mockup-block m-hero" data-label="프리미엄 모델컷"></div>
+            <div class="mockup-block m-fabric" data-label="소재 클로즈업"></div>
+            <div class="mockup-block m-closeup" data-label="봉제/디테일 확대"></div>
+            <div class="mockup-block m-detail" data-label="소재/세탁 정보"></div>
+          </div>
+        </div>
+      </div>
+      <div class="brand-detail">
+        <div class="brand-detail-inner">
+          <div class="brand-detail-title">상세페이지 특징 분석</div>
+          <ul class="brand-detail-list">
+            <li>아이보리/크림 톤의 프리미엄 배경색 사용</li>
+            <li>소재 질감을 느낄 수 있는 근접 촬영 다수</li>
+            <li>봉제선, 단추, 지퍼 등 디테일 클로즈업 풍부</li>
+            <li>고급 소재(캐시미어, 실크 등) 원산지 강조</li>
+            <li>텍스트 비중 40%로 소재 스펙 상세 기술</li>
+            <li>세련된 서체와 여백을 활용한 고급스러운 레이아웃</li>
+          </ul>
+        </div>
+      </div>
+      <div class="brand-expand-hint"><span class="hint-text"></span></div>
+    </div>
+
+    <!-- 7. 코데즈컴바인 -->
+    <div class="brand-card animate-on-scroll" onclick="toggleBrandDetail(this)">
+      <div class="brand-card-header">
+        <div class="brand-info">
+          <div class="brand-rank">7</div>
+          <div class="brand-name-kr">코데즈컴바인</div>
+          <div class="brand-name-en">Codes Combine</div>
+        </div>
+        <div class="brand-tag">캐주얼</div>
+      </div>
+      <div class="brand-price">19,900 ~ 69,900원</div>
+      <div class="brand-features">
+        <span class="brand-feature">스트리트/캐주얼 무드</span>
+        <span class="brand-feature">젊은 타겟</span>
+        <span class="brand-feature">역동적 이미지</span>
+      </div>
+      <div class="brand-mockup">
+        <div class="mockup-container">
+          <div class="mockup-browser-bar">
+            <div class="mockup-dot"></div><div class="mockup-dot"></div><div class="mockup-dot"></div>
+            <div class="mockup-url">coupang.com/codescombine</div>
+          </div>
+          <div class="mockup-layout mockup-codes">
+            <div class="mockup-block m-hero" data-label="다크 무드 스트리트 촬영"></div>
+            <div class="mockup-block m-street" data-label="역동적 포즈 이미지"></div>
+            <div class="mockup-block m-action" data-label="한정 할인 CTA"></div>
+            <div class="mockup-block m-detail" data-label="상세정보"></div>
+          </div>
+        </div>
+      </div>
+      <div class="brand-detail">
+        <div class="brand-detail-inner">
+          <div class="brand-detail-title">상세페이지 특징 분석</div>
+          <ul class="brand-detail-list">
+            <li>블랙 포인트를 활용한 스트리트 무드 연출</li>
+            <li>역동적인 포즈와 도심 배경의 액션 촬영</li>
+            <li>젊은 MZ세대를 타겟으로 한 트렌디한 카피</li>
+            <li>"한정 수량", "금주 마감" 등 긴급성 요소 활용</li>
+            <li>볼드한 타이포그래피로 시선 집중</li>
+            <li>다크 톤과 밝은 톤의 대비를 활용한 레이아웃</li>
+          </ul>
+        </div>
+      </div>
+      <div class="brand-expand-hint"><span class="hint-text"></span></div>
+    </div>
+
+    <!-- 8. LAP -->
+    <div class="brand-card animate-on-scroll delay-1" onclick="toggleBrandDetail(this)">
+      <div class="brand-card-header">
+        <div class="brand-info">
+          <div class="brand-rank">8</div>
+          <div class="brand-name-kr">LAP</div>
+          <div class="brand-name-en">LAP</div>
+        </div>
+        <div class="brand-tag">LG패션</div>
+      </div>
+      <div class="brand-price">19,900 ~ 59,900원</div>
+      <div class="brand-features">
+        <span class="brand-feature">심플하고 깔끔</span>
+        <span class="brand-feature">미니멀 레이아웃</span>
+        <span class="brand-feature">차분한 색감</span>
+      </div>
+      <div class="brand-mockup">
+        <div class="mockup-container">
+          <div class="mockup-browser-bar">
+            <div class="mockup-dot"></div><div class="mockup-dot"></div><div class="mockup-dot"></div>
+            <div class="mockup-url">coupang.com/lap</div>
+          </div>
+          <div class="mockup-layout mockup-lap">
+            <div class="mockup-block m-hero" data-label="심플 스튜디오 모델컷"></div>
+            <div class="mockup-block m-simple" data-label="미니멀 착용 이미지"></div>
+            <div class="mockup-block m-minimal" data-label="여백"></div>
+            <div class="mockup-block m-detail" data-label="깔끔한 상세정보"></div>
+          </div>
+        </div>
+      </div>
+      <div class="brand-detail">
+        <div class="brand-detail-inner">
+          <div class="brand-detail-title">상세페이지 특징 분석</div>
+          <ul class="brand-detail-list">
+            <li>화이트 배경의 심플한 스튜디오 촬영</li>
+            <li>불필요한 요소를 배제한 미니멀 레이아웃</li>
+            <li>차분한 무채색 색감으로 제품에 집중</li>
+            <li>간결한 텍스트로 핵심 정보만 전달</li>
+            <li>넉넉한 여백 활용으로 시각적 편안함 제공</li>
+            <li>깔끔한 표 형태 사이즈 가이드</li>
+          </ul>
+        </div>
+      </div>
+      <div class="brand-expand-hint"><span class="hint-text"></span></div>
+    </div>
+
+    <!-- 9. 자라 -->
+    <div class="brand-card animate-on-scroll delay-2" onclick="toggleBrandDetail(this)">
+      <div class="brand-card-header">
+        <div class="brand-info">
+          <div class="brand-rank">9</div>
+          <div class="brand-name-kr">자라</div>
+          <div class="brand-name-en">ZARA</div>
+        </div>
+        <div class="brand-tag">글로벌 SPA</div>
+      </div>
+      <div class="brand-price">29,900 ~ 129,900원</div>
+      <div class="brand-features">
+        <span class="brand-feature">에디토리얼 스타일</span>
+        <span class="brand-feature">여백 활용</span>
+        <span class="brand-feature">최소한의 텍스트</span>
+      </div>
+      <div class="brand-mockup">
+        <div class="mockup-container">
+          <div class="mockup-browser-bar">
+            <div class="mockup-dot"></div><div class="mockup-dot"></div><div class="mockup-dot"></div>
+            <div class="mockup-url">coupang.com/zara</div>
+          </div>
+          <div class="mockup-layout mockup-zara">
+            <div class="mockup-block m-hero" data-label="에디토리얼 풀사이즈 이미지"></div>
+            <div class="mockup-block m-editorial" data-label="아트 디렉팅 무드컷"></div>
+            <div class="mockup-block m-space" data-label="여백"></div>
+            <div class="mockup-block m-minimal" data-label="최소 텍스트"></div>
+          </div>
+        </div>
+      </div>
+      <div class="brand-detail">
+        <div class="brand-detail-inner">
+          <div class="brand-detail-title">상세페이지 특징 분석</div>
+          <ul class="brand-detail-list">
+            <li>라이트그레이 배경의 에디토리얼 스타일 촬영</li>
+            <li>패션 매거진 수준의 아트 디렉팅</li>
+            <li>이미지 90%, 텍스트 10%의 극도로 낮은 텍스트 비중</li>
+            <li>넓은 여백으로 고급스러움과 여유로움 표현</li>
+            <li>브랜드 무드 자체가 CTA 역할 수행</li>
+            <li>글로벌 표준에 맞춘 일관된 비주얼 시스템</li>
+          </ul>
+        </div>
+      </div>
+      <div class="brand-expand-hint"><span class="hint-text"></span></div>
+    </div>
+
+    <!-- 10. H&M -->
+    <div class="brand-card animate-on-scroll" onclick="toggleBrandDetail(this)">
+      <div class="brand-card-header">
+        <div class="brand-info">
+          <div class="brand-rank">10</div>
+          <div class="brand-name-kr">H&M</div>
+          <div class="brand-name-en">H&M</div>
+        </div>
+        <div class="brand-tag">글로벌 SPA</div>
+      </div>
+      <div class="brand-price">9,900 ~ 79,900원</div>
+      <div class="brand-features">
+        <span class="brand-feature">지속가능성 강조</span>
+        <span class="brand-feature">소재 정보 상세</span>
+        <span class="brand-feature">글로벌 모델 다양성</span>
+      </div>
+      <div class="brand-mockup">
+        <div class="mockup-container">
+          <div class="mockup-browser-bar">
+            <div class="mockup-dot"></div><div class="mockup-dot"></div><div class="mockup-dot"></div>
+            <div class="mockup-url">coupang.com/hm</div>
+          </div>
+          <div class="mockup-layout mockup-hm">
+            <div class="mockup-block m-hero" data-label="글로벌 다양성 모델컷"></div>
+            <div class="mockup-block m-sustain" data-label="지속가능성 뱃지"></div>
+            <div class="mockup-block m-material" data-label="소재 상세 정보"></div>
+            <div class="mockup-block m-global" data-label="다양한 모델 착용"></div>
+            <div class="mockup-block m-detail" data-label="사이즈/가격 정보"></div>
+          </div>
+        </div>
+      </div>
+      <div class="brand-detail">
+        <div class="brand-detail-inner">
+          <div class="brand-detail-title">상세페이지 특징 분석</div>
+          <ul class="brand-detail-list">
+            <li>밝고 깨끗한 화이트 배경 스튜디오 촬영</li>
+            <li>지속가능성(Conscious) 라벨을 별도 뱃지로 표시</li>
+            <li>소재 구성비, 원산지 등 상세한 소재 정보</li>
+            <li>다양한 인종/체형의 글로벌 모델 활용</li>
+            <li>빨간색 할인율과 가격 비교로 가성비 강조</li>
+            <li>간결한 표 형태의 사이즈 가이드</li>
+          </ul>
+        </div>
+      </div>
+      <div class="brand-expand-hint"><span class="hint-text"></span></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Section 2: 공통 구조 분석 -->
+<section class="section" id="structure">
+  <div class="section-header animate-on-scroll">
+    <div class="section-number">SECTION 02</div>
+    <h2 class="section-title">공통 구조 분석</h2>
+    <p class="section-desc">TOP 10 브랜드가 공통적으로 사용하는 9단계 상세페이지 구조를 순서대로 살펴봅니다</p>
+  </div>
+
+  <div class="structure-flow">
+    <div class="structure-line"></div>
+
+    <div class="structure-step" data-step>
+      <div class="step-number purple">1</div>
+      <div class="step-content">
+        <div class="step-title">판매 증거</div>
+        <div class="step-title-en">Social Proof</div>
+        <div class="step-desc">판매량, 리뷰 수, 베스트셀러 뱃지 등 사회적 증거를 최상단에 배치합니다. "00만개 판매", "리뷰 2,000+", "베스트 1위" 등의 요소로 신뢰를 확보합니다.</div>
+      </div>
+    </div>
+
+    <div class="structure-step" data-step>
+      <div class="step-number pink">2</div>
+      <div class="step-content">
+        <div class="step-title">배송 관리</div>
+        <div class="step-title-en">Delivery Info</div>
+        <div class="step-desc">배송 마감 시간, 택배사 정보, 검수 안내를 표시합니다. 로켓배송 마감, 당일배송 가능 여부 등 배송 관련 정보로 구매 결정을 촉진합니다.</div>
+      </div>
+    </div>
+
+    <div class="structure-step" data-step>
+      <div class="step-number cyan">3</div>
+      <div class="step-content">
+        <div class="step-title">인증</div>
+        <div class="step-title-en">Certifications</div>
+        <div class="step-desc">KC인증, 섬유 성분 표시, A/S 보증 정보를 제공합니다. 법적 필수 사항인 동시에 제품의 품질과 안전성을 보장하는 신뢰 요소입니다.</div>
+      </div>
+    </div>
+
+    <div class="structure-step" data-step>
+      <div class="step-number blue">4</div>
+      <div class="step-content">
+        <div class="step-title">메인 이미지</div>
+        <div class="step-title-en">Hero Image</div>
+        <div class="step-desc">모델 착용 전신 사진과 라이프스타일 이미지입니다. 상세페이지의 첫인상을 결정하는 핵심 요소로, 정면 전신 + 분위기컷 조합이 일반적입니다.</div>
+      </div>
+    </div>
+
+    <div class="structure-step" data-step>
+      <div class="step-number orange">5</div>
+      <div class="step-content">
+        <div class="step-title">문제 제시</div>
+        <div class="step-title-en">Problem Statement</div>
+        <div class="step-desc">고객의 페인포인트에 공감하는 영역입니다. "이런 옷 찾고 계셨죠?", "체형 커버가 안 돼서 고민이셨나요?" 등으로 고객 니즈에 직접 다가갑니다.</div>
+      </div>
+    </div>
+
+    <div class="structure-step" data-step>
+      <div class="step-number green">6</div>
+      <div class="step-content">
+        <div class="step-title">상세 이미지</div>
+        <div class="step-title-en">Detail Images</div>
+        <div class="step-desc">소재 클로즈업, 디테일 사진, 다각도 착용 사진을 제공합니다. 봉제 퀄리티, 버튼/지퍼 디테일, 소재 질감 등을 확대 촬영하여 온라인 쇼핑의 불안을 해소합니다.</div>
+      </div>
+    </div>
+
+    <div class="structure-step" data-step>
+      <div class="step-number yellow">7</div>
+      <div class="step-content">
+        <div class="step-title">공감</div>
+        <div class="step-title-en">Brand Story</div>
+        <div class="step-desc">브랜드 스토리와 디자이너 철학을 전달합니다. 단순 상품 판매를 넘어 브랜드 가치와 정체성을 공유하며 감성적 유대감을 형성합니다.</div>
+      </div>
+    </div>
+
+    <div class="structure-step" data-step>
+      <div class="step-number red">8</div>
+      <div class="step-content">
+        <div class="step-title">액션</div>
+        <div class="step-title-en">CTA (Call To Action)</div>
+        <div class="step-desc">한정 할인, 긴급성 요소를 활용한 구매 전환 영역입니다. "오늘만 특가", "한정 수량", "쿠폰 적용 시 추가 할인" 등으로 즉각적인 행동을 유도합니다.</div>
+      </div>
+    </div>
+
+    <div class="structure-step" data-step>
+      <div class="step-number teal">9</div>
+      <div class="step-content">
+        <div class="step-title">상세정보</div>
+        <div class="step-title-en">Product Specs</div>
+        <div class="step-desc">사이즈 차트, 소재 구성, 교환/환불 정책을 정리합니다. 구매 전 마지막 확인 단계로, 정확한 정보 제공이 반품률 감소에 직접 기여합니다.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Section 3: 브랜드별 차이점 비교 -->
+<section class="section" id="comparison">
+  <div class="section-header animate-on-scroll">
+    <div class="section-number">SECTION 03</div>
+    <h2 class="section-title">브랜드별 차이점 비교</h2>
+    <p class="section-desc">같은 구조 안에서도 브랜드마다 전략적으로 다른 접근 방식을 사용합니다</p>
+  </div>
+
+  <div class="comparison-tabs animate-on-scroll">
+    <button class="comp-tab active" data-tab="image">이미지 스타일</button>
+    <button class="comp-tab" data-tab="text">텍스트 비중</button>
+    <button class="comp-tab" data-tab="size">사이즈 가이드</button>
+    <button class="comp-tab" data-tab="cta">CTA 전략</button>
+    <button class="comp-tab" data-tab="color">배경색/톤</button>
+  </div>
+
+  <div class="comparison-panels">
+
+    <!-- 이미지 스타일 -->
+    <div class="comp-panel active" id="panel-image">
+      <div class="comp-items">
+        <div class="comp-item animate-on-scroll">
+          <div class="comp-item-brands">
+            <span class="comp-brand-chip chip-white">탑텐</span>
+            <span class="comp-brand-chip chip-white">스파오</span>
+            <span class="comp-brand-chip chip-white">H&M</span>
+          </div>
+          <div class="comp-item-desc">밝고 깨끗한 스튜디오 촬영, 화이트 배경. 제품 자체에 집중할 수 있도록 군더더기 없는 깔끔한 촬영 스타일을 유지합니다. 자연광에 가까운 조명으로 실제 색상을 최대한 반영합니다.</div>
+        </div>
+        <div class="comp-item animate-on-scroll delay-1">
+          <div class="comp-item-brands">
+            <span class="comp-brand-chip chip-gray">에잇세컨즈</span>
+            <span class="comp-brand-chip chip-gray">자라</span>
+          </div>
+          <div class="comp-item-desc">에디토리얼 무드, 아웃도어/라이프스타일 촬영. 패션 매거진 수준의 아트 디렉팅으로 브랜드 감성을 전달하며, 카페/거리 등 실제 공간에서의 착용 모습을 보여줍니다.</div>
+        </div>
+        <div class="comp-item animate-on-scroll delay-2">
+          <div class="comp-item-brands">
+            <span class="comp-brand-chip chip-ivory">미쏘</span>
+            <span class="comp-brand-chip chip-ivory">쉬즈미스</span>
+          </div>
+          <div class="comp-item-desc">오피스/도시 배경, 세련된 톤. 직장인 여성 타겟에 맞춰 오피스, 미팅룸, 도심 거리 등의 배경에서 촬영하며 세련되고 신뢰감 있는 이미지를 연출합니다.</div>
+        </div>
+        <div class="comp-item animate-on-scroll">
+          <div class="comp-item-brands">
+            <span class="comp-brand-chip chip-pink">아뜨랑스</span>
+          </div>
+          <div class="comp-item-desc">실제 고객 리뷰 이미지를 적극 활용합니다. 다양한 체형(155cm~170cm)의 모델 착용 비교와 실착 리뷰 사진을 함께 배치하여 실구매자의 생생한 후기를 전달합니다.</div>
+        </div>
+        <div class="comp-item animate-on-scroll delay-1">
+          <div class="comp-item-brands">
+            <span class="comp-brand-chip chip-white">코데즈컴바인</span>
+            <span class="comp-brand-chip chip-white">LAP</span>
+          </div>
+          <div class="comp-item-desc">심플 스튜디오, 미니멀. 최소한의 소품과 배경으로 제품 자체에 포커스합니다. LAP은 차분한 무채색, 코데즈컴바인은 블랙 포인트를 활용해 개성을 더합니다.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 텍스트 비중 -->
+    <div class="comp-panel" id="panel-text">
+      <div class="comp-items" style="grid-template-columns: 1fr;">
+        <div class="comp-item animate-on-scroll">
+          <div class="comp-group-title" style="margin-bottom:16px; border-left:3px solid var(--purple); padding-left:14px;">텍스트 최소</div>
+          <div class="comp-item-brands" style="margin-bottom:12px;">
+            <span class="comp-brand-chip chip-gray">자라</span>
+            <span class="comp-brand-chip chip-gray">에잇세컨즈</span>
+          </div>
+          <div class="ratio-bar-container">
+            <div class="ratio-bar">
+              <div class="ratio-image" style="width:90%;background:linear-gradient(90deg,var(--purple),var(--purple-light));">이미지 90%</div>
+              <div class="ratio-text-bar" style="width:10%;background:rgba(255,255,255,0.1);color:var(--text-muted);">10%</div>
+            </div>
+          </div>
+          <div class="comp-item-desc" style="margin-top:10px;">이미지로 모든 것을 전달합니다. 텍스트는 필수 정보(가격, 소재, 사이즈)에만 제한적으로 사용하며, 브랜드 무드 자체가 소통 수단입니다.</div>
+        </div>
+        <div class="comp-item animate-on-scroll delay-1">
+          <div class="comp-group-title" style="margin-bottom:16px; border-left:3px solid var(--cyan); padding-left:14px;">텍스트 중간</div>
+          <div class="comp-item-brands" style="margin-bottom:12px;">
+            <span class="comp-brand-chip chip-white">탑텐</span>
+            <span class="comp-brand-chip chip-ivory">미쏘</span>
+            <span class="comp-brand-chip chip-white">스파오</span>
+          </div>
+          <div class="ratio-bar-container">
+            <div class="ratio-bar">
+              <div class="ratio-image" style="width:70%;background:linear-gradient(90deg,var(--cyan),var(--cyan-light));">이미지 70%</div>
+              <div class="ratio-text-bar" style="width:30%;background:rgba(0,206,201,0.15);color:var(--cyan-light);">30%</div>
+            </div>
+          </div>
+          <div class="comp-item-desc" style="margin-top:10px;">이미지 중심이되 핵심 설명 텍스트를 함께 배치합니다. 사이즈 정보, 소재 특징, 할인 안내 등을 적절히 텍스트로 보충합니다.</div>
+        </div>
+        <div class="comp-item animate-on-scroll delay-2">
+          <div class="comp-group-title" style="margin-bottom:16px; border-left:3px solid var(--pink); padding-left:14px;">텍스트 많음</div>
+          <div class="comp-item-brands" style="margin-bottom:12px;">
+            <span class="comp-brand-chip chip-pink">아뜨랑스</span>
+            <span class="comp-brand-chip chip-ivory">쉬즈미스</span>
+          </div>
+          <div class="ratio-bar-container">
+            <div class="ratio-bar">
+              <div class="ratio-image" style="width:60%;background:linear-gradient(90deg,var(--pink),var(--pink-light));">이미지 60%</div>
+              <div class="ratio-text-bar" style="width:40%;background:rgba(253,121,168,0.15);color:var(--pink-light);">40%</div>
+            </div>
+          </div>
+          <div class="comp-item-desc" style="margin-top:10px;">제품 설명, 체형별 핏 가이드, 소재 스펙 등을 상세히 텍스트로 기술합니다. 고객의 불안 요소를 텍스트로 하나하나 해소하는 전략입니다.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 사이즈 가이드 -->
+    <div class="comp-panel" id="panel-size">
+      <div class="comp-items">
+        <div class="comp-item animate-on-scroll">
+          <div class="comp-group-title" style="margin-bottom:12px; border-left:3px solid var(--purple); padding-left:14px;">표 형태</div>
+          <div class="comp-item-brands" style="margin-bottom:12px;">
+            <span class="comp-brand-chip chip-white">탑텐</span>
+            <span class="comp-brand-chip chip-white">스파오</span>
+            <span class="comp-brand-chip chip-white">H&M</span>
+          </div>
+          <div class="comp-item-desc">cm 단위의 간단한 수치 표로 사이즈 정보를 제공합니다. S/M/L/XL 각 사이즈별 가슴둘레, 허리둘레, 힙둘레, 총장 등을 수치로 깔끔하게 정리합니다.</div>
+          <!-- mini visual -->
+          <div style="margin-top:14px;background:rgba(255,255,255,0.03);border-radius:8px;padding:12px;">
+            <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:4px;font-size:0.65rem;text-align:center;">
+              <div style="background:rgba(108,92,231,0.2);padding:6px 4px;border-radius:4px;color:var(--purple-light);font-weight:700;">사이즈</div>
+              <div style="background:rgba(108,92,231,0.2);padding:6px 4px;border-radius:4px;color:var(--purple-light);font-weight:700;">가슴</div>
+              <div style="background:rgba(108,92,231,0.2);padding:6px 4px;border-radius:4px;color:var(--purple-light);font-weight:700;">허리</div>
+              <div style="background:rgba(108,92,231,0.2);padding:6px 4px;border-radius:4px;color:var(--purple-light);font-weight:700;">힙</div>
+              <div style="background:rgba(108,92,231,0.2);padding:6px 4px;border-radius:4px;color:var(--purple-light);font-weight:700;">총장</div>
+              <div style="background:rgba(255,255,255,0.03);padding:6px 4px;border-radius:4px;color:var(--text-muted);">S</div>
+              <div style="background:rgba(255,255,255,0.03);padding:6px 4px;border-radius:4px;color:var(--text-muted);">84</div>
+              <div style="background:rgba(255,255,255,0.03);padding:6px 4px;border-radius:4px;color:var(--text-muted);">66</div>
+              <div style="background:rgba(255,255,255,0.03);padding:6px 4px;border-radius:4px;color:var(--text-muted);">90</div>
+              <div style="background:rgba(255,255,255,0.03);padding:6px 4px;border-radius:4px;color:var(--text-muted);">58</div>
+              <div style="background:rgba(255,255,255,0.03);padding:6px 4px;border-radius:4px;color:var(--text-muted);">M</div>
+              <div style="background:rgba(255,255,255,0.03);padding:6px 4px;border-radius:4px;color:var(--text-muted);">88</div>
+              <div style="background:rgba(255,255,255,0.03);padding:6px 4px;border-radius:4px;color:var(--text-muted);">70</div>
+              <div style="background:rgba(255,255,255,0.03);padding:6px 4px;border-radius:4px;color:var(--text-muted);">94</div>
+              <div style="background:rgba(255,255,255,0.03);padding:6px 4px;border-radius:4px;color:var(--text-muted);">60</div>
+            </div>
+          </div>
+        </div>
+        <div class="comp-item animate-on-scroll delay-1">
+          <div class="comp-group-title" style="margin-bottom:12px; border-left:3px solid var(--cyan); padding-left:14px;">인포그래픽</div>
+          <div class="comp-item-brands" style="margin-bottom:12px;">
+            <span class="comp-brand-chip chip-ivory">미쏘</span>
+            <span class="comp-brand-chip chip-gray">에잇세컨즈</span>
+          </div>
+          <div class="comp-item-desc">일러스트 + 수치를 결합한 인포그래픽 스타일입니다. 인체 실루엣 위에 화살표와 수치를 표시하여 직관적으로 사이즈를 이해할 수 있게 합니다.</div>
+          <!-- mini visual -->
+          <div style="margin-top:14px;background:rgba(255,255,255,0.03);border-radius:8px;padding:16px;display:flex;justify-content:center;">
+            <div style="position:relative;width:60px;">
+              <div style="width:20px;height:20px;border-radius:50%;background:rgba(0,206,201,0.3);margin:0 auto;"></div>
+              <div style="width:2px;height:12px;background:rgba(0,206,201,0.3);margin:2px auto;"></div>
+              <div style="width:40px;height:18px;border-radius:8px 8px 0 0;background:rgba(0,206,201,0.2);margin:0 auto;position:relative;">
+                <div style="position:absolute;right:-36px;top:4px;font-size:0.55rem;color:var(--cyan-light);">&#8592; 88cm</div>
+              </div>
+              <div style="width:30px;height:16px;background:rgba(0,206,201,0.15);margin:0 auto;position:relative;">
+                <div style="position:absolute;right:-36px;top:2px;font-size:0.55rem;color:var(--cyan-light);">&#8592; 70cm</div>
+              </div>
+              <div style="width:36px;height:14px;background:rgba(0,206,201,0.2);margin:0 auto;position:relative;">
+                <div style="position:absolute;right:-36px;top:0;font-size:0.55rem;color:var(--cyan-light);">&#8592; 94cm</div>
+              </div>
+              <div style="display:flex;gap:4px;justify-content:center;margin-top:2px;">
+                <div style="width:8px;height:30px;background:rgba(0,206,201,0.15);border-radius:0 0 4px 4px;"></div>
+                <div style="width:8px;height:30px;background:rgba(0,206,201,0.15);border-radius:0 0 4px 4px;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="comp-item animate-on-scroll delay-2">
+          <div class="comp-group-title" style="margin-bottom:12px; border-left:3px solid var(--pink); padding-left:14px;">실착 비교</div>
+          <div class="comp-item-brands" style="margin-bottom:12px;">
+            <span class="comp-brand-chip chip-pink">아뜨랑스</span>
+          </div>
+          <div class="comp-item-desc">여러 체형의 모델이 동일 제품을 착용한 비교 사진을 제공합니다. 155cm/50kg, 163cm/55kg, 170cm/60kg 등 구체적인 스펙과 함께 실착 사진을 나란히 배치합니다.</div>
+          <!-- mini visual -->
+          <div style="margin-top:14px;background:rgba(255,255,255,0.03);border-radius:8px;padding:12px;display:flex;gap:8px;justify-content:center;">
+            <div style="text-align:center;">
+              <div style="width:32px;height:48px;background:rgba(253,121,168,0.15);border-radius:6px;margin:0 auto 4px;"></div>
+              <div style="font-size:0.55rem;color:var(--pink-light);">155cm</div>
+              <div style="font-size:0.5rem;color:var(--text-muted);">50kg / S</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="width:34px;height:54px;background:rgba(253,121,168,0.2);border-radius:6px;margin:0 auto 4px;"></div>
+              <div style="font-size:0.55rem;color:var(--pink-light);">163cm</div>
+              <div style="font-size:0.5rem;color:var(--text-muted);">55kg / M</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="width:36px;height:60px;background:rgba(253,121,168,0.25);border-radius:6px;margin:0 auto 4px;"></div>
+              <div style="font-size:0.55rem;color:var(--pink-light);">170cm</div>
+              <div style="font-size:0.5rem;color:var(--text-muted);">60kg / L</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA 전략 -->
+    <div class="comp-panel" id="panel-cta">
+      <div class="comp-items">
+        <div class="comp-item animate-on-scroll">
+          <div class="comp-group-title" style="margin-bottom:12px; border-left:3px solid #d63031; padding-left:14px;">가격 할인 강조</div>
+          <div class="comp-item-brands" style="margin-bottom:12px;">
+            <span class="comp-brand-chip chip-white">탑텐</span>
+            <span class="comp-brand-chip chip-white">스파오</span>
+            <span class="comp-brand-chip chip-white">H&M</span>
+          </div>
+          <div class="comp-item-desc">빨간색 할인율과 가격 비교를 활용합니다. 정가 대비 할인가를 크게 표시하고, "SALE", "할인", "특가" 등의 키워드를 빨간색/주황색으로 강조합니다.</div>
+          <div style="margin-top:14px;background:rgba(255,255,255,0.03);border-radius:8px;padding:14px;text-align:center;">
+            <div style="font-size:0.75rem;color:var(--text-muted);text-decoration:line-through;">39,900원</div>
+            <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:4px;">
+              <span style="background:#d63031;color:#fff;padding:2px 8px;border-radius:4px;font-size:0.8rem;font-weight:800;">50%</span>
+              <span style="color:#ff7675;font-size:1.3rem;font-weight:800;">19,900원</span>
+            </div>
+          </div>
+        </div>
+        <div class="comp-item animate-on-scroll delay-1">
+          <div class="comp-group-title" style="margin-bottom:12px; border-left:3px solid #e17055; padding-left:14px;">긴급성 강조</div>
+          <div class="comp-item-brands" style="margin-bottom:12px;">
+            <span class="comp-brand-chip chip-pink">아뜨랑스</span>
+            <span class="comp-brand-chip chip-black">코데즈컴바인</span>
+          </div>
+          <div class="comp-item-desc">"한정 수량", "금주 마감", "품절 임박" 등 긴급성을 강조하는 CTA를 사용합니다. 타이머, 재고 표시, 마감 카운트다운 등으로 즉각적인 행동을 유도합니다.</div>
+          <div style="margin-top:14px;background:rgba(255,255,255,0.03);border-radius:8px;padding:14px;text-align:center;">
+            <div style="display:inline-block;background:linear-gradient(135deg,#e17055,#d63031);color:#fff;padding:10px 24px;border-radius:8px;font-size:0.85rem;font-weight:700;">
+              한정 수량 50개 남음 - 지금 구매하기
+            </div>
+            <div style="margin-top:8px;font-size:0.7rem;color:#e17055;">금주 금요일 23:59 마감</div>
+          </div>
+        </div>
+        <div class="comp-item animate-on-scroll delay-2">
+          <div class="comp-group-title" style="margin-bottom:12px; border-left:3px solid var(--purple); padding-left:14px;">브랜드 가치 강조</div>
+          <div class="comp-item-brands" style="margin-bottom:12px;">
+            <span class="comp-brand-chip chip-gray">자라</span>
+            <span class="comp-brand-chip chip-gray">에잇세컨즈</span>
+          </div>
+          <div class="comp-item-desc">브랜드 무드로 자연스럽게 구매 전환을 유도합니다. 직접적인 할인/긴급성 문구 대신, 고급스러운 이미지와 브랜드 감성으로 "이 브랜드의 옷을 입고 싶다"는 욕구를 자극합니다.</div>
+          <div style="margin-top:14px;background:rgba(255,255,255,0.03);border-radius:8px;padding:20px 14px;text-align:center;">
+            <div style="font-size:0.9rem;font-weight:300;color:var(--text-secondary);letter-spacing:2px;">DISCOVER YOUR STYLE</div>
+            <div style="width:40px;height:1px;background:var(--text-muted);margin:10px auto;"></div>
+            <div style="font-size:0.75rem;color:var(--text-muted);">2026 S/S COLLECTION</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 배경색/톤 -->
+    <div class="comp-panel" id="panel-color">
+      <div class="comp-items" style="grid-template-columns: 1fr;">
+        <div class="comp-item animate-on-scroll">
+          <div class="color-swatch-row">
+            <div class="color-swatch" style="background:#FFFFFF;"></div>
+            <div class="swatch-info">
+              <div class="swatch-hex">#FFFFFF - 화이트</div>
+              <div class="swatch-brands">탑텐, 스파오, H&M, LAP</div>
+            </div>
+          </div>
+          <div class="comp-item-desc">가장 보편적인 배경색입니다. 제품 색상을 왜곡 없이 정확하게 보여주며, 깔끔하고 신뢰감 있는 인상을 줍니다. 가성비 브랜드에서 특히 선호합니다.</div>
+        </div>
+        <div class="comp-item animate-on-scroll delay-1">
+          <div class="color-swatch-row">
+            <div class="color-swatch" style="background:#FAF8F5;"></div>
+            <div class="swatch-info">
+              <div class="swatch-hex">#FAF8F5 - 아이보리/크림</div>
+              <div class="swatch-brands">미쏘, 쉬즈미스</div>
+            </div>
+          </div>
+          <div class="comp-item-desc">따뜻하고 부드러운 느낌의 배경색입니다. 순백색보다 눈의 피로가 적고, 여성스럽고 고급스러운 분위기를 연출합니다. 오피스룩/프리미엄 브랜드에 적합합니다.</div>
+        </div>
+        <div class="comp-item animate-on-scroll delay-2">
+          <div class="color-swatch-row">
+            <div class="color-swatch" style="background:#F5F5F5;"></div>
+            <div class="swatch-info">
+              <div class="swatch-hex">#F5F5F5 - 라이트그레이</div>
+              <div class="swatch-brands">에잇세컨즈, 자라</div>
+            </div>
+          </div>
+          <div class="comp-item-desc">모던하고 세련된 느낌을 주는 배경색입니다. 에디토리얼/하이엔드 무드를 연출하기에 적합하며, 화이트보다 깊이감이 있어 이미지가 돋보입니다.</div>
+        </div>
+        <div class="comp-item animate-on-scroll">
+          <div class="color-swatch-row">
+            <div class="color-swatch" style="background:linear-gradient(135deg, #FDE2E9, #E8D0F0);"></div>
+            <div class="swatch-info">
+              <div class="swatch-hex">소프트핑크/라벤더 톤</div>
+              <div class="swatch-brands">아뜨랑스</div>
+            </div>
+          </div>
+          <div class="comp-item-desc">여성 타겟을 강조하는 소프트 파스텔 톤입니다. 따뜻하고 친근한 느낌으로 10~30대 여성 고객의 감성에 어필하며, 리뷰 영역과의 조화가 좋습니다.</div>
+        </div>
+        <div class="comp-item animate-on-scroll delay-1">
+          <div class="color-swatch-row">
+            <div class="color-swatch" style="background:#2D3436;"></div>
+            <div class="swatch-info">
+              <div class="swatch-hex">#2D3436 - 블랙 포인트</div>
+              <div class="swatch-brands">코데즈컴바인</div>
+            </div>
+          </div>
+          <div class="comp-item-desc">스트리트/캐주얼 무드를 강조하는 다크 톤입니다. 강렬하고 역동적인 인상을 주며, MZ세대 타겟의 트렌디한 감성에 부합합니다. 밝은 제품 색상과의 대비 효과가 탁월합니다.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Section 4: 상세페이지 제작 가이드라인 -->
+<section class="section" id="guide">
+  <div class="section-header animate-on-scroll">
+    <div class="section-number">SECTION 04</div>
+    <h2 class="section-title">상세페이지 제작 가이드라인</h2>
+    <p class="section-desc">쿠팡 상세페이지 제작 시 반드시 지켜야 할 기술 사양과 권장 규격입니다</p>
+  </div>
+
+  <div class="guide-grid">
+    <div class="guide-card animate-on-scroll">
+      <div class="guide-icon">&#9634;</div>
+      <div class="guide-label">이미지 가로 사이즈</div>
+      <div class="guide-value">780px <span style="font-size:0.8rem;font-weight:400;color:var(--text-muted);">(권장)</span></div>
+      <div class="guide-desc">최대 1,000px까지 허용됩니다. 780px이 모바일/PC 모두에서 가장 깔끔하게 보이는 최적 사이즈입니다.</div>
+    </div>
+    <div class="guide-card animate-on-scroll delay-1">
+      <div class="guide-icon">&#8693;</div>
+      <div class="guide-label">이미지 세로 사이즈</div>
+      <div class="guide-value">최대 3,000px</div>
+      <div class="guide-desc">1장당 세로 최대 3,000px입니다. 너무 긴 이미지는 로딩 시간과 이탈률에 영향을 줍니다.</div>
+    </div>
+    <div class="guide-card animate-on-scroll delay-2">
+      <div class="guide-icon">&#9776;</div>
+      <div class="guide-label">총 이미지 수</div>
+      <div class="guide-value">10~15장 <span style="font-size:0.8rem;font-weight:400;color:var(--text-muted);">(권장)</span></div>
+      <div class="guide-desc">최대 20장까지 등록 가능합니다. 10~15장이 정보 전달과 로딩 속도의 최적 균형점입니다.</div>
+    </div>
+    <div class="guide-card animate-on-scroll">
+      <div class="guide-icon">&#128190;</div>
+      <div class="guide-label">파일 형식 및 용량</div>
+      <div class="guide-value">JPG / PNG</div>
+      <div class="guide-desc">GIF는 불가합니다. 1장당 5MB 이하, 전체 20MB 이하로 제한됩니다.</div>
+    </div>
+    <div class="guide-card animate-on-scroll delay-1">
+      <div class="guide-icon">A</div>
+      <div class="guide-label">최소 폰트 사이즈</div>
+      <div class="guide-value">40pt 이상</div>
+      <div class="guide-desc">780px 기준 이미지 내 텍스트는 40pt 이상을 권장합니다. 모바일에서의 가독성이 핵심입니다.</div>
+    </div>
+    <div class="guide-card animate-on-scroll delay-2">
+      <div class="guide-icon">&#9633;</div>
+      <div class="guide-label">배경색 권장</div>
+      <div class="guide-value">흰색 / 밝은 무채색</div>
+      <div class="guide-desc">화이트(#FFFFFF) 또는 밝은 무채색 배경이 가장 안전합니다. 쿠팡 앱 UI와의 자연스러운 조화를 고려하세요.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 5: 실전 적용 체크리스트 -->
+<section class="section" id="checklist">
+  <div class="section-header animate-on-scroll">
+    <div class="section-number">SECTION 05</div>
+    <h2 class="section-title">실전 적용 체크리스트</h2>
+    <p class="section-desc">상세페이지를 제작할 때 하나씩 체크해보세요. 진행 상태는 자동 저장됩니다.</p>
+  </div>
+
+  <div class="checklist-container">
+    <div class="checklist-progress animate-on-scroll">
+      <div class="progress-label">완료 진행률</div>
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" id="progressFill" style="width: 0%;"></div>
+      </div>
+      <div class="progress-text" id="progressText">0 / 12</div>
+    </div>
+
+    <div class="checklist-items" id="checklistItems">
+      <div class="checklist-item animate-on-scroll" data-index="0" onclick="toggleCheck(this)">
+        <div class="check-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <span class="check-label">브랜드 로고 및 슬로건 배치</span>
+      </div>
+      <div class="checklist-item animate-on-scroll" data-index="1" onclick="toggleCheck(this)">
+        <div class="check-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <span class="check-label">판매 증거 (리뷰 수, 판매량) 상단 배치</span>
+      </div>
+      <div class="checklist-item animate-on-scroll" data-index="2" onclick="toggleCheck(this)">
+        <div class="check-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <span class="check-label">모델 착용 메인 이미지 (전신 정면)</span>
+      </div>
+      <div class="checklist-item animate-on-scroll" data-index="3" onclick="toggleCheck(this)">
+        <div class="check-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <span class="check-label">다각도 착용 사진 (측면, 후면)</span>
+      </div>
+      <div class="checklist-item animate-on-scroll" data-index="4" onclick="toggleCheck(this)">
+        <div class="check-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <span class="check-label">디테일 클로즈업 이미지</span>
+      </div>
+      <div class="checklist-item animate-on-scroll" data-index="5" onclick="toggleCheck(this)">
+        <div class="check-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <span class="check-label">코디/스타일링 제안 이미지</span>
+      </div>
+      <div class="checklist-item animate-on-scroll" data-index="6" onclick="toggleCheck(this)">
+        <div class="check-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <span class="check-label">사이즈 가이드 (표 + 모델 스펙)</span>
+      </div>
+      <div class="checklist-item animate-on-scroll" data-index="7" onclick="toggleCheck(this)">
+        <div class="check-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <span class="check-label">소재/세탁 정보</span>
+      </div>
+      <div class="checklist-item animate-on-scroll" data-index="8" onclick="toggleCheck(this)">
+        <div class="check-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <span class="check-label">컬러 바리에이션 사진</span>
+      </div>
+      <div class="checklist-item animate-on-scroll" data-index="9" onclick="toggleCheck(this)">
+        <div class="check-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <span class="check-label">한정 할인/CTA 영역</span>
+      </div>
+      <div class="checklist-item animate-on-scroll" data-index="10" onclick="toggleCheck(this)">
+        <div class="check-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <span class="check-label">배송/교환/반품 안내</span>
+      </div>
+      <div class="checklist-item animate-on-scroll" data-index="11" onclick="toggleCheck(this)">
+        <div class="check-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <span class="check-label">모바일 가독성 검증 완료</span>
+      </div>
+    </div>
+
+    <button class="checklist-reset" onclick="resetChecklist()">체크리스트 초기화</button>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <p class="footer-text">
+    쿠팡 여성의류 TOP 10 상세페이지 완전 분석<br>
+    본 분석은 2026년 2월 기준 쿠팡 여성의류 카테고리 베스트셀러 데이터를 기반으로 작성되었습니다.<br>
+    상세페이지 최적화를 통해 전환율을 높이고 매출을 극대화하세요.
+  </p>
+</footer>
+
+<!-- Back to top -->
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="맨 위로">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="18 15 12 9 6 15"></polyline>
+  </svg>
+</button>
+
+<script>
+// ===== PARTICLES =====
+(function createParticles() {
+  const container = document.getElementById('particles');
+  if (!container) return;
+  for (let i = 0; i < 30; i++) {
+    const p = document.createElement('div');
+    p.classList.add('particle');
+    p.style.left = Math.random() * 100 + '%';
+    p.style.animationDuration = (6 + Math.random() * 10) + 's';
+    p.style.animationDelay = Math.random() * 8 + 's';
+    p.style.width = p.style.height = (2 + Math.random() * 4) + 'px';
+    const colors = ['rgba(162,155,254,0.5)', 'rgba(253,121,168,0.4)', 'rgba(0,206,201,0.4)', 'rgba(129,236,236,0.3)'];
+    p.style.background = colors[Math.floor(Math.random() * colors.length)];
+    container.appendChild(p);
+  }
+})();
+
+// ===== NAV SCROLL =====
+const nav = document.getElementById('nav');
+const backToTop = document.getElementById('backToTop');
+
+window.addEventListener('scroll', function() {
+  if (window.scrollY > 50) {
+    nav.classList.add('scrolled');
+  } else {
+    nav.classList.remove('scrolled');
+  }
+  if (window.scrollY > 400) {
+    backToTop.classList.add('visible');
+  } else {
+    backToTop.classList.remove('visible');
+  }
+  updateActiveNav();
+});
+
+// ===== HAMBURGER MENU =====
+document.getElementById('hamburger').addEventListener('click', function() {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+// Close mobile menu on link click
+document.querySelectorAll('.nav-links a').forEach(function(link) {
+  link.addEventListener('click', function() {
+    document.getElementById('navLinks').classList.remove('open');
+  });
+});
+
+// ===== ACTIVE NAV =====
+function updateActiveNav() {
+  const sections = ['brands', 'structure', 'comparison', 'guide', 'checklist'];
+  const scrollPos = window.scrollY + 120;
+
+  sections.forEach(function(id) {
+    const section = document.getElementById(id);
+    const link = document.querySelector('.nav-links a[href="#' + id + '"]');
+    if (!section || !link) return;
+
+    if (section.offsetTop <= scrollPos && section.offsetTop + section.offsetHeight > scrollPos) {
+      link.classList.add('active');
+    } else {
+      link.classList.remove('active');
+    }
+  });
+}
+
+// ===== SCROLL ANIMATIONS =====
+const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -40px 0px' };
+
+const observer = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, observerOptions);
+
+document.querySelectorAll('.animate-on-scroll, .structure-step').forEach(function(el) {
+  observer.observe(el);
+});
+
+// ===== BRAND CARD EXPAND =====
+function toggleBrandDetail(card) {
+  const wasExpanded = card.classList.contains('expanded');
+  // Close all others
+  document.querySelectorAll('.brand-card.expanded').forEach(function(c) {
+    if (c !== card) c.classList.remove('expanded');
+  });
+  if (wasExpanded) {
+    card.classList.remove('expanded');
+  } else {
+    card.classList.add('expanded');
+  }
+}
+
+// ===== COMPARISON TABS =====
+document.querySelectorAll('.comp-tab').forEach(function(tab) {
+  tab.addEventListener('click', function() {
+    document.querySelectorAll('.comp-tab').forEach(function(t) { t.classList.remove('active'); });
+    document.querySelectorAll('.comp-panel').forEach(function(p) { p.classList.remove('active'); });
+
+    tab.classList.add('active');
+    var panelId = 'panel-' + tab.getAttribute('data-tab');
+    var panel = document.getElementById(panelId);
+    if (panel) {
+      panel.classList.add('active');
+      // Re-trigger animations
+      panel.querySelectorAll('.animate-on-scroll').forEach(function(el) {
+        el.classList.remove('visible');
+        void el.offsetWidth;
+        observer.observe(el);
+      });
+    }
+  });
+});
+
+// ===== CHECKLIST WITH LOCALSTORAGE =====
+var STORAGE_KEY = 'coupang-analysis-checklist';
+
+function getCheckedState() {
+  try {
+    var data = localStorage.getItem(STORAGE_KEY);
+    return data ? JSON.parse(data) : {};
+  } catch(e) {
+    return {};
+  }
+}
+
+function saveCheckedState(state) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch(e) {}
+}
+
+function updateProgress() {
+  var items = document.querySelectorAll('.checklist-item');
+  var checked = document.querySelectorAll('.checklist-item.checked').length;
+  var total = items.length;
+  var pct = total > 0 ? Math.round((checked / total) * 100) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = checked + ' / ' + total;
+}
+
+function toggleCheck(item) {
+  item.classList.toggle('checked');
+  var state = getCheckedState();
+  var idx = item.getAttribute('data-index');
+  state[idx] = item.classList.contains('checked');
+  saveCheckedState(state);
+  updateProgress();
+}
+
+function resetChecklist() {
+  document.querySelectorAll('.checklist-item').forEach(function(item) {
+    item.classList.remove('checked');
+  });
+  saveCheckedState({});
+  updateProgress();
+}
+
+// Restore on load
+(function restoreChecklist() {
+  var state = getCheckedState();
+  document.querySelectorAll('.checklist-item').forEach(function(item) {
+    var idx = item.getAttribute('data-index');
+    if (state[idx]) {
+      item.classList.add('checked');
+    }
+  });
+  updateProgress();
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-label="30일 상품 소싱 실행 로드맵">
+  <defs>
+    <linearGradient id="bg3" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1f2937"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bg3)"/>
+  <text x="70" y="92" fill="#f9fafb" font-size="42" font-weight="700" font-family="Pretendard, Noto Sans KR, Arial, sans-serif">30일 상품 소싱 실행 로드맵</text>
+  <text x="70" y="130" fill="#cbd5e1" font-size="22" font-family="Pretendard, Noto Sans KR, Arial, sans-serif">작게 검증하고 빠르게 확장하는 일정표</text>
+
+  <g font-family="Pretendard, Noto Sans KR, Arial, sans-serif">
+    <rect x="70" y="175" width="250" height="410" rx="20" fill="#0f172a" stroke="#3b82f6"/>
+    <rect x="340" y="175" width="250" height="410" rx="20" fill="#0f172a" stroke="#10b981"/>
+    <rect x="610" y="175" width="250" height="410" rx="20" fill="#0f172a" stroke="#f59e0b"/>
+    <rect x="880" y="175" width="250" height="410" rx="20" fill="#0f172a" stroke="#ef4444"/>
+
+    <text x="110" y="230" fill="#93c5fd" font-size="31" font-weight="700">1주차</text>
+    <text x="380" y="230" fill="#86efac" font-size="31" font-weight="700">2주차</text>
+    <text x="650" y="230" fill="#fde68a" font-size="31" font-weight="700">3주차</text>
+    <text x="920" y="230" fill="#fca5a5" font-size="31" font-weight="700">4주차</text>
+
+    <text x="95" y="285" fill="#dbeafe" font-size="21">- 카테고리 3개 선정</text>
+    <text x="95" y="320" fill="#dbeafe" font-size="21">- 후보 SKU 60개 추출</text>
+    <text x="95" y="355" fill="#dbeafe" font-size="21">- 공급처 10곳 접촉</text>
+    <text x="95" y="390" fill="#dbeafe" font-size="21">- 샘플 15개 발주</text>
+
+    <text x="365" y="285" fill="#dcfce7" font-size="21">- 샘플 품질 점검표 작성</text>
+    <text x="365" y="320" fill="#dcfce7" font-size="21">- 목표마진 15% 이상 선별</text>
+    <text x="365" y="355" fill="#dcfce7" font-size="21">- 1차 계약조건 협상</text>
+    <text x="365" y="390" fill="#dcfce7" font-size="21">- 테스트 SKU 20개 확정</text>
+
+    <text x="635" y="285" fill="#fef3c7" font-size="21">- 소량 사입/위탁 테스트</text>
+    <text x="635" y="320" fill="#fef3c7" font-size="21">- 상세페이지/가격 A/B</text>
+    <text x="635" y="355" fill="#fef3c7" font-size="21">- 클릭률·전환율 측정</text>
+    <text x="635" y="390" fill="#fef3c7" font-size="21">- 반품사유 주간 분석</text>
+
+    <text x="905" y="285" fill="#fee2e2" font-size="21">- 승자 SKU 5~8개 선정</text>
+    <text x="905" y="320" fill="#fee2e2" font-size="21">- 물량/단가 재협상</text>
+    <text x="905" y="355" fill="#fee2e2" font-size="21">- 광고 예산 집중 배분</text>
+    <text x="905" y="390" fill="#fee2e2" font-size="21">- 다음 30일 계획 수립</text>
+  </g>
+
+  <line x1="70" y1="610" x2="1130" y2="610" stroke="#475569" stroke-width="3"/>
+  <text x="77" y="645" fill="#94a3b8" font-size="21" font-family="Pretendard, Noto Sans KR, Arial, sans-serif">핵심: 데이터 없는 대량확장 금지, KPI 통과 SKU만 확대</text>
+</svg>

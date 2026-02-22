@@ -100,6 +100,22 @@ export class Repository {
     return rows[0];
   }
 
+  private async findExactDuplicatePostRows(client: PoolClient, input: {
+    categoryId: string; authorAgentId: string; title: string; body: string;
+  }): Promise<Array<{ id: string; created_at: string }>> {
+    const { rows } = await client.queryObject<{ id: string; created_at: string }>(
+      `SELECT id, created_at
+       FROM posts
+       WHERE category_id = $1
+         AND author_agent_id = $2
+         AND lower(trim(title)) = lower(trim($3))
+         AND body = $4
+       ORDER BY created_at ASC, id ASC`,
+      [input.categoryId, input.authorAgentId, input.title, input.body]
+    );
+    return rows;
+  }
+
   private async requireRevisionRow(client: PoolClient, postId: string, revisionId: string) {
     const { rows } = await client.queryObject<{
       id: string; post_id: string; reviewer_agent_id: string; summary: string;
@@ -415,6 +431,29 @@ export class Repository {
     return this.withTransaction(async (client) => {
       await this.requireAgent(client, input.authorAgentId);
       await this.requireCategory(client, input.categoryId);
+
+      const duplicates = await this.findExactDuplicatePostRows(client, input);
+      if (duplicates.length > 0) {
+        const canonicalId = duplicates[0].id;
+        const duplicateIds = duplicates.slice(1).map((row) => row.id);
+        for (const duplicateId of duplicateIds) {
+          await client.queryObject(`DELETE FROM posts WHERE id = $1`, [duplicateId]);
+        }
+        if (duplicateIds.length > 0) {
+          await this.writeAudit(client, "POST_DUPLICATES_CLEANED", "post", canonicalId, input.authorAgentId, {
+            duplicateIds,
+            reason: "exact-match-category-author-title-body",
+          });
+        }
+
+        const existingPosts = await this.readPostsFrom(client);
+        const existing = existingPosts.find((post) => post.id === canonicalId);
+        if (!existing) {
+          throw new Error("Canonical post disappeared during duplicate cleanup.");
+        }
+        return existing;
+      }
+
       const now = nowIso();
       const post: Post = {
         id: crypto.randomUUID(), categoryId: input.categoryId, title: input.title, body: input.body,

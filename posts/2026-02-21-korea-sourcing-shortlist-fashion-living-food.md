@@ -1,0 +1,85 @@
+# 국내 소싱처 7선 압축 리스트 (패션/리빙/식품) - 2026-02-21 검증
+
+요청하신 기준대로 국내 소싱처 중 즉시 연락 가능한 채널(전화/이메일/1:1문의)이 공개된 곳만 추렸습니다.
+
+- 검증일: 2026년 2월 21일
+- 선정 기준: 국내 사업 운영 + 공식 연락채널 확인 + 카테고리 적합성 + 바로 견적/입점 문의 가능 여부
+- 최종 개수: 7곳 (패션 2, 리빙 3, 식품 2)
+
+## 카테고리 요약
+
+![카테고리 요약](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjY3NSIgdmlld0JveD0iMCAwIDEyMDAgNjc1IiByb2xlPSJpbWciIGFyaWEtbGFiZWw9IktvcmVhIHNvdXJjaW5nIHNob3J0bGlzdCBjYXRlZ29yaWVzIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iYmcxIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMwQjEzMkIiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMUMyNTQxIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KICA8cmVjdCB3aWR0aD0iMTIwMCIgaGVpZ2h0PSI2NzUiIGZpbGw9InVybCgjYmcxKSIvPgogIDxyZWN0IHg9IjYwIiB5PSI1NiIgd2lkdGg9IjEwODAiIGhlaWdodD0iNTYzIiByeD0iMjQiIGZpbGw9IiMxMTE4MjciIGZpbGwtb3BhY2l0eT0iMC44NSIvPgogIDx0ZXh0IHg9Ijk2IiB5PSIxNDAiIGZpbGw9IiNFNUU3RUIiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI1NCIgZm9udC13ZWlnaHQ9IjcwMCI+S29yZWEgU291cmNpbmcgU2hvcnRsaXN0PC90ZXh0PgogIDx0ZXh0IHg9Ijk2IiB5PSIxOTIiIGZpbGw9IiM5Q0EzQUYiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIzMCI+VmVyaWZpZWQgY29udGFjdCBjaGFubmVscyB8IDIwMjYtMDItMjE8L3RleHQ+CgogIDxyZWN0IHg9Ijk2IiB5PSIyNDAiIHdpZHRoPSIzMDAiIGhlaWdodD0iMjgwIiByeD0iMTgiIGZpbGw9IiMxRjI5MzciLz4KICA8dGV4dCB4PSIxMjYiIHk9IjMwMCIgZmlsbD0iI0Y5RkFGQiIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjM4IiBmb250LXdlaWdodD0iNzAwIj5GYXNoaW9uPC90ZXh0PgogIDx0ZXh0IHg9IjEyNiIgeT0iMzYyIiBmaWxsPSIjNjBBNUZBIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNjQiIGZvbnQtd2VpZ2h0PSI3MDAiPjI8L3RleHQ+CiAgPHRleHQgeD0iMTI2IiB5PSI0MTQiIGZpbGw9IiNDQkQ1RTEiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyOCI+U2luc2FuZ21hcmtldCwgRHBsYXphPC90ZXh0PgoKICA8cmVjdCB4PSI0NTAiIHk9IjI0MCIgd2lkdGg9IjMwMCIgaGVpZ2h0PSIyODAiIHJ4PSIxOCIgZmlsbD0iIzFGMjkzNyIvPgogIDx0ZXh0IHg9IjQ4MCIgeT0iMzAwIiBmaWxsPSIjRjlGQUZCIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMzgiIGZvbnQtd2VpZ2h0PSI3MDAiPkxpdmluZzwvdGV4dD4KICA8dGV4dCB4PSI0ODAiIHk9IjM2MiIgZmlsbD0iIzM0RDM5OSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjY0IiBmb250LXdlaWdodD0iNzAwIj4zPC90ZXh0PgogIDx0ZXh0IHg9IjQ4MCIgeT0iNDE0IiBmaWxsPSIjQ0JENUUxIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjgiPk93bmVyY2xhbiwgRG9tZXRvcGlhLCBEb21lZ2dvb2s8L3RleHQ+CgogIDxyZWN0IHg9IjgwNCIgeT0iMjQwIiB3aWR0aD0iMzAwIiBoZWlnaHQ9IjI4MCIgcng9IjE4IiBmaWxsPSIjMUYyOTM3Ii8+CiAgPHRleHQgeD0iODM0IiB5PSIzMDAiIGZpbGw9IiNGOUZBRkIiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIzOCIgZm9udC13ZWlnaHQ9IjcwMCI+Rm9vZDwvdGV4dD4KICA8dGV4dCB4PSI4MzQiIHk9IjM2MiIgZmlsbD0iI0ZCQkYyNCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjY0IiBmb250LXdlaWdodD0iNzAwIj4yPC90ZXh0PgogIDx0ZXh0IHg9IjgzNCIgeT0iNDE0IiBmaWxsPSIjQ0JENUUxIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjgiPkZvb2RzcHJpbmcsIENKIEZyZXNod2F5PC90ZXh0Pgo8L3N2Zz4K)
+
+## 연락 준비 체크리스트
+
+![연락 체크리스트](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjY3NSIgdmlld0JveD0iMCAwIDEyMDAgNjc1IiByb2xlPSJpbWciIGFyaWEtbGFiZWw9IkNvbnRhY3QgY2hlY2tsaXN0IGZvciBzb3VyY2luZyI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnMiIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMDUyRTJCIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzBGNzY2RSIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICA8L2RlZnM+CiAgPHJlY3Qgd2lkdGg9IjEyMDAiIGhlaWdodD0iNjc1IiBmaWxsPSJ1cmwoI2JnMikiLz4KICA8cmVjdCB4PSI2MiIgeT0iNTYiIHdpZHRoPSIxMDc2IiBoZWlnaHQ9IjU2MyIgcng9IjI0IiBmaWxsPSIjMEYxNzJBIiBmaWxsLW9wYWNpdHk9IjAuODQiLz4KICA8dGV4dCB4PSI5NiIgeT0iMTQwIiBmaWxsPSIjRUNGRUZGIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNTQiIGZvbnQtd2VpZ2h0PSI3MDAiPkNvbnRhY3QtUmVhZHkgQ2hlY2tsaXN0PC90ZXh0PgogIDx0ZXh0IHg9Ijk2IiB5PSIxOTAiIGZpbGw9IiM5OUY2RTQiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyOSI+VXNlIHRoaXMgYmVmb3JlIGZpcnN0IGNhbGwgb3IgZW1haWw8L3RleHQ+CgogIDx0ZXh0IHg9IjEwNCIgeT0iMjY0IiBmaWxsPSIjRTJFOEYwIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMzMiPjEuIEJ1c2luZXNzIHByb2ZpbGUgYW5kIHRhcmdldCBjaGFubmVsIChOYXZlci9Db3VwYW5nL1NtYXJ0c3RvcmUpPC90ZXh0PgogIDx0ZXh0IHg9IjEwNCIgeT0iMzI0IiBmaWxsPSIjRTJFOEYwIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMzMiPjIuIEV4cGVjdGVkIE1PUSwgbWFyZ2luIHRhcmdldCwgYW5kIG1vbnRobHkgdm9sdW1lPC90ZXh0PgogIDx0ZXh0IHg9IjEwNCIgeT0iMzg0IiBmaWxsPSIjRTJFOEYwIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMzMiPjMuIERlbGl2ZXJ5IFNMQSBhbmQgQ1MvcmV0dXJuIHByb2Nlc3M8L3RleHQ+CiAgPHRleHQgeD0iMTA0IiB5PSI0NDQiIGZpbGw9IiNFMkU4RjAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIzMyI+NC4gVGF4IGludm9pY2UsIHNldHRsZW1lbnQgY3ljbGUsIGFuZCBjYXRlZ29yeSByZXN0cmljdGlvbnM8L3RleHQ+CiAgPHRleHQgeD0iMTA0IiB5PSI1MDQiIGZpbGw9IiNFMkU4RjAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIzMyI+NS4gUHJvZHVjdCBpbWFnZSByaWdodHMgYW5kIGR1cGxpY2F0ZSBsaXN0aW5nIHBvbGljeTwvdGV4dD4KCiAgPHJlY3QgeD0iODYwIiB5PSIyMjIiIHdpZHRoPSIyMzAiIGhlaWdodD0iMzIwIiByeD0iMTYiIGZpbGw9IiMxMTE4MjciLz4KICA8dGV4dCB4PSI4OTAiIHk9IjI3MCIgZmlsbD0iI0Y4RkFGQyIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI2IiBmb250LXdlaWdodD0iNzAwIj5GYXN0IFN0YXJ0PC90ZXh0PgogIDx0ZXh0IHg9Ijg5MCIgeT0iMzE0IiBmaWxsPSIjQTdGM0QwIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjQiPkRheSAxLTI8L3RleHQ+CiAgPHRleHQgeD0iODkwIiB5PSIzNDgiIGZpbGw9IiNDQkQ1RTEiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyMiI+Q29udGFjdCA3IHN1cHBsaWVyczwvdGV4dD4KICA8dGV4dCB4PSI4OTAiIHk9IjM5MCIgZmlsbD0iI0E3RjNEMCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI0Ij5EYXkgMy00PC90ZXh0PgogIDx0ZXh0IHg9Ijg5MCIgeT0iNDI0IiBmaWxsPSIjQ0JENUUxIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjIiPlJlY2VpdmUgcHJpY2Ugc2hlZXRzPC90ZXh0PgogIDx0ZXh0IHg9Ijg5MCIgeT0iNDY2IiBmaWxsPSIjQTdGM0QwIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjQiPkRheSA1LTc8L3RleHQ+CiAgPHRleHQgeD0iODkwIiB5PSI1MDAiIGZpbGw9IiNDQkQ1RTEiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyMiI+UGlsb3QgU0tVIGxhdW5jaDwvdGV4dD4KPC9zdmc+Cg==)
+
+## 7일 실행 플랜
+
+![7일 실행 플랜](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjY3NSIgdmlld0JveD0iMCAwIDEyMDAgNjc1IiByb2xlPSJpbWciIGFyaWEtbGFiZWw9IjcgZGF5IHNvdXJjaW5nIGFjdGlvbiBwbGFuIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iYmczIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMyQjBBM0QiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjN0MyRDEyIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KICA8cmVjdCB3aWR0aD0iMTIwMCIgaGVpZ2h0PSI2NzUiIGZpbGw9InVybCgjYmczKSIvPgogIDxyZWN0IHg9IjYyIiB5PSI1NiIgd2lkdGg9IjEwNzYiIGhlaWdodD0iNTYzIiByeD0iMjQiIGZpbGw9IiMxMTE4MjciIGZpbGwtb3BhY2l0eT0iMC44NiIvPgogIDx0ZXh0IHg9Ijk2IiB5PSIxNDAiIGZpbGw9IiNGOUZBRkIiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI1NCIgZm9udC13ZWlnaHQ9IjcwMCI+Ny1EYXkgU291cmNpbmcgRXhlY3V0aW9uIFBsYW48L3RleHQ+CiAgPHRleHQgeD0iOTYiIHk9IjE5MCIgZmlsbD0iI0ZERTY4QSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI5Ij5Gcm9tIGZpcnN0IG91dHJlYWNoIHRvIHBpbG90IHNhbGVzPC90ZXh0PgoKICA8bGluZSB4MT0iMTIwIiB5MT0iMzQwIiB4Mj0iMTA4MCIgeTI9IjM0MCIgc3Ryb2tlPSIjMzc0MTUxIiBzdHJva2Utd2lkdGg9IjYiLz4KCiAgPGNpcmNsZSBjeD0iMTgwIiBjeT0iMzQwIiByPSIzMCIgZmlsbD0iI0Y1OUUwQiIvPgogIDx0ZXh0IHg9IjE2OCIgeT0iMzQ4IiBmaWxsPSIjMTExODI3IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjQiIGZvbnQtd2VpZ2h0PSI3MDAiPjE8L3RleHQ+CiAgPHRleHQgeD0iMTMwIiB5PSI0MDAiIGZpbGw9IiNFNUU3RUIiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyNCI+T3V0cmVhY2g8L3RleHQ+CgogIDxjaXJjbGUgY3g9IjM2MCIgY3k9IjM0MCIgcj0iMzAiIGZpbGw9IiNGNTlFMEIiLz4KICA8dGV4dCB4PSIzNDgiIHk9IjM0OCIgZmlsbD0iIzExMTgyNyIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI0IiBmb250LXdlaWdodD0iNzAwIj4yPC90ZXh0PgogIDx0ZXh0IHg9IjMwMCIgeT0iNDAwIiBmaWxsPSIjRTVFN0VCIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjQiPkNhbGwvRW1haWw8L3RleHQ+CgogIDxjaXJjbGUgY3g9IjU0MCIgY3k9IjM0MCIgcj0iMzAiIGZpbGw9IiNGNTlFMEIiLz4KICA8dGV4dCB4PSI1MjgiIHk9IjM0OCIgZmlsbD0iIzExMTgyNyIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI0IiBmb250LXdlaWdodD0iNzAwIj4zPC90ZXh0PgogIDx0ZXh0IHg9IjQ4OCIgeT0iNDAwIiBmaWxsPSIjRTVFN0VCIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjQiPlByaWNlIFNoZWV0PC90ZXh0PgoKICA8Y2lyY2xlIGN4PSI3MjAiIGN5PSIzNDAiIHI9IjMwIiBmaWxsPSIjRjU5RTBCIi8+CiAgPHRleHQgeD0iNzA4IiB5PSIzNDgiIGZpbGw9IiMxMTE4MjciIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyNCIgZm9udC13ZWlnaHQ9IjcwMCI+NDwvdGV4dD4KICA8dGV4dCB4PSI2NjQiIHk9IjQwMCIgZmlsbD0iI0U1RTdFQiIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI0Ij5TYW1wbGUgVGVzdDwvdGV4dD4KCiAgPGNpcmNsZSBjeD0iOTAwIiBjeT0iMzQwIiByPSIzMCIgZmlsbD0iI0Y1OUUwQiIvPgogIDx0ZXh0IHg9Ijg4OCIgeT0iMzQ4IiBmaWxsPSIjMTExODI3IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjQiIGZvbnQtd2VpZ2h0PSI3MDAiPjU8L3RleHQ+CiAgPHRleHQgeD0iODUwIiB5PSI0MDAiIGZpbGw9IiNFNUU3RUIiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyNCI+UGlsb3QgTGF1bmNoPC90ZXh0PgoKICA8dGV4dCB4PSI5NiIgeT0iNDk0IiBmaWxsPSIjRDFENURCIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjgiPkRheXMgMS0yOiBvdXRyZWFjaCB8IERheXMgMy00OiBxdW90ZXMgfCBEYXlzIDUtNzogU0tVIHBpbG90IGFuZCByZW9yZGVyIGRlY2lzaW9uPC90ZXh0Pgo8L3N2Zz4K)
+
+## 최종 소싱처 7곳 (바로 연락 가능)
+
+| 번호 | 카테고리 | 소싱처 | 바로 연락 채널 | 이 소싱처가 맞는 판매자 | 첫 통화에서 바로 확인할 것 |
+|---|---|---|---|---|---|
+| 1 | 패션 | [신상마켓(딜리셔스)](https://www.dealicious.kr/services) | TEL 1661-1916, Email contact@deali.net | 동대문 패션 사입을 온라인으로 돌리고 싶은 의류 셀러 | 최소 발주수량(MOQ), 촬영/업로드 지원 범위, 정산 주기 |
+| 2 | 패션 | [Dplaza (동대문 원단/부자재)](https://dplaza.kr/shop_top10.php) | 고객센터 TEL 070-7430-7997, Email jshcrave@naver.com | 원단/부자재 기반 패션 제작 셀러, 소량 테스트 운영자 | 샘플 발송 가능 여부, 납기, 반복 발주 단가 |
+| 3 | 리빙 | [오너클랜](https://ownerclan.com/V2/member/vender_join.php) | 고객센터 070-4603-5431 (평일 09:30~18:30), 1:1 문의 | 위탁/도매 동시 운영하는 리빙 셀러 | 공급사 등급, 반품/교환 처리 주체, 세금계산서 발행 방식 |
+| 4 | 리빙 | [도매토피아](https://m.dometopia.com/service/cs) | 전화 1566-6779, 주문상담 02-2026-2754, Email dometopia@dometopia.com | 생활/판촉/잡화 SKU를 빠르게 늘려야 하는 초중급 셀러 | 직배송/택배 조건, 대량견적 조건, 반품지 정책 |
+| 5 | 리빙 | [도매꾹/도매매 (지앤지커머스)](https://domemedb.domeggook.com/) | 고객센터 1588-0628, Email info@ggook.com | 카테고리 확장형 종합 셀러, 멀티마켓 연동 운영자 | 공급사 신뢰지표, 이미지 사용권, 배송 SLA |
+| 6 | 식품 | [식봄(마켓보로)](https://asset-seller.foodspring.co.kr/manual/20241217/%E1%84%89%E1%85%B5%E1%86%A8%E1%84%87%E1%85%A9%E1%86%B7_%E1%84%8B%E1%85%B5%E1%86%B8%E1%84%8C%E1%85%A5%E1%86%B7_%E1%84%89%E1%85%A9%E1%84%80%E1%85%A2%E1%84%89%E1%85%A5_241217.pdf) | 판매자 입점문의 031-698-3454, Email info@foodspring.co.kr | 식당/업장 대상 식자재 B2B 판매자, 직배송 병행 사업자 | 권역 배송 커버리지, 출고 컷오프, 정산 D+ 조건 |
+| 7 | 식품 | [CJ프레시웨이](https://m.cjfreshway.com/solution/brand/freshOne.jsp) | 고객문의 대표번호 02-2149-6114 | 중대형 식자재 유통/납품 파트너를 찾는 B2B 사업자 | 신규 납품상담 절차, 품질/인증 기준, 물류 최소 조건 |
+
+## 카테고리별 우선 연락 순서 (실행용)
+
+### 패션
+
+1. 신상마켓
+2. Dplaza
+
+- 이유: 완제품 사입(신상마켓)과 원단/부자재 소싱(Dplaza)을 동시에 열어두면 테스트 속도가 빨라집니다.
+
+### 리빙
+
+1. 도매꾹/도매매
+2. 도매토피아
+3. 오너클랜
+
+- 이유: SKU 폭과 연동성(도매꾹/도매매) 확보 후, 도매토피아로 단가 비교, 오너클랜으로 공급사 비교 견적을 받는 구조가 안정적입니다.
+
+### 식품
+
+1. 식봄
+2. CJ프레시웨이
+
+- 이유: 식봄으로 초기 온라인 판매동선을 만들고, 이후 안정 공급망이 필요하면 CJ프레시웨이로 확장하는 흐름이 실무에서 리스크가 낮습니다.
+
+## 첫 연락 메시지 템플릿 (복붙용)
+
+```text
+안녕하세요. [상호명] [이름]입니다.
+[패션/리빙/식품] 카테고리로 온라인 판매를 준비 중이며,
+월 예상 발주량은 [수량/금액] 수준입니다.
+
+아래 3가지 먼저 확인 가능할까요?
+1) MOQ/도매단가/정산 주기
+2) 배송 리드타임 및 반품 정책
+3) 상품 이미지 사용 범위와 재고 연동 방식
+
+가능하시면 입점/거래 절차 안내 부탁드립니다.
+```
+
+## 실행 시 주의사항
+
+- 식품 카테고리는 사업자 업종, 보관/유통 조건, 표시사항을 먼저 맞추고 진행해야 CS 리스크를 줄일 수 있습니다.
+- 첫 주에는 최소 10~20개 SKU만 테스트하고, 재구매율 + 클레임율 + 마진 기준으로 2주 내 압축하는 방식이 안전합니다.
+- 같은 상품을 여러 플랫폼에서 받을 때는 이미지 사용권/중복등록 정책을 반드시 확인해야 합니다.
+
+## 조사 출처
+
+- 딜리셔스 서비스/문의: https://www.dealicious.kr/services
+- 오너클랜 공급사 페이지: https://ownerclan.com/V2/member/vender_join.php
+- 도매토피아 고객센터: https://m.dometopia.com/service/cs
+- 도매매(도매꾹 연계) 메인/고객센터 정보: https://domemedb.domeggook.com/
+- 식봄 입점 소개서(PDF): https://asset-seller.foodspring.co.kr/manual/20241217/%E1%84%89%E1%85%B5%E1%86%A8%E1%84%87%E1%85%A9%E1%86%B7_%E1%84%8B%E1%85%B5%E1%86%B8%E1%84%8C%E1%85%A5%E1%86%B7_%E1%84%89%E1%85%A9%E1%84%80%E1%85%A2%E1%84%89%E1%85%A5_241217.pdf
+- CJ프레시웨이 브랜드/문의 대표번호: https://m.cjfreshway.com/solution/brand/freshOne.jsp

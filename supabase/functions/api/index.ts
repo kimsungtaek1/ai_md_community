@@ -10,6 +10,7 @@ import {
   deletePostSchema,
   listAuditLogsSchema,
   reviewCategoryRequestSchema,
+  uploadImageAssetSchema,
   updatePostSchema,
 } from "./validation.ts";
 import { ZodError } from "npm:zod@3.23.8";
@@ -22,6 +23,16 @@ if (!databaseUrl) {
 }
 
 const repository = new Repository(databaseUrl);
+const uploadToken = Deno.env.get("AI_MD_UPLOAD_TOKEN") ?? "";
+const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
+const supabaseServiceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+const storageBucket = Deno.env.get("AI_MD_UPLOAD_BUCKET") ?? "uploads";
+const storageBucketPublic = (Deno.env.get("AI_MD_UPLOAD_BUCKET_PUBLIC") ?? "true").toLowerCase() !== "false";
+const mimeExtension: Record<string, string> = {
+  "image/png": "png",
+  "image/jpeg": "jpg",
+  "image/webp": "webp",
+};
 
 function corsHeaders(): Record<string, string> {
   return {
@@ -259,6 +270,119 @@ addRoute("GET", "/api/audit-logs", async (req) => {
     });
     const logs = await repository.listAuditLogs(input.limit);
     return json(logs);
+  } catch (error) {
+    return errorJson(error);
+  }
+});
+
+// POST /assets/images
+addRoute("POST", "/api/assets/images", async (req) => {
+  try {
+    if (uploadToken) {
+      const providedToken = req.headers.get("x-upload-token");
+      if (!providedToken || providedToken !== uploadToken) {
+        return json({ error: "Invalid upload token." }, 401);
+      }
+    }
+
+    if (!supabaseUrl || !supabaseServiceRoleKey) {
+      return json({ error: "SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY is not configured." }, 500);
+    }
+
+    const body = await req.json();
+    const input = uploadImageAssetSchema.parse(body);
+    const normalizedBase64 = input.base64Data.replace(/\s+/g, "");
+    if (!/^[A-Za-z0-9+/]+={0,2}$/.test(normalizedBase64)) {
+      throw new Error("Invalid base64 payload.");
+    }
+
+    const bytes = Uint8Array.from(atob(normalizedBase64), (char) => char.charCodeAt(0));
+    if (bytes.length === 0) {
+      throw new Error("Image payload is empty.");
+    }
+    if (bytes.length > 8 * 1024 * 1024) {
+      throw new Error("Image payload exceeds 8MB.");
+    }
+
+    const extension = mimeExtension[input.mimeType] ?? "bin";
+    const safeHint = (input.filenameHint ?? "ai-image")
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9-_]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+      .slice(0, 48) || "ai-image";
+    const objectPath = `${new Date().toISOString().slice(0, 10)}/${safeHint}-${crypto.randomUUID()}.${extension}`;
+
+    const uploadObject = async (): Promise<Response> => {
+      const uploadUrl = `${supabaseUrl}/storage/v1/object/${encodeURIComponent(storageBucket)}/${objectPath}`;
+      return fetch(uploadUrl, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${supabaseServiceRoleKey}`,
+          apikey: supabaseServiceRoleKey,
+          "Content-Type": input.mimeType,
+          "x-upsert": "false",
+        },
+        body: bytes,
+      });
+    };
+
+    const ensureBucketExists = async (): Promise<Response> => {
+      const createBucketUrl = `${supabaseUrl}/storage/v1/bucket`;
+      return fetch(createBucketUrl, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${supabaseServiceRoleKey}`,
+          apikey: supabaseServiceRoleKey,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: storageBucket,
+          name: storageBucket,
+          public: storageBucketPublic,
+          file_size_limit: 8 * 1024 * 1024,
+        }),
+      });
+    };
+
+    let uploadRes = await uploadObject();
+    if (!uploadRes.ok) {
+      const firstErrText = await uploadRes.text();
+      const missingBucket = uploadRes.status === 400
+        && firstErrText.toLowerCase().includes("bucket not found");
+      if (missingBucket) {
+        const createBucketRes = await ensureBucketExists();
+        if (!createBucketRes.ok && createBucketRes.status !== 409) {
+          const bucketErrText = await createBucketRes.text();
+          return json(
+            { error: `Storage bucket create failed (${createBucketRes.status}): ${bucketErrText || createBucketRes.statusText}` },
+            500
+          );
+        }
+        uploadRes = await uploadObject();
+      } else {
+        return json(
+          { error: `Storage upload failed (${uploadRes.status}): ${firstErrText || uploadRes.statusText}` },
+          500
+        );
+      }
+    }
+
+    if (!uploadRes.ok) {
+      const finalErrText = await uploadRes.text();
+      return json(
+        { error: `Storage upload failed (${uploadRes.status}): ${finalErrText || uploadRes.statusText}` },
+        500
+      );
+    }
+
+    const urlPath = `/storage/v1/object/public/${storageBucket}/${objectPath}`;
+    return json({
+      ok: true,
+      urlPath,
+      bytes: bytes.length,
+      mimeType: input.mimeType,
+    }, 201);
   } catch (error) {
     return errorJson(error);
   }

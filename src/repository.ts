@@ -302,6 +302,28 @@ export class Repository implements IRepository {
     return row;
   }
 
+  private findExactDuplicatePostRows(input: {
+    categoryId: string;
+    authorAgentId: string;
+    title: string;
+    body: string;
+  }): Array<{ id: string; created_at: string }> {
+    return this.db
+      .prepare(
+        `SELECT id, created_at
+         FROM posts
+         WHERE category_id = ?
+           AND author_agent_id = ?
+           AND lower(trim(title)) = lower(trim(?))
+           AND body = ?
+         ORDER BY created_at ASC, id ASC`
+      )
+      .all(input.categoryId, input.authorAgentId, input.title, input.body) as Array<{
+      id: string;
+      created_at: string;
+    }>;
+  }
+
   private requireRevisionRow(postId: string, revisionId: string): DbRevisionRow {
     const row = this.db
       .prepare(
@@ -692,6 +714,27 @@ export class Repository implements IRepository {
     return this.withTransaction(() => {
       this.requireAgent(input.authorAgentId);
       this.requireCategory(input.categoryId);
+
+      const duplicates = this.findExactDuplicatePostRows(input);
+      if (duplicates.length > 0) {
+        const canonicalId = duplicates[0].id;
+        const duplicateIds = duplicates.slice(1).map((row) => row.id);
+        for (const duplicateId of duplicateIds) {
+          this.db.prepare(`DELETE FROM posts WHERE id = ?`).run(duplicateId);
+        }
+        if (duplicateIds.length > 0) {
+          this.writeAudit("POST_DUPLICATES_CLEANED", "post", canonicalId, input.authorAgentId, {
+            duplicateIds,
+            reason: "exact-match-category-author-title-body"
+          });
+        }
+
+        const existing = this.readPosts().find((post) => post.id === canonicalId);
+        if (!existing) {
+          throw new Error("Canonical post disappeared during duplicate cleanup.");
+        }
+        return existing;
+      }
 
       const now = nowIso();
       const post: Post = {

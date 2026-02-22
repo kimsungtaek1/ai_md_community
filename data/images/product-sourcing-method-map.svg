@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-label="상품 소싱 실행 맵">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b132b"/>
+      <stop offset="100%" stop-color="#1c2541"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#00b4d8"/>
+      <stop offset="100%" stop-color="#48cae4"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bg)"/>
+  <circle cx="1050" cy="90" r="180" fill="#3a506b" opacity="0.25"/>
+  <circle cx="130" cy="610" r="210" fill="#5bc0be" opacity="0.18"/>
+
+  <text x="70" y="95" fill="#e0fbfc" font-size="44" font-weight="700" font-family="Pretendard, Noto Sans KR, Arial, sans-serif">상품 소싱 5단계 실행 맵</text>
+  <text x="70" y="136" fill="#b7c9e2" font-size="24" font-family="Pretendard, Noto Sans KR, Arial, sans-serif">시장검증 중심으로 실패비용을 낮추는 구조</text>
+
+  <g font-family="Pretendard, Noto Sans KR, Arial, sans-serif" font-size="25" font-weight="700">
+    <rect x="70" y="190" rx="20" width="200" height="130" fill="#111a33" stroke="#2f3d66"/>
+    <rect x="290" y="190" rx="20" width="200" height="130" fill="#111a33" stroke="#2f3d66"/>
+    <rect x="510" y="190" rx="20" width="200" height="130" fill="#111a33" stroke="#2f3d66"/>
+    <rect x="730" y="190" rx="20" width="200" height="130" fill="#111a33" stroke="#2f3d66"/>
+    <rect x="950" y="190" rx="20" width="180" height="130" fill="#111a33" stroke="#2f3d66"/>
+
+    <rect x="70" y="190" rx="20" width="200" height="8" fill="url(#card)"/>
+    <rect x="290" y="190" rx="20" width="200" height="8" fill="url(#card)"/>
+    <rect x="510" y="190" rx="20" width="200" height="8" fill="url(#card)"/>
+    <rect x="730" y="190" rx="20" width="200" height="8" fill="url(#card)"/>
+    <rect x="950" y="190" rx="20" width="180" height="8" fill="url(#card)"/>
+
+    <text x="96" y="250" fill="#90e0ef">1. 수요 분석</text>
+    <text x="316" y="250" fill="#90e0ef">2. 공급처 발굴</text>
+    <text x="536" y="250" fill="#90e0ef">3. 샘플 검증</text>
+    <text x="756" y="250" fill="#90e0ef">4. 소량 테스트</text>
+    <text x="976" y="250" fill="#90e0ef">5. 확장</text>
+
+    <text x="96" y="286" fill="#c6d8ee" font-size="19" font-weight="500">키워드·리뷰·가격대</text>
+    <text x="316" y="286" fill="#c6d8ee" font-size="19" font-weight="500">국내/해외/도매 플랫폼</text>
+    <text x="536" y="286" fill="#c6d8ee" font-size="19" font-weight="500">품질·원가·납기 확인</text>
+    <text x="756" y="286" fill="#c6d8ee" font-size="19" font-weight="500">2주 단위 KPI 측정</text>
+    <text x="976" y="286" fill="#c6d8ee" font-size="19" font-weight="500">승자 SKU 집중</text>
+  </g>
+
+  <g stroke="#5d7296" stroke-width="3" fill="none" opacity="0.9">
+    <path d="M270 255 L290 255"/>
+    <path d="M490 255 L510 255"/>
+    <path d="M710 255 L730 255"/>
+    <path d="M930 255 L950 255"/>
+  </g>
+  <g fill="#5d7296">
+    <polygon points="282,247 290,255 282,263"/>
+    <polygon points="502,247 510,255 502,263"/>
+    <polygon points="722,247 730,255 722,263"/>
+    <polygon points="942,247 950,255 942,263"/>
+  </g>
+
+  <rect x="70" y="360" width="1060" height="230" rx="24" fill="#0e1730" stroke="#334e7d"/>
+  <text x="100" y="412" fill="#d6e4f4" font-size="30" font-weight="700" font-family="Pretendard, Noto Sans KR, Arial, sans-serif">실무 체크 포인트</text>
+  <text x="100" y="455" fill="#b7c9e2" font-size="24" font-family="Pretendard, Noto Sans KR, Arial, sans-serif">- 한 번에 대량 사입하지 말고, 1차는 2~4주 판매 데이터로 검증</text>
+  <text x="100" y="492" fill="#b7c9e2" font-size="24" font-family="Pretendard, Noto Sans KR, Arial, sans-serif">- 공급처는 최소 2곳 확보해 단가/재고 리스크를 분산</text>
+  <text x="100" y="529" fill="#b7c9e2" font-size="24" font-family="Pretendard, Noto Sans KR, Arial, sans-serif">- 매출보다 공헌이익, 반품률, 불량률을 먼저 추적</text>
+</svg>
