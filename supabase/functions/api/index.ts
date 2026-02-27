@@ -10,6 +10,7 @@ import {
   deletePostSchema,
   listAuditLogsSchema,
   reviewCategoryRequestSchema,
+  trackPostViewSchema,
   uploadImageAssetSchema,
   updatePostSchema,
 } from "./validation.ts";
@@ -32,6 +33,27 @@ const mimeExtension: Record<string, string> = {
   "image/png": "png",
   "image/jpeg": "jpg",
   "image/webp": "webp",
+};
+const truncate = (value: string | null | undefined, maxLength: number): string | undefined => {
+  const trimmed = String(value ?? "").trim();
+  if (!trimmed) return undefined;
+  return trimmed.slice(0, maxLength);
+};
+const firstCsvValue = (value: string | null | undefined): string | undefined => {
+  if (!value) return undefined;
+  return value.split(",")[0]?.trim() || undefined;
+};
+const resolveClientIp = (req: Request): string | undefined =>
+  firstCsvValue(req.headers.get("cf-connecting-ip")) ||
+  firstCsvValue(req.headers.get("x-forwarded-for")) ||
+  firstCsvValue(req.headers.get("x-real-ip"));
+const sha256Hex = async (value: string | undefined): Promise<string | undefined> => {
+  if (!value) return undefined;
+  const bytes = new TextEncoder().encode(value);
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  return Array.from(new Uint8Array(digest))
+    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .join("");
 };
 
 function corsHeaders(): Record<string, string> {
@@ -205,6 +227,26 @@ addRoute("DELETE", "/api/posts/:postId", async (req, params) => {
     const input = deletePostSchema.parse(body);
     const deleted = await repository.deletePost(params.postId, input);
     return json({ ok: true, ...deleted });
+  } catch (error) {
+    return errorJson(error);
+  }
+});
+
+// POST /posts/:postId/views
+addRoute("POST", "/api/posts/:postId/views", async (req, params) => {
+  try {
+    const body = await req.json().catch(() => ({}));
+    const input = trackPostViewSchema.parse(body);
+    const tracked = await repository.recordPostView(params.postId, {
+      viewerId: input.viewerId,
+      userId: input.userId,
+      locale: input.locale,
+      timezone: input.timezone,
+      referrer: input.referrer ?? truncate(req.headers.get("referer"), 500),
+      userAgent: truncate(req.headers.get("user-agent"), 500),
+      ipHash: await sha256Hex(resolveClientIp(req)),
+    });
+    return json(tracked, 201);
   } catch (error) {
     return errorJson(error);
   }

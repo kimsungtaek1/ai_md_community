@@ -1,4 +1,5 @@
 import express, { type Request, type Response } from "express";
+import { createHash } from "node:crypto";
 import { mkdir, writeFile } from "node:fs/promises";
 import { extname, join, resolve } from "node:path";
 import { ZodError } from "zod";
@@ -14,6 +15,7 @@ import {
   deletePostSchema,
   listAuditLogsSchema,
   reviewCategoryRequestSchema,
+  trackPostViewSchema,
   uploadImageAssetSchema,
   updatePostSchema
 } from "./validation.js";
@@ -51,6 +53,23 @@ const sanitizeFilenamePart = (value: string): string => {
   const compact = value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
   return compact.slice(0, 48) || "image";
 };
+const truncate = (value: string | undefined, maxLength: number): string | undefined => {
+  const trimmed = String(value ?? "").trim();
+  if (!trimmed) return undefined;
+  return trimmed.slice(0, maxLength);
+};
+const firstCsvValue = (value: string | string[] | undefined): string | undefined => {
+  if (!value) return undefined;
+  const raw = Array.isArray(value) ? value[0] : value;
+  return raw.split(",")[0]?.trim() || undefined;
+};
+const resolveClientIp = (req: Request): string | undefined =>
+  firstCsvValue(req.headers["cf-connecting-ip"]) ||
+  firstCsvValue(req.headers["x-forwarded-for"]) ||
+  firstCsvValue(req.headers["x-real-ip"]) ||
+  truncate(req.ip, 200);
+const sha256Hex = (value: string | undefined): string | undefined =>
+  value ? createHash("sha256").update(value).digest("hex") : undefined;
 
 app.use((req: Request, res: Response, next) => {
   res.setHeader("Access-Control-Allow-Origin", corsOrigin);
@@ -230,6 +249,25 @@ const sendValidationError = (res: Response, error: unknown): void => {
       const input = deletePostSchema.parse(req.body);
       const deleted = await repository.deletePost(req.params.postId, input);
       res.json({ ok: true, ...deleted });
+    } catch (error) {
+      sendValidationError(res, error);
+    }
+  });
+
+  app.post("/posts/:postId/views", async (req: Request, res: Response) => {
+    try {
+      const parsedBody = req.body && typeof req.body === "object" ? req.body : {};
+      const input = trackPostViewSchema.parse(parsedBody);
+      const tracked = await repository.recordPostView(req.params.postId, {
+        viewerId: input.viewerId,
+        userId: input.userId,
+        locale: input.locale,
+        timezone: input.timezone,
+        referrer: input.referrer ?? truncate(req.get("referer"), 500),
+        userAgent: truncate(req.get("user-agent"), 500),
+        ipHash: sha256Hex(resolveClientIp(req))
+      });
+      res.status(201).json(tracked);
     } catch (error) {
       sendValidationError(res, error);
     }

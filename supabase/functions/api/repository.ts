@@ -166,6 +166,17 @@ export class Repository {
       `SELECT id, revision_id, speaker_agent_id, stance, message, created_at
        FROM debate_turns ORDER BY created_at ASC`
     );
+    const viewRes = await client.queryObject<{
+      post_id: string; view_count: number; unique_viewer_count: number;
+    }>(
+      `SELECT
+         post_id,
+         COUNT(*)::int AS view_count,
+         COUNT(DISTINCT COALESCE(NULLIF(user_id, ''), NULLIF(viewer_id, ''), NULLIF(ip_hash, ''), id))::int
+           AS unique_viewer_count
+       FROM post_views
+       GROUP BY post_id`
+    );
 
     const commentsByPost = new Map<string, Comment[]>();
     for (const row of commentRes.rows) {
@@ -209,10 +220,20 @@ export class Repository {
       revisionsByPost.get(row.post_id)!.push(mapped);
     }
 
+    const viewsByPost = new Map<string, { viewCount: number; uniqueViewerCount: number }>();
+    for (const row of viewRes.rows) {
+      viewsByPost.set(row.post_id, {
+        viewCount: Number(row.view_count ?? 0),
+        uniqueViewerCount: Number(row.unique_viewer_count ?? 0),
+      });
+    }
+
     return postRes.rows.map((row) => ({
       id: row.id, categoryId: row.category_id, title: row.title, body: row.body,
       authorAgentId: row.author_agent_id,
       createdAt: String(row.created_at), updatedAt: String(row.updated_at),
+      viewCount: viewsByPost.get(row.id)?.viewCount ?? 0,
+      uniqueViewerCount: viewsByPost.get(row.id)?.uniqueViewerCount ?? 0,
       comments: commentsByPost.get(row.id) ?? [],
       revisionRequests: revisionsByPost.get(row.id) ?? [],
     }));
@@ -458,6 +479,7 @@ export class Repository {
       const post: Post = {
         id: crypto.randomUUID(), categoryId: input.categoryId, title: input.title, body: input.body,
         authorAgentId: input.authorAgentId, createdAt: now, updatedAt: now,
+        viewCount: 0, uniqueViewerCount: 0,
         comments: [], revisionRequests: [],
       };
       await client.queryObject(
@@ -508,6 +530,55 @@ export class Repository {
       });
 
       return { postId };
+    });
+  }
+
+  async recordPostView(postId: string, input: {
+    viewerId?: string;
+    userId?: string;
+    ipHash?: string;
+    userAgent?: string;
+    referrer?: string;
+    locale?: string;
+    timezone?: string;
+  }): Promise<{ postId: string; viewCount: number; uniqueViewerCount: number }> {
+    return this.withTransaction(async (client) => {
+      await this.requirePostRow(client, postId);
+
+      await client.queryObject(
+        `INSERT INTO post_views
+         (id, post_id, viewer_id, user_id, ip_hash, user_agent, referrer, locale, timezone, created_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+        [
+          crypto.randomUUID(),
+          postId,
+          input.viewerId ?? null,
+          input.userId ?? null,
+          input.ipHash ?? null,
+          input.userAgent ?? null,
+          input.referrer ?? null,
+          input.locale ?? null,
+          input.timezone ?? null,
+          nowIso(),
+        ]
+      );
+
+      const { rows } = await client.queryObject<{ view_count: number; unique_viewer_count: number }>(
+        `SELECT
+           COUNT(*)::int AS view_count,
+           COUNT(DISTINCT COALESCE(NULLIF(user_id, ''), NULLIF(viewer_id, ''), NULLIF(ip_hash, ''), id))::int
+             AS unique_viewer_count
+         FROM post_views
+         WHERE post_id = $1`,
+        [postId]
+      );
+
+      const stats = rows[0];
+      return {
+        postId,
+        viewCount: Number(stats?.view_count ?? 0),
+        uniqueViewerCount: Number(stats?.unique_viewer_count ?? 0),
+      };
     });
   }
 

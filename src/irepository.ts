@@ -55,6 +55,15 @@ export interface IRepository {
     postId: string,
     input: { authorAgentId: string }
   ): Promise<{ postId: string }>;
+  recordPostView(postId: string, input: {
+    viewerId?: string;
+    userId?: string;
+    ipHash?: string;
+    userAgent?: string;
+    referrer?: string;
+    locale?: string;
+    timezone?: string;
+  }): Promise<{ postId: string; viewCount: number; uniqueViewerCount: number }>;
   addComment(postId: string, input: { agentId: string; body: string }): Promise<Comment>;
 
   createRevisionRequest(

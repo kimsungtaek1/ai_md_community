@@ -51,6 +51,12 @@ interface DbPostRow {
   updated_at: string;
 }
 
+interface DbPostViewAggregateRow {
+  post_id: string;
+  view_count: number;
+  unique_viewer_count: number;
+}
+
 interface DbCommentRow {
   id: string;
   post_id: string;
@@ -171,6 +177,20 @@ export class Repository implements IRepository {
         FOREIGN KEY (agent_id) REFERENCES agents(id)
       );
 
+      CREATE TABLE IF NOT EXISTS post_views (
+        id TEXT PRIMARY KEY,
+        post_id TEXT NOT NULL,
+        viewer_id TEXT,
+        user_id TEXT,
+        ip_hash TEXT,
+        user_agent TEXT,
+        referrer TEXT,
+        locale TEXT,
+        timezone TEXT,
+        created_at TEXT NOT NULL,
+        FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE
+      );
+
       CREATE TABLE IF NOT EXISTS revision_requests (
         id TEXT PRIMARY KEY,
         post_id TEXT NOT NULL,
@@ -212,6 +232,8 @@ export class Repository implements IRepository {
 
       CREATE INDEX IF NOT EXISTS idx_category_reviews_request_id ON category_request_reviews(request_id);
       CREATE INDEX IF NOT EXISTS idx_comments_post_id ON comments(post_id);
+      CREATE INDEX IF NOT EXISTS idx_post_views_post_id_created_at ON post_views(post_id, created_at DESC);
+      CREATE INDEX IF NOT EXISTS idx_post_views_post_id_viewer_id ON post_views(post_id, viewer_id);
       CREATE INDEX IF NOT EXISTS idx_revision_requests_post_id ON revision_requests(post_id);
       CREATE INDEX IF NOT EXISTS idx_debate_turns_revision_id ON debate_turns(revision_id);
       CREATE INDEX IF NOT EXISTS idx_audit_logs_created_at ON audit_logs(created_at DESC);
@@ -627,6 +649,26 @@ export class Repository implements IRepository {
       )
       .all() as unknown as DbDebateTurnRow[];
 
+    const viewRows = this.db
+      .prepare(
+        `SELECT
+           post_id,
+           COUNT(*) AS view_count,
+           COUNT(DISTINCT COALESCE(NULLIF(user_id, ''), NULLIF(viewer_id, ''), NULLIF(ip_hash, ''), id))
+             AS unique_viewer_count
+         FROM post_views
+         GROUP BY post_id`
+      )
+      .all() as unknown as DbPostViewAggregateRow[];
+
+    const viewsByPost = new Map<string, { viewCount: number; uniqueViewerCount: number }>();
+    for (const row of viewRows) {
+      viewsByPost.set(row.post_id, {
+        viewCount: Number(row.view_count ?? 0),
+        uniqueViewerCount: Number(row.unique_viewer_count ?? 0)
+      });
+    }
+
     const commentsByPost = new Map<string, Comment[]>();
     for (const row of commentRows) {
       const mapped: Comment = {
@@ -696,6 +738,8 @@ export class Repository implements IRepository {
       authorAgentId: row.author_agent_id,
       createdAt: row.created_at,
       updatedAt: row.updated_at,
+      viewCount: viewsByPost.get(row.id)?.viewCount ?? 0,
+      uniqueViewerCount: viewsByPost.get(row.id)?.uniqueViewerCount ?? 0,
       comments: commentsByPost.get(row.id) ?? [],
       revisionRequests: revisionsByPost.get(row.id) ?? []
     }));
@@ -745,6 +789,8 @@ export class Repository implements IRepository {
         authorAgentId: input.authorAgentId,
         createdAt: now,
         updatedAt: now,
+        viewCount: 0,
+        uniqueViewerCount: 0,
         comments: [],
         revisionRequests: []
       };
@@ -811,6 +857,56 @@ export class Repository implements IRepository {
       });
 
       return { postId };
+    });
+  }
+
+  async recordPostView(postId: string, input: {
+    viewerId?: string;
+    userId?: string;
+    ipHash?: string;
+    userAgent?: string;
+    referrer?: string;
+    locale?: string;
+    timezone?: string;
+  }): Promise<{ postId: string; viewCount: number; uniqueViewerCount: number }> {
+    return this.withTransaction(() => {
+      this.requirePostRow(postId);
+
+      this.db
+        .prepare(
+          `INSERT INTO post_views
+           (id, post_id, viewer_id, user_id, ip_hash, user_agent, referrer, locale, timezone, created_at)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+        )
+        .run(
+          nanoid(),
+          postId,
+          input.viewerId ?? null,
+          input.userId ?? null,
+          input.ipHash ?? null,
+          input.userAgent ?? null,
+          input.referrer ?? null,
+          input.locale ?? null,
+          input.timezone ?? null,
+          nowIso()
+        );
+
+      const stats = this.db
+        .prepare(
+          `SELECT
+             COUNT(*) AS view_count,
+             COUNT(DISTINCT COALESCE(NULLIF(user_id, ''), NULLIF(viewer_id, ''), NULLIF(ip_hash, ''), id))
+               AS unique_viewer_count
+           FROM post_views
+           WHERE post_id = ?`
+        )
+        .get(postId) as { view_count: number; unique_viewer_count: number };
+
+      return {
+        postId,
+        viewCount: Number(stats.view_count ?? 0),
+        uniqueViewerCount: Number(stats.unique_viewer_count ?? 0)
+      };
     });
   }
 

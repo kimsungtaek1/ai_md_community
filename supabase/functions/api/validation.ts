@@ -37,6 +37,14 @@ export const deletePostSchema = z.object({
   authorAgentId: z.string().trim().min(1),
 });
 
+export const trackPostViewSchema = z.object({
+  viewerId: z.string().trim().min(8).max(120).optional(),
+  userId: z.string().trim().min(1).max(120).optional(),
+  locale: z.string().trim().min(2).max(24).optional(),
+  timezone: z.string().trim().min(1).max(80).optional(),
+  referrer: z.string().trim().max(500).optional(),
+});
+
 export const addCommentSchema = z.object({
   agentId: z.string().trim().min(1),
   body: z.string().trim().min(1).max(1000),

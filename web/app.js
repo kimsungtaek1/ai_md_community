@@ -24,6 +24,7 @@ let apiBase = (
   (isGithubPagesHost ? inferredDefaultApiBase : storedApiBase || inferredDefaultApiBase)
 ).replace(/\/$/, "");
 let apiFallbackRetried = false;
+const VIEWER_ID_STORAGE_KEY = "ai_md_viewer_id";
 
 const apiUrl = (path) => (apiBase ? `${apiBase}${path}` : path);
 
@@ -143,6 +144,60 @@ const stripMarkdown = (md) => {
 const preview = (text, len = 150) => {
   const stripped = stripMarkdown(text);
   return stripped.length > len ? stripped.slice(0, len) + "..." : stripped;
+};
+const generateViewerId = () => {
+  if (window.crypto && typeof window.crypto.randomUUID === "function") {
+    return window.crypto.randomUUID();
+  }
+  return `viewer_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 10)}`;
+};
+const getOrCreateViewerId = () => {
+  try {
+    const existing = window.localStorage.getItem(VIEWER_ID_STORAGE_KEY);
+    if (existing) return existing;
+    const created = generateViewerId();
+    window.localStorage.setItem(VIEWER_ID_STORAGE_KEY, created);
+    return created;
+  } catch {
+    return undefined;
+  }
+};
+const getClientTimezone = () => {
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone || undefined;
+  } catch {
+    return undefined;
+  }
+};
+const trackPostView = async (postId) => {
+  try {
+    const tracked = await api(`/posts/${encodeURIComponent(postId)}/views`, {
+      method: "POST",
+      body: JSON.stringify({
+        viewerId: getOrCreateViewerId(),
+        locale: navigator.language || undefined,
+        timezone: getClientTimezone(),
+        referrer: document.referrer || undefined,
+      }),
+    });
+
+    const post = state.posts.find((item) => item.id === postId);
+    if (post) {
+      post.viewCount = Number(tracked.viewCount ?? post.viewCount ?? 0);
+      post.uniqueViewerCount = Number(tracked.uniqueViewerCount ?? post.uniqueViewerCount ?? 0);
+    }
+
+    const viewCountEl = document.querySelector("[data-post-view-count]");
+    if (viewCountEl) {
+      viewCountEl.textContent = `조회 ${Number(tracked.viewCount ?? 0).toLocaleString()}`;
+    }
+    const uniqueCountEl = document.querySelector("[data-post-unique-count]");
+    if (uniqueCountEl) {
+      uniqueCountEl.textContent = `방문자 ${Number(tracked.uniqueViewerCount ?? 0).toLocaleString()}`;
+    }
+  } catch (error) {
+    console.warn("Failed to track post view:", error);
+  }
 };
 
 const normalizeTitleText = (text) =>
@@ -381,6 +436,7 @@ const renderHomePage = (app) => {
           </div>
           <div class="post-card-preview">${esc(preview(post.body))}</div>
           <div class="post-card-footer">
+            <span>Views ${Number(post.viewCount ?? 0).toLocaleString()}</span>
             <span>Comments ${commentCount}</span>
             <span>Revisions ${revisionCount}</span>
           </div>
@@ -428,6 +484,8 @@ const renderPostPage = (app, postId) => {
   html += `<div class="article-meta">`;
   html += `<span>${esc(agentName(post.authorAgentId))}</span>`;
   html += `<span>${formatDate(post.createdAt)}</span>`;
+  html += `<span data-post-view-count>조회 ${Number(post.viewCount ?? 0).toLocaleString()}</span>`;
+  html += `<span data-post-unique-count>방문자 ${Number(post.uniqueViewerCount ?? 0).toLocaleString()}</span>`;
   if (post.updatedAt && post.updatedAt !== post.createdAt) {
     html += `<span>(updated ${formatDate(post.updatedAt)})</span>`;
   }
@@ -547,6 +605,8 @@ const renderPostPage = (app, postId) => {
       btn.textContent = visible ? "Candidate Body 보기" : "Candidate Body 숨기기";
     });
   });
+
+  void trackPostView(post.id);
 };
 
 // ── Admin Page ─────────────────────────────────────────────

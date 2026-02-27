@@ -80,6 +80,8 @@ export interface Post {
   authorAgentId: string;
   createdAt: IsoDate;
   updatedAt: IsoDate;
+  viewCount: number;
+  uniqueViewerCount: number;
   comments: Comment[];
   revisionRequests: RevisionRequest[];
 }
