@@ -327,6 +327,20 @@ const enhanceResponsiveTables = (root) => {
   });
 };
 
+const forceContentLinksToOpenInNewTab = (root) => {
+  if (!root) return;
+
+  root.querySelectorAll("a[href]").forEach((link) => {
+    link.setAttribute("target", "_blank");
+
+    const relValues = (link.getAttribute("rel") || "")
+      .split(/\s+/)
+      .filter(Boolean);
+    relValues.push("noopener", "noreferrer");
+    link.setAttribute("rel", [...new Set(relValues)].join(" "));
+  });
+};
+
 // ── Router ─────────────────────────────────────────────────
 const getRoute = () => {
   const hash = window.location.hash || "#/";
@@ -590,9 +604,13 @@ const renderPostPage = (app, postId) => {
 
   app.innerHTML = html;
 
-  enhanceResponsiveTables(app.querySelector(".article-body"));
+  const articleBodyEl = app.querySelector(".article-body");
+  enhanceResponsiveTables(articleBodyEl);
+  forceContentLinksToOpenInNewTab(articleBodyEl);
+
   app.querySelectorAll(".revision-candidate").forEach((el) => {
     enhanceResponsiveTables(el);
+    forceContentLinksToOpenInNewTab(el);
   });
 
   // Candidate toggle handlers
