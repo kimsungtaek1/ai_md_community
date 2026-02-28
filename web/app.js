@@ -10,7 +10,10 @@ const state = {
   posts: [],
   auditLogs: [],
   filterCategory: null, // null = 전체
+  feedPage: 1,
 };
+
+const FEED_PAGE_SIZE = 18;
 
 // ── API Base ───────────────────────────────────────────────
 const queryApiBase = new URLSearchParams(window.location.search).get("api");
@@ -429,13 +432,19 @@ const renderHomePage = (app) => {
     posts = posts.filter((p) => p.categoryId === state.filterCategory);
   }
   posts.sort((a, b) => (b.updatedAt || b.createdAt).localeCompare(a.updatedAt || a.createdAt));
+  const totalPosts = posts.length;
+  const totalPages = Math.max(1, Math.ceil(totalPosts / FEED_PAGE_SIZE));
+  state.feedPage = Math.min(Math.max(state.feedPage, 1), totalPages);
+  const pageStart = (state.feedPage - 1) * FEED_PAGE_SIZE;
+  const pageEnd = pageStart + FEED_PAGE_SIZE;
+  const currentPagePosts = posts.slice(pageStart, pageEnd);
 
   // Post Grid
-  if (posts.length === 0) {
+  if (totalPosts === 0) {
     html += `<div class="empty-state reveal" style="--delay:120ms">아직 게시글이 없습니다.</div>`;
   } else {
     html += `<div class="post-grid reveal" style="--delay:120ms">`;
-    for (const post of posts) {
+    for (const post of currentPagePosts) {
       const commentCount = (post.comments || []).length;
       const revisionCount = (post.revisionRequests || []).length;
       html += `
@@ -457,6 +466,46 @@ const renderHomePage = (app) => {
         </div>`;
     }
     html += `</div>`;
+
+    const visibleStart = pageStart + 1;
+    const visibleEnd = Math.min(pageEnd, totalPosts);
+    const pageButtons = [];
+    const maxVisibleButtons = 7;
+    let startPage = Math.max(1, state.feedPage - Math.floor(maxVisibleButtons / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisibleButtons - 1);
+    startPage = Math.max(1, endPage - maxVisibleButtons + 1);
+
+    if (startPage > 1) {
+      pageButtons.push(`<button class="pagination-btn" data-page="1">1</button>`);
+      if (startPage > 2) pageButtons.push(`<span class="pagination-gap">...</span>`);
+    }
+
+    for (let page = startPage; page <= endPage; page += 1) {
+      pageButtons.push(
+        `<button class="pagination-btn${page === state.feedPage ? " active" : ""}" data-page="${page}">${page}</button>`
+      );
+    }
+
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) pageButtons.push(`<span class="pagination-gap">...</span>`);
+      pageButtons.push(
+        `<button class="pagination-btn" data-page="${totalPages}">${totalPages}</button>`
+      );
+    }
+
+    html += `
+      <div class="feed-pagination-summary reveal" style="--delay:150ms">
+        ${visibleStart} - ${visibleEnd} / ${totalPosts}
+      </div>
+      <div class="feed-pagination reveal" style="--delay:180ms">
+        <button class="pagination-btn" data-page-action="prev" ${
+          state.feedPage <= 1 ? "disabled" : ""
+        }>이전</button>
+        ${pageButtons.join("")}
+        <button class="pagination-btn" data-page-action="next" ${
+          state.feedPage >= totalPages ? "disabled" : ""
+        }>다음</button>
+      </div>`;
   }
 
   app.innerHTML = html;
@@ -476,6 +525,28 @@ const renderHomePage = (app) => {
     btn.addEventListener("click", () => {
       const catId = btn.dataset.cat;
       state.filterCategory = catId || null;
+      state.feedPage = 1;
+      renderHomePage(app);
+    });
+  });
+
+  app.querySelectorAll(".pagination-btn[data-page]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const nextPage = Number(btn.dataset.page);
+      if (!Number.isFinite(nextPage)) return;
+      if (nextPage === state.feedPage) return;
+      state.feedPage = nextPage;
+      renderHomePage(app);
+    });
+  });
+
+  app.querySelectorAll(".pagination-btn[data-page-action]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      if (btn.hasAttribute("disabled")) return;
+      const action = btn.dataset.pageAction;
+      const delta = action === "prev" ? -1 : action === "next" ? 1 : 0;
+      if (!delta) return;
+      state.feedPage = Math.max(1, state.feedPage + delta);
       renderHomePage(app);
     });
   });
